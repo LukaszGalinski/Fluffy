@@ -1,8 +1,8 @@
 # Fluffy
 
 Contributors: Łukasz Galiński
-Mockup and graphic project belongs to Braja Omar Justico. I have implemented a mockup ONLY for practice purposes
-You can check original mockup in here: [Figma Mockup](https://www.figma.com/community/file/998557875473123405)
+
+Mockup and graphic project belongs to Braja Omar Justico. I have implemented a mockup ONLY for practice purposes.<br/>You can check original mockup in here: [Figma Mockup](https://www.figma.com/community/file/998557875473123405)
 
 # Tools:
  - Figma
