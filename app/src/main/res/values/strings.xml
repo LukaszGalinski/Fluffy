@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Fluffy</string>
+    <string name="onboarding_logo">Fluffy Logo</string>
+    <string name="onboarding_one_title">Gain total control of your money</string>
+    <string name="onboarding_one_subtitle">Become your own money manager and make every cent count</string>
+
 </resources>
