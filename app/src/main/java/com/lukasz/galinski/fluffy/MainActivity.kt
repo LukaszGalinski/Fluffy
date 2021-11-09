@@ -1,4 +1,4 @@
-package com.darul.galinski.fluffy
+package com.lukasz.galinski.fluffy
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

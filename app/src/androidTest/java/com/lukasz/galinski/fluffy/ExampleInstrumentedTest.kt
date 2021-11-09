@@ -1,4 +1,4 @@
-package com.darul.galinski.fluffy
+package com.lukasz.galinski.fluffy
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

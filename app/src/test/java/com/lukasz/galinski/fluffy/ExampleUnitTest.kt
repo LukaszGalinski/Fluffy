@@ -1,4 +1,4 @@
-package com.darul.galinski.fluffy
+package com.lukasz.galinski.fluffy
 
 import org.junit.Test
 
