@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".OnBoardingScreenActivity">
+
+        <ImageView
+            android:id="@+id/onboarding_logo"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/onboarding_logo_height"
+            android:layout_marginTop="@dimen/margin_medium_16"
+            android:layout_marginBottom="@dimen/margin_medium_16"
+            android:contentDescription="@string/onBoarding_logo"
+            android:src="@drawable/onboarding_one_logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".9" />
+
+        <TextView
+            android:id="@+id/onboarding_title"
+            style="@style/Theme.Fluffy.Onboarding.titleStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/onBoarding_two_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onboarding_logo"
+            app:layout_constraintWidth_percent=".8" />
+
+        <TextView
+            android:id="@+id/onboarding_subTitle"
+            style="@style/Theme.Fluffy.Onboarding.subTitleStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_medium_16"
+            android:text="@string/onBoarding_two_subtitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onboarding_title"
+            app:layout_constraintWidth_percent=".7" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

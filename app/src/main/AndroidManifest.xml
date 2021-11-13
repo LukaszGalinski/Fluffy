@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Fluffy.OnBoarding">
         <activity
-            android:name="com.lukasz.galinski.fluffy.OnBoardingScreenFirst"
+            android:name="com.lukasz.galinski.fluffy.OnBoardingScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
