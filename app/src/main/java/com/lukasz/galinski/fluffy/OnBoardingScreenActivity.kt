@@ -6,6 +6,6 @@ import android.os.Bundle
 class OnBoardingScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.onboarding_screen_first_fragment)
+        setContentView(R.layout.onboarding_screen_layout)
     }
 }
