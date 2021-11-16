@@ -11,13 +11,13 @@ private const val ONBOARDING_PAGES = 3
 class OnBoardingScreenActivity : FragmentActivity() {
 
     private lateinit var viewPager: ViewPager2
-    private lateinit var onboardingBinding: OnboardingScreenLayoutBinding
+    private var _onboardingViewBinding: OnboardingScreenLayoutBinding? = null
+    private val onboardingViewBinding get() = _onboardingViewBinding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        onboardingBinding = OnboardingScreenLayoutBinding.inflate(layoutInflater)
-        setContentView(onboardingBinding.root)
-        viewPager = onboardingBinding.onboardingFragmentHost
+        _onboardingViewBinding = OnboardingScreenLayoutBinding.inflate(layoutInflater)
+        setContentView(onboardingViewBinding.root)
         buildViewPager()
     }
 
@@ -27,6 +27,7 @@ class OnBoardingScreenActivity : FragmentActivity() {
     }
 
     private fun buildViewPager(){
+        viewPager = onboardingViewBinding.onboardingFragmentHost
         val pagerAdapter = ScreenSlidePagerAdapter(this)
         viewPager.adapter = pagerAdapter
     }
@@ -34,5 +35,10 @@ class OnBoardingScreenActivity : FragmentActivity() {
     override fun onBackPressed() {
         if (viewPager.currentItem == 0) { super.onBackPressed() }
         else { viewPager.currentItem = viewPager.currentItem - 1 }
+    }
+
+    override fun onDestroy() {
+        _onboardingViewBinding = null
+        super.onDestroy()
     }
 }

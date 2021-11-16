@@ -10,8 +10,8 @@ import com.lukasz.galinski.fluffy.R
 class OnboardingFragment(private val onboardingScreenNumber: Int) : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val numberedLayout = createViewBasedOnNumber(onboardingScreenNumber)
-        return inflater.inflate(numberedLayout, container, false)
+        val onboardingScreenNumber = createViewBasedOnNumber(onboardingScreenNumber)
+        return inflater.inflate(onboardingScreenNumber, container, false)
     }
 }
 
