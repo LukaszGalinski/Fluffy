@@ -7,7 +7,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".OnBoardingScreenActivity">
+        tools:context=".view.OnBoardingScreenActivity">
 
         <ImageView
             android:id="@+id/onboarding_logo"
@@ -16,7 +16,7 @@
             android:layout_marginTop="@dimen/margin_medium_16"
             android:layout_marginBottom="@dimen/margin_medium_16"
             android:contentDescription="@string/onBoarding_logo"
-            android:src="@drawable/onboarding_one_logo"
+            android:src="@drawable/onboarding_logo_two"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
