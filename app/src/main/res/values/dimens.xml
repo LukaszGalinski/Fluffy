@@ -10,4 +10,5 @@
     <dimen name="onboarding_title_line_height">34dp</dimen>
     <dimen name="onboarding_subtitle_text_size">16sp</dimen>
     <dimen name="onboarding_subtitle_line_height">19dp</dimen>
+    <dimen name="onboarding_default_dot_step_size">8dp</dimen>
 </resources>

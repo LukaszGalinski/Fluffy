@@ -87,3 +87,5 @@ lint/tmp/
 
 #customFilesIgnore
 openjdk.jdk
+gradle/.DS_Store
+.idea/misc.xml

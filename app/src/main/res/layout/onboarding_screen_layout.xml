@@ -12,27 +12,37 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/margin_medium_16"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/onboarding_register_button"/>
+        app:layout_constraintBottom_toTopOf="@id/onboarding_step_indicator"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/onboarding_step_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_medium_16"
+        app:layout_constraintBottom_toTopOf="@id/onboarding_register_button"
+        app:tabBackground="@drawable/onboarding_tab_selector"
+        app:tabGravity="center"
+        app:tabIndicatorHeight="0dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/onboarding_register_button"
-        android:layout_width="0dp"
         style="@style/Theme.Fluffy.ButtonDefault"
+        android:layout_width="0dp"
         android:layout_height="@dimen/button_height"
-        android:text="@string/register"
         android:layout_marginBottom="@dimen/margin_medium_16"
+        android:text="@string/register"
         app:layout_constraintBottom_toTopOf="@id/onboarding_login_button"
-        app:layout_constraintStart_toStartOf="@id/onboarding_login_button"
         app:layout_constraintEnd_toEndOf="@id/onboarding_login_button"
+        app:layout_constraintStart_toStartOf="@id/onboarding_login_button"
         app:layout_constraintWidth_percent="0.7" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/onboarding_login_button"
-        android:layout_width="0dp"
-        android:layout_marginBottom="@dimen/margin_medium_16"
         style="@style/Theme.Fluffy.ButtonSecondary"
+        android:layout_width="0dp"
         android:layout_height="@dimen/button_height"
+        android:layout_marginBottom="@dimen/margin_medium_16"
         android:text="@string/login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

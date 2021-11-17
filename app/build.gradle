@@ -7,7 +7,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.darul.galinski.fluffy"
+        applicationId "com.lukasz.galinski.fluffy"
         minSdk 29
         targetSdk 31
         versionCode 1
