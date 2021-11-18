@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Fluffy</string>
+
+    <string name="onBoarding_logo">Fluffy Logo</string>
+    <string name="onBoarding_one_title">Gain total control of your money</string>
+    <string name="onBoarding_two_title">Know where your money goes</string>
+    <string name="onBoarding_three_title">Planning ahead</string>
+    <string name="onBoarding_one_subtitle">Become your own money manager and make every cent count</string>
+    <string name="onBoarding_two_subtitle">Track your transactions easily, with categories and financial report</string>
+    <string name="onBoarding_three_subtitle">Setup your budget for each category so you in control</string>
+    <string name="login">Login</string>
+    <string name="register">Sign Up</string>
 </resources>
