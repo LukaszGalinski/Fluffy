@@ -1,4 +1,4 @@
-package com.lukasz.galinski.fluffy.view
+package com.lukasz.galinski.fluffy.view.onboarding
 
 import android.os.Bundle
 import android.view.LayoutInflater
