@@ -10,4 +10,6 @@
     <string name="onBoarding_three_subtitle">Setup your budget for each category so you in control</string>
     <string name="login">Login</string>
     <string name="register">Sign Up</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="create_account_info">Don\'t have an account yet? <b><u>Sign Up</u></b></string>
 </resources>
