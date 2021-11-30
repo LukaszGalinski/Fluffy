@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Fluffy.OnBoarding">
         <activity
-            android:name="com.lukasz.galinski.fluffy.view.account.LoginActivity"
+            android:name="com.lukasz.galinski.fluffy.view.onboarding.OnBoardingScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,6 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".view.account.LoginHostActivity" />
     </application>
 
 </manifest>
