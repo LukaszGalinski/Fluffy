@@ -7,9 +7,14 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lukasz.galinski.fluffy.databinding.OnboardingScreenLayoutBinding
+import com.lukasz.galinski.fluffy.view.account.LoginHostActivity
 
 private const val ONBOARDING_PAGES = 3
+
 class OnBoardingScreenActivity : FragmentActivity() {
+    companion object {
+        private const val REGISTER_SCREEN_LABEL = "REGISTER"
+    }
 
     private lateinit var viewPager: ViewPager2
     private var _onboardingViewBinding: OnboardingScreenLayoutBinding? = null
@@ -21,6 +26,14 @@ class OnBoardingScreenActivity : FragmentActivity() {
         setContentView(onboardingViewBinding.root)
         buildViewPager()
         buildStepsIndication()
+        setButtons()
+    }
+
+    private fun setButtons() {
+        onboardingViewBinding.onboardingLoginButton.setOnClickListener {
+            val intent = LoginHostActivity.createIntent(baseContext, REGISTER_SCREEN_LABEL)
+            startActivity(intent)
+        }
     }
 
     private inner class ScreenSlidePagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {

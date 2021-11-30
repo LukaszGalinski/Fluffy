@@ -12,13 +12,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/toolbar_title"
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-            android:textSize="@dimen/onboarding_subtitle_text_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login"
             android:layout_gravity="center"
-            android:id="@+id/toolbar_title" />
+            android:text="@string/login"
+            android:textSize="@dimen/onboarding_subtitle_text_size" />
     </com.google.android.material.appbar.MaterialToolbar>
 
     <com.google.android.material.textfield.TextInputEditText
@@ -38,16 +38,16 @@
         android:layout_marginTop="@dimen/margin_medium_16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.9"
-        app:layout_constraintTop_toBottomOf="@id/input_login" />
+        app:layout_constraintTop_toBottomOf="@id/input_login"
+        app:layout_constraintWidth_percent="0.9" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/login_button"
         style="@style/Theme.Fluffy.ButtonDefault"
         android:layout_width="0dp"
         android:layout_height="@dimen/button_height"
-        android:layout_marginBottom="@dimen/margin_medium_16"
         android:layout_marginTop="@dimen/margin_medium_16"
+        android:layout_marginBottom="@dimen/margin_medium_16"
         android:text="@string/login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
