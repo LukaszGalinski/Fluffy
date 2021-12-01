@@ -4,9 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
-import androidx.navigation.findNavController
-import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.LoginHostLayoutBinding
 
 private const val ACCOUNT_TAG = "Account activity: "
@@ -32,11 +29,17 @@ class LoginHostActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _loginViewBinding = LoginHostLayoutBinding.inflate(layoutInflater)
         setContentView(loginViewBinding.root)
+        setToolbarOff()
         val chosenScreen = intent.getStringExtra(ACCOUNT_INTENT_KEY) ?: ""
         loadDefaultDestination(savedInstanceState, chosenScreen)
     }
 
-    private fun loadDefaultDestination(savedState: Bundle?, chosenScreen: String){
+    private fun setToolbarOff() {
+        val actionBar = supportActionBar
+        actionBar?.hide()
+    }
+
+    private fun loadDefaultDestination(savedState: Bundle?, chosenScreen: String) {
 
     }
 
