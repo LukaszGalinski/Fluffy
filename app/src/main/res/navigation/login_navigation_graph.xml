@@ -15,5 +15,12 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpToInclusive="false" />-->
+        <action
+            android:id="@+id/action_loginScreen_to_registerScreen"
+            app:destination="@id/registerScreen" />
     </fragment>
+    <fragment
+        android:id="@+id/registerScreen"
+        android:name="com.lukasz.galinski.fluffy.view.account.RegisterScreen"
+        android:label="RegisterScreen" />
 </navigation>

@@ -14,4 +14,7 @@
     <string name="create_account_info">Don\'t have an account yet? <b><u>Sign Up</u></b></string>
     <string name="password">Password</string>
     <string name="email_hint">Email</string>
+    <string name="name">Name</string>
+    <string name="existing_account_info">Already have an account? <b><u>Login</u></b></string>
+    <string name="terms_info"><b>By signing up, you agree to Terms of Service and Privacy Policy</b></string>
 </resources>

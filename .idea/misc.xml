@@ -9,12 +9,13 @@
         <entry key="app/src/main/res/drawable/onboarding_selected_dot.xml" value="0.24375" />
         <entry key="app/src/main/res/drawable/onboarding_tab_selector.xml" value="0.23645833333333333" />
         <entry key="app/src/main/res/layout/login_host_layout.xml" value="0.13179347826086957" />
-        <entry key="app/src/main/res/layout/login_screen_fragment.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/login_screen_fragment.xml" value="0.11822916666666666" />
         <entry key="app/src/main/res/layout/login_screen_layout.xml" value="0.24653175602828897" />
         <entry key="app/src/main/res/layout/onboarding_screen_first_fragment.xml" value="0.178125" />
         <entry key="app/src/main/res/layout/onboarding_screen_layout.xml" value="0.25" />
         <entry key="app/src/main/res/layout/onboarding_screen_second_fragment.xml" value="0.178125" />
         <entry key="app/src/main/res/layout/onboarding_screen_third_fragment.xml" value="0.178125" />
+        <entry key="app/src/main/res/layout/register_screen_fragment.xml" value="0.335" />
       </map>
     </option>
   </component>
