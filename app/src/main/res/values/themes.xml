@@ -54,4 +54,13 @@
         <item name="boxStrokeWidth">1dp</item>
     </style>
 
+    <style name="Theme.Fluffy.Checkbox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:paddingStart">@dimen/padding_small_8</item>
+        <item name="android:paddingEnd">@dimen/padding_small_8</item>
+        <item name="android:buttonTint">@color/purple_primary</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:textSize">@dimen/onboarding_subtitle_text_size</item>
+        <item name="android:lineHeight">@dimen/line_height_terms_info</item>
+    </style>
+
 </resources>
