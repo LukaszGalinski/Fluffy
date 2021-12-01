@@ -31,18 +31,13 @@ class LoginHostActivity : AppCompatActivity() {
         setContentView(loginViewBinding.root)
         setToolbarOff()
         val chosenScreen = intent.getStringExtra(ACCOUNT_INTENT_KEY) ?: ""
-        loadDefaultDestination(savedInstanceState, chosenScreen)
     }
 
     private fun setToolbarOff() {
         val actionBar = supportActionBar
         actionBar?.hide()
     }
-
-    private fun loadDefaultDestination(savedState: Bundle?, chosenScreen: String) {
-
-    }
-
+    
     override fun onDestroy() {
         _loginViewBinding = null
         super.onDestroy()

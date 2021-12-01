@@ -18,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_medium_16"
             android:text="@string/login"
             android:textSize="@dimen/screen_title_text_size" />
     </com.google.android.material.appbar.MaterialToolbar>
@@ -39,7 +40,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/email_hint"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textColorHint="@color/gray" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -60,7 +62,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textColorHint="@color/gray" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
@@ -98,6 +101,7 @@
         android:text="@string/create_account_info"
         android:textAlignment="center"
         android:textSize="@dimen/onboarding_subtitle_text_size"
+        android:textColor="@color/gray"
         app:layout_constraintTop_toBottomOf="@id/forgot_password" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
