@@ -30,7 +30,7 @@ class LoginHostActivity : AppCompatActivity() {
         _loginViewBinding = LoginHostLayoutBinding.inflate(layoutInflater)
         setContentView(loginViewBinding.root)
         setToolbarOff()
-        val chosenScreen = intent.getStringExtra(ACCOUNT_INTENT_KEY) ?: ""
+        //val chosenScreen = intent.getStringExtra(ACCOUNT_INTENT_KEY) ?: ""
     }
 
     private fun setToolbarOff() {

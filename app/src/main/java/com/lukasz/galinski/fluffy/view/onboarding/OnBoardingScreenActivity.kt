@@ -31,6 +31,7 @@ class OnBoardingScreenActivity : FragmentActivity() {
 
     private fun setButtons() {
         onboardingViewBinding.onboardingLoginButton.setOnClickListener {
+            finish()
             val intent = LoginHostActivity.createIntent(baseContext, REGISTER_SCREEN_LABEL)
             startActivity(intent)
         }
