@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.lukasz.galinski.fluffy.view.account.LoginHostActivity"/>
+            android:name="com.lukasz.galinski.fluffy.view.account.LoginHostActivity"
+            android:theme="@style/Theme.Fluffy.OnBoarding"/>
     </application>
 
 </manifest>
