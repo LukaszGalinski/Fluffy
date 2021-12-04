@@ -3,12 +3,18 @@ package com.lukasz.galinski.fluffy.view.account
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import com.lukasz.galinski.fluffy.R
+import com.lukasz.galinski.fluffy.common.createToast
 import com.lukasz.galinski.fluffy.databinding.LoginHostLayoutBinding
 
 private const val ACCOUNT_TAG = "Account activity: "
 private const val ACCOUNT_LOGIN = "Login screen"
 private const val ACCOUNT_REGISTER = "Register screen"
+private const val BACK_BUTTON_DELAY = 1000L
 
 class LoginHostActivity : AppCompatActivity() {
 
@@ -24,12 +30,16 @@ class LoginHostActivity : AppCompatActivity() {
 
     private var _loginViewBinding: LoginHostLayoutBinding? = null
     private val loginViewBinding get() = _loginViewBinding!!
+    private var doubleCheckButton = false
+    private var handler = Handler(Looper.getMainLooper())
+    private lateinit var runnable: Runnable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _loginViewBinding = LoginHostLayoutBinding.inflate(layoutInflater)
         setContentView(loginViewBinding.root)
         setToolbarOff()
+        runnable = Runnable { doubleCheckButton = false }
         //val chosenScreen = intent.getStringExtra(ACCOUNT_INTENT_KEY) ?: ""
     }
 
@@ -37,8 +47,27 @@ class LoginHostActivity : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar?.hide()
     }
-    
+
+    override fun onBackPressed() =
+        when (findNavController(R.id.fragmentContainerView).graph.startDestination) {
+            findNavController(R.id.fragmentContainerView).currentDestination?.id -> {
+                createBackButtonDelay()
+            }
+            else -> super.onBackPressed()
+        }
+
+    private fun createBackButtonDelay() {
+        if (doubleCheckButton) {
+            super.onBackPressed()
+            return
+        }
+        doubleCheckButton = true
+        this.createToast(resources.getString(R.string.double_press_to_exit))
+        handler.postDelayed(runnable, BACK_BUTTON_DELAY)
+    }
+
     override fun onDestroy() {
+        handler.removeCallbacks(runnable)
         _loginViewBinding = null
         super.onDestroy()
     }
