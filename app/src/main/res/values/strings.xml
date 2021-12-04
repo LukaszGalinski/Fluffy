@@ -17,4 +17,6 @@
     <string name="name">Name</string>
     <string name="existing_account_info">Already have an account? <b><u>Login</u></b></string>
     <string name="terms_info"><b>By signing up, you agree to Terms of Service and Privacy Policy</b></string>
+
+    <string name="double_press_to_exit">Press back button twice to exit the application</string>
 </resources>
