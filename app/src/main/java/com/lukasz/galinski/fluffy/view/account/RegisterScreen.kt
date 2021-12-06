@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.google.android.material.textfield.TextInputLayout
+import com.lukasz.galinski.fluffy.common.FieldsValidation
 import com.lukasz.galinski.fluffy.common.highlightSelectedTextRange
 import com.lukasz.galinski.fluffy.databinding.RegisterScreenFragmentBinding
 
@@ -28,6 +30,7 @@ class RegisterScreen : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         highlightTextParts()
+        assignValidation()
     }
 
     private fun highlightTextParts(){
@@ -45,5 +48,20 @@ class RegisterScreen : Fragment() {
             loginLabel.text.length,
             HIGHLIGHTED_COLOR
         )
+    }
+
+    private fun assignValidation() {
+        listOf(
+            registerBinding.etName,
+            registerBinding.etLogin,
+            registerBinding.etPassword
+        ).forEach {
+            it.addTextChangedListener(
+                FieldsValidation(
+                    it,
+                    it.parent.parent as TextInputLayout
+                )
+            )
+        }
     }
 }
