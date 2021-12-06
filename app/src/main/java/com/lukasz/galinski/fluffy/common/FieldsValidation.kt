@@ -7,14 +7,12 @@ import com.google.android.material.textfield.TextInputLayout
 import com.lukasz.galinski.fluffy.R
 
 private const val NAME = "NAME"
-private const val LAST_NAME = "LAST_NAME"
 private const val EMAIL = "EMAIL"
 private const val PASSWORD = "PASSWORD"
 private const val NAME_MAX_LENGTH = 14
 
 private val correctFields = mutableMapOf(
     NAME to false,
-    LAST_NAME to false,
     EMAIL to false,
     PASSWORD to false
 )
@@ -30,45 +28,51 @@ class FieldsValidation(
         when (et.id) {
             R.id.et_name -> {
                 if (s!!.length < NAME_MAX_LENGTH) {
-                    correctFields[NAME] = true
-                    textInputLayout.error = null
+                    setInputPositive(NAME)
                 } else {
-                    textInputLayout.error = et.context.getString(R.string.register_error)
-                    correctFields[NAME] = false
+                    setInputNegative(NAME)
                 }
                 if (s.isEmpty()) {
-                    textInputLayout.error = et.context.getString(R.string.register_error_empty)
-                    correctFields[NAME] = false
+                    setInputEmptyError(NAME)
                 }
             }
 
             R.id.et_login -> {
                 if (FormValidator.validationEmail(s)) {
-                    correctFields[EMAIL] = true
-                    textInputLayout.error = null
+                    setInputPositive(EMAIL)
                 } else {
-                    textInputLayout.error = et.context.getString(R.string.register_error)
-                    correctFields[EMAIL] = false
+                    setInputNegative(EMAIL)
                 }
                 if (s!!.isEmpty()) {
-                    textInputLayout.error = et.context.getString(R.string.register_error_empty)
-                    correctFields[EMAIL] = false
+                    setInputEmptyError(EMAIL)
                 }
             }
             R.id.et_password -> {
                 if (FormValidator.passwordValidation(s.toString())) {
-                    correctFields[PASSWORD] = true
-                    textInputLayout.error = null
+                    setInputPositive(PASSWORD)
                 } else {
-                    textInputLayout.error = et.context.getString(R.string.register_error)
-                    correctFields[PASSWORD] = false
+                    setInputNegative(PASSWORD)
                 }
                 if (s!!.isEmpty()) {
-                    textInputLayout.error = et.context.getString(R.string.register_error_empty)
-                    correctFields[PASSWORD] = false
+                    setInputEmptyError(PASSWORD)
                 }
             }
         }
+    }
+
+    private fun setInputPositive(inputLabel: String) {
+        correctFields[inputLabel] = true
+        textInputLayout.error = null
+    }
+
+    private fun setInputNegative(inputLabel: String) {
+        textInputLayout.error = et.context.getString(R.string.register_error)
+        correctFields[inputLabel] = false
+    }
+
+    private fun setInputEmptyError(inputLabel: String) {
+        textInputLayout.error = et.context.getString(R.string.register_error_empty)
+        correctFields[inputLabel] = false
     }
 
     override fun afterTextChanged(s: Editable?) {
@@ -83,7 +87,7 @@ class FieldsValidation(
                 return@forEach
             }
         }
-       // viewModel.setSaveButtonState(areAllFieldsValid)
+        // viewModel.setSaveButtonState(areAllFieldsValid)
     }
 }
 
