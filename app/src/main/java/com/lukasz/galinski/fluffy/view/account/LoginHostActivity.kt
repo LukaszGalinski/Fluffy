@@ -6,11 +6,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.common.createToast
 import com.lukasz.galinski.fluffy.databinding.LoginHostLayoutBinding
+import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 
 private const val ACCOUNT_TAG = "Account activity: "
 private const val ACCOUNT_LOGIN = "Login screen"
@@ -28,7 +30,6 @@ class LoginHostActivity : AppCompatActivity() {
             }
         }
     }
-
     private var _loginViewBinding: LoginHostLayoutBinding? = null
     private val loginViewBinding get() = _loginViewBinding!!
     private var doubleCheckButton = false
