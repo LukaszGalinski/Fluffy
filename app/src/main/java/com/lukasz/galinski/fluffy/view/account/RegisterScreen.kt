@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputLayout
 import com.lukasz.galinski.fluffy.common.FieldsValidation
 import com.lukasz.galinski.fluffy.common.highlightSelectedTextRange
 import com.lukasz.galinski.fluffy.databinding.RegisterScreenFragmentBinding
+import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 
 private const val HIGHLIGHTED_TERMS_SPANS_COUNT = 35
 private const val HIGHLIGHTED_LOGIN_SPANS_COUNT = 5
@@ -18,6 +21,7 @@ class RegisterScreen : Fragment() {
 
     private var _registerBinding: RegisterScreenFragmentBinding? = null
     private val registerBinding get() = _registerBinding!!
+    private val viewModel by viewModels<LoginViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,9 +35,12 @@ class RegisterScreen : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         highlightTextParts()
         assignValidation()
+        viewModel.saveButtonState.observe(viewLifecycleOwner, {
+            registerBinding.registerButton.markAs(it)
+        })
     }
 
-    private fun highlightTextParts(){
+    private fun highlightTextParts() {
         val checkBoxText = registerBinding.termsCheckbox
         val loginLabel = registerBinding.existingAccountInfo
         checkBoxText.text = highlightSelectedTextRange(
@@ -59,9 +66,14 @@ class RegisterScreen : Fragment() {
             it.addTextChangedListener(
                 FieldsValidation(
                     it,
-                    it.parent.parent as TextInputLayout
+                    it.parent.parent as TextInputLayout,
+                    viewModel
                 )
             )
         }
+    }
+
+    private fun Button.markAs(state: Boolean) {
+        this.isEnabled = state
     }
 }

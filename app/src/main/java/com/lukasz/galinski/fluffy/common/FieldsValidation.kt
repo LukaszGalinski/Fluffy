@@ -5,6 +5,7 @@ import android.text.TextWatcher
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.lukasz.galinski.fluffy.R
+import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 
 private const val NAME = "NAME"
 private const val EMAIL = "EMAIL"
@@ -20,7 +21,7 @@ private val correctFields = mutableMapOf(
 class FieldsValidation(
     private val et: TextInputEditText,
     private val textInputLayout: TextInputLayout,
-    //private val viewModel: LoginViewModel
+    private val viewModel: LoginViewModel
 ) : TextWatcher {
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
 
@@ -87,7 +88,7 @@ class FieldsValidation(
                 return@forEach
             }
         }
-        // viewModel.setSaveButtonState(areAllFieldsValid)
+        viewModel.setSaveButtonState(areAllFieldsValid)
     }
 }
 

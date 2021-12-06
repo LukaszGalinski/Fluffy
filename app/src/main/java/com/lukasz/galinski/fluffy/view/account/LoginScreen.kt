@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.common.highlightSelectedTextRange
 import com.lukasz.galinski.fluffy.databinding.LoginScreenFragmentBinding
+import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 
 private const val MARKED_SPANS_COUNT = 7
 private const val HIGHLIGHTED_COLOR = "#7F3DFF"
@@ -16,6 +18,7 @@ private const val HIGHLIGHTED_COLOR = "#7F3DFF"
 class LoginScreen : Fragment() {
     private var _loginBinding: LoginScreenFragmentBinding? = null
     private val loginBinding get() = _loginBinding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
