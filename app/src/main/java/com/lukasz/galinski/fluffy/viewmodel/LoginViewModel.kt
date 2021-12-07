@@ -14,10 +14,5 @@ class LoginViewModel @Inject constructor() : ViewModel() {
 
     fun setSaveButtonState(state: Boolean) {
         _saveButtonState.value = state
-        if (state) println("Hilt validation working")
-    }
-
-    fun createDummyMessage() {
-        println("Dummy messeage is working with HiLT")
     }
 }
