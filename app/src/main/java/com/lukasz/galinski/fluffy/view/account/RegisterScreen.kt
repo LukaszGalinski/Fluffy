@@ -10,6 +10,8 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputLayout
 import com.lukasz.galinski.fluffy.common.FieldsValidation
 import com.lukasz.galinski.fluffy.common.highlightSelectedTextRange
+import com.lukasz.galinski.fluffy.common.markAs
+import com.lukasz.galinski.fluffy.common.setStateAppearance
 import com.lukasz.galinski.fluffy.databinding.RegisterScreenFragmentBinding
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 
@@ -37,6 +39,7 @@ class RegisterScreen : Fragment() {
         assignValidation()
         viewModel.saveButtonState.observe(viewLifecycleOwner, {
             registerBinding.registerButton.markAs(it)
+            registerBinding.registerButton.setStateAppearance()
         })
     }
 
@@ -71,9 +74,5 @@ class RegisterScreen : Fragment() {
                 )
             )
         }
-    }
-
-    private fun Button.markAs(state: Boolean) {
-        this.isEnabled = state
     }
 }
