@@ -2,6 +2,7 @@ package com.lukasz.galinski.fluffy.common
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.CheckBox
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.lukasz.galinski.fluffy.R
@@ -15,13 +16,14 @@ private const val NAME_MAX_LENGTH = 14
 private val correctFields = mutableMapOf(
     NAME to false,
     EMAIL to false,
-    PASSWORD to false
+    PASSWORD to false,
 )
 
 class FieldsValidation(
     private val et: TextInputEditText,
     private val textInputLayout: TextInputLayout,
-    private val viewModel: LoginViewModel
+    private val viewModel: LoginViewModel,
+    private val termsCheckbox: CheckBox
 ) : TextWatcher {
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
 
@@ -83,7 +85,7 @@ class FieldsValidation(
     private fun searchEmpty() {
         var areAllFieldsValid = true
         correctFields.forEach { (_, value) ->
-            if (!value) {
+            if (!value || !termsCheckbox.isChecked) {
                 areAllFieldsValid = false
                 return@forEach
             }

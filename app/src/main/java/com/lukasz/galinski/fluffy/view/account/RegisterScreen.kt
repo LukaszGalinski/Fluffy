@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputLayout
@@ -41,6 +40,10 @@ class RegisterScreen : Fragment() {
             registerBinding.registerButton.markAs(it)
             registerBinding.registerButton.setStateAppearance()
         })
+
+        registerBinding.termsCheckbox.setOnClickListener {
+            registerBinding.etName.text = registerBinding.etName.text
+        }
     }
 
     private fun highlightTextParts() {
@@ -70,7 +73,8 @@ class RegisterScreen : Fragment() {
                 FieldsValidation(
                     it,
                     it.parent.parent as TextInputLayout,
-                    viewModel
+                    viewModel,
+                    registerBinding.termsCheckbox
                 )
             )
         }
