@@ -22,5 +22,10 @@
     <fragment
         android:id="@+id/registerScreen"
         android:name="com.lukasz.galinski.fluffy.view.account.RegisterScreen"
-        android:label="RegisterScreen" />
+        android:label="RegisterScreen" >
+        <action
+            android:id="@+id/action_registerScreen_pop"
+            app:popUpTo="@id/registerScreen"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>
