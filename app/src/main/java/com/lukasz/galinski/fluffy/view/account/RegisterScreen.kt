@@ -6,7 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
+import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.common.FieldsValidation
 import com.lukasz.galinski.fluffy.common.highlightSelectedTextRange
 import com.lukasz.galinski.fluffy.common.markAs
@@ -43,6 +46,15 @@ class RegisterScreen : Fragment() {
 
         registerBinding.termsCheckbox.setOnClickListener {
             registerBinding.etName.text = registerBinding.etName.text
+        }
+
+        registerBinding.existingAccountInfo.setOnClickListener {
+            findNavController().navigate(R.id.action_registerScreen_pop)
+        }
+
+        registerBinding.registerButton.setOnClickListener {
+            //save user into database
+            //navigate to setup Pingit
         }
     }
 
