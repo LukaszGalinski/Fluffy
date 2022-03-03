@@ -13,12 +13,15 @@ import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.common.createToast
 import com.lukasz.galinski.fluffy.databinding.LoginHostLayoutBinding
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 
 private const val ACCOUNT_TAG = "Account activity: "
 private const val ACCOUNT_LOGIN = "Login screen"
 private const val ACCOUNT_REGISTER = "REGISTER"
 private const val BACK_BUTTON_DELAY = 1000L
 
+@AndroidEntryPoint
 class LoginHostActivity : AppCompatActivity() {
 
     companion object {
@@ -59,7 +62,7 @@ class LoginHostActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() =
-        when (findNavController(R.id.fragmentContainerView).graph.startDestination) {
+        when (findNavController(R.id.fragmentContainerView).graph.startDestinationId) {
             findNavController(R.id.fragmentContainerView).currentDestination?.id -> {
                 createBackButtonDelay()
             }

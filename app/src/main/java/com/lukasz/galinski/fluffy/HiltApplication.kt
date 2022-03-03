@@ -5,12 +5,19 @@ import android.content.Context
 import androidx.room.Room
 import com.lukasz.galinski.fluffy.repository.database.AppDatabase
 import com.lukasz.galinski.fluffy.repository.database.DatabaseDao
+import com.lukasz.galinski.fluffy.repository.database.DatabaseRepository
+import com.lukasz.galinski.fluffy.repository.database.DatabaseRepositoryImpl
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.HiltAndroidApp
+import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 private const val DATABASE_NAME = "UsersDatabase"
@@ -35,4 +42,32 @@ class HiltApplication: Application() {
             ).build()
         }
     }
+
+    @InstallIn(SingletonComponent::class)
+    @Module
+    object DispatcherModule {
+        @DefaultDispatcher
+        @Provides
+        fun providesDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
+
+        @IoDispatcher
+        @Provides
+        fun providesIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+        @MainDispatcher
+        @Provides
+        fun providesMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
+    }
+
+    @Retention(AnnotationRetention.BINARY)
+    @Qualifier
+    annotation class DefaultDispatcher
+
+    @Retention(AnnotationRetention.BINARY)
+    @Qualifier
+    annotation class IoDispatcher
+
+    @Retention(AnnotationRetention.BINARY)
+    @Qualifier
+    annotation class MainDispatcher
 }

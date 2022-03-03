@@ -8,7 +8,6 @@ object TestUtilities {
         for (i in 0..testUsersLastIndex){
             usersList.add(UserModel("George", "emailExample$i@test.com", "test", "0000") )
         }
-
         return usersList
     }
 }
