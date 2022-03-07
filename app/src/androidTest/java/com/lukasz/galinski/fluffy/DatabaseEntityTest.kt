@@ -66,4 +66,14 @@ class DatabaseEntityTest {
         val list = usersDao.getAllUsers()
         assertEquals(1, list.size)
     }
+
+    @Test
+    @Throws(Exception::class)
+    fun getSingleUser(){
+        val testUsers = TestUtilities.createTestUsers(1)
+        val newUser = usersDao.addNewUser(testUsers[0])
+        val loadedUser = usersDao.getUser(newUser)
+
+        assertEquals(testUsers[0], loadedUser)
+    }
 }

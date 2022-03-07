@@ -11,7 +11,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.lukasz.galinski.fluffy.R
+import com.lukasz.galinski.fluffy.common.createToast
 import com.lukasz.galinski.fluffy.common.highlightSelectedTextRange
+import com.lukasz.galinski.fluffy.common.setInvisible
+import com.lukasz.galinski.fluffy.common.setVisible
 import com.lukasz.galinski.fluffy.databinding.LoginScreenFragmentBinding
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -66,17 +69,24 @@ class LoginScreen : Fragment() {
                 is Failure -> {
                     Log.i(STATE_TAG, state.toString())
                 }
-                is Loading -> { Log.i(STATE_TAG, state.toString()) }
-                is Idle -> { Log.i(STATE_TAG, state.toString()) }
+                is Loading -> {
+                    Log.i(STATE_TAG, state.toString())
+                    loginBinding.loginProgressBar.setVisible()
+                }
+                is Idle -> {
+                    Log.i(STATE_TAG, state.toString())
+                    loginBinding.loginProgressBar.setInvisible()
+                }
                 is UserNotFound-> {
                     Log.i(STATE_TAG, state.toString())
-                    Toast.makeText(
-                        context,
-                        "User not found. Please try again...",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    context?.createToast(resources.getString(R.string.user_not_found))
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _loginBinding = null
     }
 }

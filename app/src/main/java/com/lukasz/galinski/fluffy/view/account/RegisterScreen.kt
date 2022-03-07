@@ -11,10 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 import com.lukasz.galinski.fluffy.R
-import com.lukasz.galinski.fluffy.common.FieldsValidation
-import com.lukasz.galinski.fluffy.common.highlightSelectedTextRange
-import com.lukasz.galinski.fluffy.common.markAs
-import com.lukasz.galinski.fluffy.common.setStateAppearance
+import com.lukasz.galinski.fluffy.common.*
 import com.lukasz.galinski.fluffy.databinding.RegisterScreenFragmentBinding
 import com.lukasz.galinski.fluffy.model.UserModel
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
@@ -70,10 +67,22 @@ class RegisterScreen : Fragment() {
     private fun handleRegisterStates() = lifecycleScope.launchWhenStarted {
         viewModel.userAccountState.collect { state ->
             when (state) {
-                is Success -> { Log.i(STATE_TAG, state.toString()) }
-                is Failure -> { Log.i(STATE_TAG, "$state\n Email has been already used") }
-                is Loading -> { Log.i(STATE_TAG, state.toString()) }
-                is Idle -> { Log.i(STATE_TAG, state.toString()) }
+                is Success -> {
+                    Log.i(STATE_TAG, state.toString())
+                    context?.createToast(resources.getString(R.string.user_created))
+                }
+                is Failure -> {
+                    Log.i(STATE_TAG, state.toString())
+                    context?.createToast(resources.getString(R.string.email_occupied))
+                }
+                is Loading -> {
+                    Log.i(STATE_TAG, state.toString())
+                    registerBinding.registerProgressBar.setVisible()
+                }
+                is Idle -> {
+                    Log.i(STATE_TAG, state.toString())
+                    registerBinding.registerProgressBar.setInvisible()
+                }
                 else -> {Log.i(STATE_TAG, state.toString()) }
             }
         }
@@ -112,4 +121,10 @@ class RegisterScreen : Fragment() {
             )
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _registerBinding = null
+    }
 }
+

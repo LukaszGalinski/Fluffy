@@ -33,6 +33,9 @@ class LoginViewModel @Inject constructor(
     fun saveUserIntoDatabase(userModel: UserModel) = viewModelScope.launch {
         if (_userAccountState.value !is Loading) {
             dbRepo.addNewUser(userModel)
+                .onStart {
+                    _userAccountState.value = Loading
+                }
                 .flowOn(ioDispatcher)
                 .catch {
                     _userAccountState.emit(Failure(it))
@@ -48,6 +51,9 @@ class LoginViewModel @Inject constructor(
     fun loginUser(userLogin: String, userPassword: String) = viewModelScope.launch {
         if (_userAccountState.value !is Loading) {
             dbRepo.loginUser(userLogin, userPassword)
+                .onStart {
+                    _userAccountState.value = Loading
+                }
                 .flowOn(ioDispatcher)
                 .catch {
                     _userAccountState.emit(Failure(it))
