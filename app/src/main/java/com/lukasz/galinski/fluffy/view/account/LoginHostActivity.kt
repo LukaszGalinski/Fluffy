@@ -6,18 +6,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
-import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.common.createToast
 import com.lukasz.galinski.fluffy.databinding.LoginHostLayoutBinding
-import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
 
-private const val ACCOUNT_TAG = "Account activity: "
-private const val ACCOUNT_LOGIN = "Login screen"
 private const val ACCOUNT_REGISTER = "REGISTER"
 private const val BACK_BUTTON_DELAY = 1000L
 
@@ -33,6 +28,7 @@ class LoginHostActivity : AppCompatActivity() {
             }
         }
     }
+
     private var _loginViewBinding: LoginHostLayoutBinding? = null
     private val loginViewBinding get() = _loginViewBinding!!
     private var doubleCheckButton = false
@@ -49,9 +45,10 @@ class LoginHostActivity : AppCompatActivity() {
         loadScreenFromOnboarding(chosenScreen)
     }
 
-    private fun loadScreenFromOnboarding(intentLabel: String){
-        if (intentLabel == ACCOUNT_REGISTER){
-            val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+    private fun loadScreenFromOnboarding(intentLabel: String) {
+        if (intentLabel == ACCOUNT_REGISTER) {
+            val navHostFragment =
+                supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
             navHostFragment.navController.navigate(R.id.action_loginScreen_to_registerScreen)
         }
     }

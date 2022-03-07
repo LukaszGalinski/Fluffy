@@ -41,7 +41,7 @@ class FieldsValidation(
             }
 
             R.id.et_login -> {
-                if (FormValidator.validationEmail(s)) {
+                if (FormValidationRules.validationEmail(s)) {
                     setInputPositive(EMAIL)
                 } else {
                     setInputNegative(EMAIL)
@@ -51,7 +51,7 @@ class FieldsValidation(
                 }
             }
             R.id.et_password -> {
-                if (FormValidator.passwordValidation(s.toString())) {
+                if (FormValidationRules.passwordValidation(s.toString())) {
                     setInputPositive(PASSWORD)
                 } else {
                     setInputNegative(PASSWORD)
@@ -69,7 +69,7 @@ class FieldsValidation(
     }
 
     private fun setInputNegative(inputLabel: String) {
-        textInputLayout.error = et.context.getString(R.string.register_error)
+        textInputLayout.error = et.context.getString(R.string.email_occupied)
         correctFields[inputLabel] = false
     }
 

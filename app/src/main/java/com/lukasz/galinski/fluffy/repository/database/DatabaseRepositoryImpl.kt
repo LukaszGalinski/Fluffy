@@ -11,6 +11,7 @@ class DatabaseRepositoryImpl @Inject constructor(private val db: DatabaseDao) : 
     override fun addNewUser(user: UserModel) =
         flow {
             val id = db.addNewUser(user)
+            delay(5000)
             emit(id)
         }
 
@@ -23,10 +24,8 @@ class DatabaseRepositoryImpl @Inject constructor(private val db: DatabaseDao) : 
 
     override fun getUser(userId: Long): Flow<UserModel> {
         return flow {
-            delay(5000)
-            val user = db.getAllUsers()
-            println("All users: " + user)
-            emit(user[0])
+            val user = db.getUser(userId)
+            emit(user)
         }
     }
 }

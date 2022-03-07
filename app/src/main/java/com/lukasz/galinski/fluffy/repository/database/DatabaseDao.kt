@@ -19,4 +19,7 @@ interface DatabaseDao {
 
     @Query("SELECT * FROM UserModel WHERE userId LIKE:userId")
     fun getUser(userId: Long): UserModel
+
+    @Query("DELETE FROM UserModel WHERE userId LIKE:userId")
+    fun deleteUser(userId: Long)
 }
