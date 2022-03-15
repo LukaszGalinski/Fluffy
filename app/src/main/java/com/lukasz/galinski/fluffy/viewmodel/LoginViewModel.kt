@@ -7,16 +7,17 @@ import androidx.lifecycle.viewModelScope
 import com.lukasz.galinski.fluffy.HiltApplication
 import com.lukasz.galinski.fluffy.model.UserModel
 import com.lukasz.galinski.fluffy.repository.database.DatabaseRepositoryImpl
+import com.lukasz.galinski.fluffy.repository.database.LoginSharedPreferences
 import com.lukasz.galinski.fluffy.view.account.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val dbRepo: DatabaseRepositoryImpl,
+    private val loginSharedPreferences: LoginSharedPreferences,
     @HiltApplication.IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -70,15 +71,14 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun getUser(userId: Long) = viewModelScope.launch {
-        _userAccountState.emit(Loading)
-        dbRepo.getUser(userId)
-            .flowOn(ioDispatcher)
-            .catch {
-                //error while loading the user
-            }
-            .collect {
-                //set the new user data
-            }
+    fun updateLoggedUser(userId: Long) {
+        viewModelScope.launch {
+            withContext(ioDispatcher){loginSharedPreferences.updateLoggedUser(userId)}
+            println(loginSharedPreferences.readLoggedUser())
+        }
+    }
+
+    suspend fun readLoggedUser(): Long {
+        return withContext(ioDispatcher) { loginSharedPreferences.readLoggedUser() }
     }
 }

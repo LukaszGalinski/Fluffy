@@ -2,6 +2,7 @@ package com.lukasz.galinski.fluffy
 
 import android.app.Application
 import android.content.Context
+import androidx.annotation.NonNull
 import androidx.room.Room
 import com.lukasz.galinski.fluffy.repository.database.AppDatabase
 import com.lukasz.galinski.fluffy.repository.database.DatabaseDao
@@ -40,6 +41,16 @@ class HiltApplication: Application() {
                 AppDatabase::class.java,
                 DATABASE_NAME
             ).build()
+        }
+    }
+
+    @InstallIn(SingletonComponent::class)
+    @Module
+    class SharedPreferences{
+        @Provides
+        @Singleton
+        fun provideContext(@ApplicationContext context: Context): Context {
+            return context
         }
     }
 

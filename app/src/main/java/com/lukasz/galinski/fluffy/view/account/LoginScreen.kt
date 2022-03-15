@@ -5,17 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.Navigation.findNavController
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.common.createToast
 import com.lukasz.galinski.fluffy.common.highlightSelectedTextRange
 import com.lukasz.galinski.fluffy.common.setInvisible
 import com.lukasz.galinski.fluffy.common.setVisible
 import com.lukasz.galinski.fluffy.databinding.LoginScreenFragmentBinding
+import com.lukasz.galinski.fluffy.view.main.MainMenuActivity
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -50,7 +50,7 @@ class LoginScreen : Fragment() {
         )
 
         loginBinding.createAccountInfo.setOnClickListener {
-            findNavController().navigate(R.id.action_loginScreen_to_registerScreen)
+            findNavController(view).navigate(R.id.action_loginScreen_to_registerScreen)
         }
 
         loginBinding.loginButton.setOnClickListener {
@@ -65,6 +65,11 @@ class LoginScreen : Fragment() {
             when (state) {
                 is Success -> {
                     Log.i(STATE_TAG, state.toString())
+                    hostViewModel.updateLoggedUser(state.userId)
+                    context?.let {
+                        activity?.finishAndRemoveTask()
+                        startActivity(MainMenuActivity.createIntent(it, state.userId))
+                    }
                 }
                 is Failure -> {
                     Log.i(STATE_TAG, state.toString())
@@ -77,7 +82,7 @@ class LoginScreen : Fragment() {
                     Log.i(STATE_TAG, state.toString())
                     loginBinding.loginProgressBar.setInvisible()
                 }
-                is UserNotFound-> {
+                is UserNotFound -> {
                     Log.i(STATE_TAG, state.toString())
                     context?.createToast(resources.getString(R.string.user_not_found))
                 }
