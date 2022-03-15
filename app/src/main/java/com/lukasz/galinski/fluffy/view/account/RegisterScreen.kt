@@ -53,7 +53,7 @@ class RegisterScreen : Fragment() {
         }
 
         registerBinding.existingAccountInfo.setOnClickListener {
-            findNavController().navigate(R.id.action_registerScreen_pop)
+            findNavController().navigate(R.id.action_registerScreen_to_loginScreen)
         }
 
         registerBinding.registerButton.setOnClickListener {
@@ -70,6 +70,7 @@ class RegisterScreen : Fragment() {
                 is Success -> {
                     Log.i(STATE_TAG, state.toString())
                     context?.createToast(resources.getString(R.string.user_created))
+                    findNavController().navigate(R.id.action_registerScreen_to_loginScreen)
                 }
                 is Failure -> {
                     Log.i(STATE_TAG, state.toString())

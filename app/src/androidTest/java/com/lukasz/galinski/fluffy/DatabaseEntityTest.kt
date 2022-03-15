@@ -7,6 +7,8 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.lukasz.galinski.fluffy.repository.database.AppDatabase
 import com.lukasz.galinski.fluffy.repository.database.DatabaseDao
+import com.lukasz.galinski.fluffy.repository.database.DatabaseRepositoryImpl
+import com.lukasz.galinski.fluffy.repository.database.LoginSharedPreferences
 import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -14,6 +16,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import java.io.IOException
 import java.lang.Exception
+import javax.inject.Inject
 import kotlin.jvm.Throws
 
 @RunWith(AndroidJUnit4::class)
@@ -73,7 +76,16 @@ class DatabaseEntityTest {
         val testUsers = TestUtilities.createTestUsers(1)
         val newUser = usersDao.addNewUser(testUsers[0])
         val loadedUser = usersDao.getUser(newUser)
-
         assertEquals(testUsers[0], loadedUser)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun saveAndReadSharedPreferences(){
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val loginSP = LoginSharedPreferences(context)
+        loginSP.updateLoggedUser(2)
+        val readUser = loginSP.readLoggedUser()
+        assertEquals(2, readUser)
     }
 }

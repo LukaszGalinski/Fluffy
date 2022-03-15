@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 
 private const val INACTIVE_BUTTON_ALPHA = .6F
 private const val ACTIVE_BUTTON_ALPHA = 1F

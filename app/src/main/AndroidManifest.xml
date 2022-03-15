@@ -21,7 +21,10 @@
         </activity>
         <activity
             android:name="com.lukasz.galinski.fluffy.view.account.LoginHostActivity"
+            android:theme="@style/Theme.Fluffy.OnBoarding"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.main.MainMenuActivity"
             android:theme="@style/Theme.Fluffy.OnBoarding"/>
     </application>
-
 </manifest>

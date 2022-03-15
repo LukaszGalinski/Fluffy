@@ -9,12 +9,6 @@
         android:name="com.lukasz.galinski.fluffy.view.account.LoginScreen"
         android:label="LoginScreen"
         tools:layout="@layout/login_screen_fragment">
-        <!--<action
-            android:id="@+id/action_loginScreen2_to_registerScreen"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpToInclusive="false" />-->
         <action
             android:id="@+id/action_loginScreen_to_registerScreen"
             app:destination="@id/registerScreen" />
@@ -22,10 +16,9 @@
     <fragment
         android:id="@+id/registerScreen"
         android:name="com.lukasz.galinski.fluffy.view.account.RegisterScreen"
-        android:label="RegisterScreen" >
+        android:label="RegisterScreen">
         <action
-            android:id="@+id/action_registerScreen_pop"
-            app:popUpTo="@id/registerScreen"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_registerScreen_to_loginScreen"
+            app:destination="@id/loginScreen" />
     </fragment>
 </navigation>
