@@ -1,14 +1,20 @@
 package com.lukasz.galinski.fluffy.view.onboarding
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lukasz.galinski.fluffy.databinding.OnboardingScreenLayoutBinding
 import com.lukasz.galinski.fluffy.view.account.LoginHostActivity
+import com.lukasz.galinski.fluffy.view.main.MainMenuActivity
+import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OnBoardingScreenActivity : FragmentActivity() {
     companion object {
         private const val REGISTER_SCREEN_LABEL = "REGISTER"
@@ -18,14 +24,26 @@ class OnBoardingScreenActivity : FragmentActivity() {
     private lateinit var viewPager: ViewPager2
     private var _onboardingViewBinding: OnboardingScreenLayoutBinding? = null
     private val onboardingViewBinding get() = _onboardingViewBinding!!
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _onboardingViewBinding = OnboardingScreenLayoutBinding.inflate(layoutInflater)
         setContentView(onboardingViewBinding.root)
+        checkLoginStatus()
         buildViewPager()
         buildStepsIndication()
         setButtons()
+    }
+
+    private fun checkLoginStatus(){
+        lifecycleScope.launchWhenStarted {
+            val loginStatus = viewModel.readLoggedUser()
+            if (loginStatus != 0L){
+                finish()
+                startActivity(MainMenuActivity.createIntent(applicationContext, loginStatus))
+            }
+        }
     }
 
     private fun setButtons() {
