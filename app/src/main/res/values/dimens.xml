@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="margin_medium_16">16dp</dimen>
+    <dimen name="margin_default_8">8dp</dimen>
     <dimen name="padding_small_8">8dp</dimen>
 
     <dimen name="button_corner_radius">12dp</dimen>
