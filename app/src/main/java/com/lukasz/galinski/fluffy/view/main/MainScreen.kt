@@ -6,9 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.lukasz.galinski.fluffy.BR
 import com.lukasz.galinski.fluffy.databinding.MainMenuFragmentBinding
-import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,6 +27,7 @@ class MainScreen: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mainMenuBinding.setVariable(BR.mainViewModel, hostViewModel)
+        mainMenuBinding.lifecycleOwner = viewLifecycleOwner
+        mainMenuBinding.mainViewModel = hostViewModel
     }
 }

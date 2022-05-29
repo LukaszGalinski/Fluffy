@@ -5,6 +5,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#757575</color>
-    <color name="dark_green">#50A855</color>
-    <color name="dark_red">#BD1C1C</color>
+    <color name="dark_green">#08a273</color>
+    <color name="dark_red">#f73d53</color>
 </resources>

@@ -25,5 +25,7 @@
 
     <string name="double_press_to_exit">Press back button twice to exit the application</string>
     <string name="register_error_empty">empty!</string>
-    <string name="welcome_main">Welcome to main menu, %s</string>
+    <string name="user_balance">%s, your account balance</string>
+    <string name="icon_income">icon_income</string>
+    <string name="icon_outcome">icon_outcome</string>
 </resources>

@@ -2,18 +2,13 @@ package com.lukasz.galinski.fluffy
 
 import android.app.Application
 import android.content.Context
-import androidx.annotation.NonNull
 import androidx.room.Room
 import com.lukasz.galinski.fluffy.repository.database.AppDatabase
 import com.lukasz.galinski.fluffy.repository.database.DatabaseDao
-import com.lukasz.galinski.fluffy.repository.database.DatabaseRepository
-import com.lukasz.galinski.fluffy.repository.database.DatabaseRepositoryImpl
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.HiltAndroidApp
-import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher

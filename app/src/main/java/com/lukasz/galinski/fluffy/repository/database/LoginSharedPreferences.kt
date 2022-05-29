@@ -13,14 +13,14 @@ class LoginSharedPreferences @Inject constructor(context: Context) {
     private val sharedPreferences: SharedPreferences
         get() = appContext.getSharedPreferences(LOGGED_USER_LABEL, Context.MODE_PRIVATE)
 
-    fun updateLoggedUser(id: Long) {
+    fun setLoggedUser(id: Long) {
         sharedPreferences.edit().putLong(
             LOGGED_USER_LABEL,
             id
         ).apply()
     }
 
-    fun readLoggedUser(): Long {
+    fun getLoggedUser(): Long {
         return sharedPreferences.getLong(LOGGED_USER_LABEL, 0)
     }
 }
