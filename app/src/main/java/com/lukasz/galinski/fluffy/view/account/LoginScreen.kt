@@ -65,7 +65,7 @@ class LoginScreen : Fragment() {
             when (state) {
                 is Success -> {
                     Log.i(STATE_TAG, state.toString())
-                    hostViewModel.updateLoggedUser(state.userId)
+                    hostViewModel.setLoggedUser(state.userId)
                     context?.let {
                         activity?.finishAndRemoveTask()
                         startActivity(MainMenuActivity.createIntent(it, state.userId))

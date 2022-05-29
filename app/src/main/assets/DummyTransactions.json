@@ -1,0 +1,20 @@
+{
+  "transactions": [
+    {
+      "name": "Apple juice",
+      "date": "22-04-2022",
+      "category": "food",
+      "type": "outcome",
+      "amount": "4,99",
+      "description": "Apple juice in the office"
+    },
+    {
+      "name": "Salad",
+      "date": "22-04-2022",
+      "category": "food",
+      "type": "outcome",
+      "amount": "12,31",
+      "description": "Salad with chicken"
+    }
+  ]
+}

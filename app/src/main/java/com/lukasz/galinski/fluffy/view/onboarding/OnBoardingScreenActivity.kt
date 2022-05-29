@@ -38,7 +38,7 @@ class OnBoardingScreenActivity : FragmentActivity() {
 
     private fun checkLoginStatus(){
         lifecycleScope.launchWhenStarted {
-            val loginStatus = viewModel.readLoggedUser()
+            val loginStatus = viewModel.getLoggedUser()
             if (loginStatus != 0L){
                 finish()
                 startActivity(MainMenuActivity.createIntent(applicationContext, loginStatus))

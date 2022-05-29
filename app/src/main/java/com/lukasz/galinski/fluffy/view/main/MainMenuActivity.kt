@@ -15,11 +15,11 @@ import dagger.hilt.android.AndroidEntryPoint
 private const val BACK_BUTTON_DELAY = 1000L
 
 @AndroidEntryPoint
-class MainMenuActivity: AppCompatActivity() {
-    companion object{
+class MainMenuActivity : AppCompatActivity() {
+    companion object {
         private const val USER_ID_INTENT = "USER_ID"
 
-        fun createIntent(context: Context, userId: Long): Intent{
+        fun createIntent(context: Context, userId: Long): Intent {
             return Intent(context, MainMenuActivity::class.java).apply {
                 putExtra(USER_ID_INTENT, userId)
             }
@@ -34,13 +34,7 @@ class MainMenuActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_host_layout)
-        val userId = intent.getLongExtra(USER_ID_INTENT, 0)
         Runnable { createBackButtonDelay() }
-        getUserinfo(userId)
-    }
-
-    private fun getUserinfo(userId: Long){
-        mainViewModel.getUser(userId)
     }
 
     private fun createBackButtonDelay() {

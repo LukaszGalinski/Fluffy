@@ -10,8 +10,10 @@ import com.lukasz.galinski.fluffy.repository.database.DatabaseRepositoryImpl
 import com.lukasz.galinski.fluffy.repository.database.LoginSharedPreferences
 import com.lukasz.galinski.fluffy.view.account.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -71,14 +73,13 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun updateLoggedUser(userId: Long) {
+    fun setLoggedUser(userId: Long) {
         viewModelScope.launch {
-            withContext(ioDispatcher){loginSharedPreferences.updateLoggedUser(userId)}
-            println(loginSharedPreferences.readLoggedUser())
+            withContext(ioDispatcher) { loginSharedPreferences.setLoggedUser(userId) }
         }
     }
 
-    suspend fun readLoggedUser(): Long {
-        return withContext(ioDispatcher) { loginSharedPreferences.readLoggedUser() }
+    suspend fun getLoggedUser(): Long {
+        return withContext(ioDispatcher) { loginSharedPreferences.getLoggedUser() }
     }
 }
