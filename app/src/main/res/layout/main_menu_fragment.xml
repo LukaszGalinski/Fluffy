@@ -164,8 +164,11 @@
             tools:layout_editor_absoluteX="-43dp" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/transactions"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/chart" />
     </androidx.constraintlayout.widget.ConstraintLayout>

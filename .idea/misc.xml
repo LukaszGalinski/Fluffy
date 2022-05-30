@@ -26,6 +26,7 @@
         <entry key="app/src/main/res/layout/onboarding_screen_second_fragment.xml" value="0.178125" />
         <entry key="app/src/main/res/layout/onboarding_screen_third_fragment.xml" value="0.178125" />
         <entry key="app/src/main/res/layout/register_screen_fragment.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/transactions_single_item.xml" value="0.125" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.13645833333333332" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.13645833333333332" />
       </map>
