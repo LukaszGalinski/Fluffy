@@ -1,4 +1,4 @@
-package com.lukasz.galinski.fluffy.common
+package com.lukasz.galinski.fluffy.view.account
 
 import android.text.Editable
 import android.text.TextWatcher

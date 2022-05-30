@@ -68,7 +68,7 @@ class LoginScreen : Fragment() {
                     hostViewModel.setLoggedUser(state.userId)
                     context?.let {
                         activity?.finishAndRemoveTask()
-                        startActivity(MainMenuActivity.createIntent(it, state.userId))
+                        startActivity(MainMenuActivity.createIntent(it))
                     }
                 }
                 is Failure -> {

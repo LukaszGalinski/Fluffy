@@ -1,5 +1,4 @@
-{
-  "transactions": [
+[
     {
       "name": "Apple juice",
       "date": "22-04-2022",
@@ -10,11 +9,26 @@
     },
     {
       "name": "Salad",
-      "date": "22-04-2022",
+      "date": "21-05-2022",
       "category": "food",
+      "type": "outcome",
+      "amount": "12,31",
+      "description": "Salad with chicken"
+    },
+    {
+      "name": "Macbook",
+      "date": "21-05-2022",
+      "category": "Credit",
+      "type": "outcome",
+      "amount": "659,31",
+      "description": "1 of 10 dept"
+    },
+    {
+      "name": "Macbook",
+      "date": "21-05-2022",
+      "category": "Credit",
       "type": "outcome",
       "amount": "12,31",
       "description": "Salad with chicken"
     }
   ]
-}

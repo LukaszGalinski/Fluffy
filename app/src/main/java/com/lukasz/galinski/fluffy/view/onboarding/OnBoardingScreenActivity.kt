@@ -41,7 +41,7 @@ class OnBoardingScreenActivity : FragmentActivity() {
             val loginStatus = viewModel.getLoggedUser()
             if (loginStatus != 0L){
                 finish()
-                startActivity(MainMenuActivity.createIntent(applicationContext, loginStatus))
+                startActivity(MainMenuActivity.createIntent(applicationContext))
             }
         }
     }

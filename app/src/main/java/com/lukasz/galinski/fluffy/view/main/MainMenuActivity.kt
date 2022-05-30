@@ -16,13 +16,10 @@ private const val BACK_BUTTON_DELAY = 1000L
 
 @AndroidEntryPoint
 class MainMenuActivity : AppCompatActivity() {
-    companion object {
-        private const val USER_ID_INTENT = "USER_ID"
 
-        fun createIntent(context: Context, userId: Long): Intent {
-            return Intent(context, MainMenuActivity::class.java).apply {
-                putExtra(USER_ID_INTENT, userId)
-            }
+    companion object {
+        fun createIntent(context: Context): Intent {
+            return Intent(context, MainMenuActivity::class.java)
         }
     }
 
