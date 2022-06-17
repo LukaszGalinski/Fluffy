@@ -28,4 +28,12 @@
     <string name="user_balance">%s, your account balance</string>
     <string name="icon_income">icon_income</string>
     <string name="icon_outcome">icon_outcome</string>
+    <string name="notifications">Notifications</string>
+    <string name="logout">Logout</string>
+    <string name="date_drop_down">date_drop_down</string>
+    <string name="amount_text">9500$</string>
+    <string name="income">Income</string>
+    <string name="amount_test_one">$5000</string>
+    <string name="expenses">Expenses</string>
+    <string name="amount_test_second">$1200</string>
 </resources>

@@ -33,7 +33,7 @@ class NetworkRepository @Inject constructor(private val context: Context) {
             val gson = Gson()
             val listPersonType = object : TypeToken<ArrayList<DataModel>>() {}.type
             val persons: ArrayList<DataModel> = gson.fromJson(jsonFileString, listPersonType)
-            persons.forEachIndexed { idx, person -> Log.i("data", "> Item $idx:\n$person") }
+            persons.forEachIndexed { idx, person -> Log.i("NetworkRepository", "> Item $idx:\n$person") }
             emit(persons)
         }
     }
