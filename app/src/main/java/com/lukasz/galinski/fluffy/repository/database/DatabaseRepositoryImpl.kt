@@ -1,7 +1,6 @@
 package com.lukasz.galinski.fluffy.repository.database
 
 import com.lukasz.galinski.fluffy.model.UserModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -11,7 +10,6 @@ class DatabaseRepositoryImpl @Inject constructor(private val db: DatabaseDao) : 
     override fun addNewUser(user: UserModel) =
         flow {
             val id = db.addNewUser(user)
-            delay(5000)
             emit(id)
         }
 

@@ -3,19 +3,17 @@ package com.lukasz.galinski.fluffy
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import com.lukasz.galinski.fluffy.repository.database.AppDatabase
 import com.lukasz.galinski.fluffy.repository.database.DatabaseDao
 import com.lukasz.galinski.fluffy.repository.database.LoginSharedPreferences
 import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.Assert.*
-import org.junit.Before
 import java.io.IOException
-import java.lang.Exception
-import kotlin.jvm.Throws
 
 @RunWith(AndroidJUnit4::class)
 class DatabaseEntityTest {
