@@ -8,10 +8,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import com.lukasz.galinski.fluffy.databinding.MainMenuFragmentBinding
+import com.lukasz.galinski.fluffy.model.DataModel
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+
 
 private const val MAIN_MENU_TAG = "MainMenu: "
 
@@ -45,6 +50,7 @@ class MainScreen : Fragment() {
                     Log.i(MAIN_MENU_TAG, state.toString())
                     mainMenuBinding.transactions.adapter =
                         TransactionsAdapter(state.transactionsList)
+                    configureLineChart(state.transactionsList)
                 }
                 is Failure -> {
                     Log.i(MAIN_MENU_TAG, state.toString())
@@ -57,5 +63,27 @@ class MainScreen : Fragment() {
                 }
             }
         }
+    }
+
+    private fun configureLineChart(data: ArrayList<DataModel>) {
+        mainMenuBinding.chart.description.text = "My own Data Chart"
+        mainMenuBinding.chart.description.textSize = 24F
+        mainMenuBinding.chart.isActivated = true
+
+        val entryList = ArrayList<Entry>()
+
+        for (i in data.indices){
+            entryList.add(Entry(i.toFloat(), (2*i).toFloat(), data[i].amount))
+        }
+
+        val lineDataSet = LineDataSet(entryList, "Expenses")
+        val lineData = LineData(lineDataSet)
+
+        mainMenuBinding.chart.data = lineData
+    }
+
+    override fun onDestroy() {
+        _mainMenuBinding = null
+        super.onDestroy()
     }
 }

@@ -9,14 +9,55 @@
             type="com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel" />
     </data>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/category_icon"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:contentDescription="@string/food_icon"
+            android:src="@drawable/food_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".2" />
+
         <TextView
-            android:id="@+id/transactionName"
+            android:id="@+id/transaction_name"
             style="@style/Theme.Fluffy.Onboarding.titleStyle"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="14sp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:paddingTop="24dp"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/category_icon"
+            app:layout_constraintTop_toTopOf="@+id/category_icon"
             tools:text="Example transaction" />
 
+        <TextView
+            android:id="@+id/transaction_description"
+            style="@style/Theme.Fluffy.Onboarding.titleStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="@+id/category_icon"
+            app:layout_constraintStart_toEndOf="@+id/category_icon"
+            app:layout_constraintTop_toBottomOf="@+id/transaction_name"
+            tools:text="Example transaction" />
+
+        <TextView
+            android:id="@+id/amount"
+            style="@style/Theme.Fluffy.Onboarding.titleStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/transaction_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="$200"
+            android:layout_marginEnd="@dimen/margin_medium_16" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
