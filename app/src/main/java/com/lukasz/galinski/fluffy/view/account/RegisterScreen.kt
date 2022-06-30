@@ -124,8 +124,8 @@ class RegisterScreen : Fragment() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         _registerBinding = null
+        super.onDestroy()
     }
 }
 

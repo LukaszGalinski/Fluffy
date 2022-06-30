@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(indices = [Index(value = ["userId"], unique = true)])
+@Entity(indices = [Index(value = ["transactionId"], unique = true)])
 data class DataModel(
     @ColumnInfo(name = "name")
     var name: String?,
@@ -19,8 +19,10 @@ data class DataModel(
     var description: String?,
     @ColumnInfo(name = "type")
     var type: String?,
+    @ColumnInfo(name = "userId")
+    var userId: Long?,
 ) {
     @PrimaryKey(autoGenerate = true)
-    var userId: Long? = null
+    var transactionId: Long? = null
 }
 

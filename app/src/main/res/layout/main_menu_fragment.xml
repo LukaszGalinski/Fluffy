@@ -14,26 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/material_top_bar"
-                style="@style/Widget.MaterialComponents.Toolbar.Surface"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:backgroundTint="@color/white"
-                app:menu="@menu/app_bar_top_menu"
-                app:navigationIcon="@drawable/ic_baseline_account_circle_24"
-                app:title="October"
-                app:titleCentered="true">
-
-            </com.google.android.material.appbar.MaterialToolbar>
-        </com.google.android.material.appbar.AppBarLayout>
-
         <TextView
             android:id="@+id/balance_label"
             style="@style/Theme.Fluffy.Onboarding.titleStyle"
@@ -42,8 +22,9 @@
             android:layout_marginTop="@dimen/margin_default_8"
             android:gravity="center"
             android:text="@{@string/user_balance(mainViewModel.loggedUserDetails.name)}"
-            android:textSize="14sp"
-            app:layout_constraintTop_toBottomOf="@id/appbar"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/onboarding_subtitle_text_size"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Roger, your account balance: " />
 
         <TextView

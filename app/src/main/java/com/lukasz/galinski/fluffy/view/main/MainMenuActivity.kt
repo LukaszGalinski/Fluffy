@@ -6,14 +6,17 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.common.createToast
+import com.lukasz.galinski.fluffy.databinding.MainHostLayoutBinding
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 
 private const val BACK_BUTTON_DELAY = 1000L
@@ -28,15 +31,72 @@ class MainMenuActivity : AppCompatActivity() {
         }
     }
 
+    private var _mainMenuHostBinding: MainHostLayoutBinding? = null
+    private val mainMenuHostBinding get() = _mainMenuHostBinding!!
     private val mainViewModel: MainMenuViewModel by viewModels()
     private var doubleCheckButton = false
     private var handler = Handler(Looper.getMainLooper())
-    private lateinit var runnable: Runnable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_host_layout)
-        Runnable { createBackButtonDelay() }
+        _mainMenuHostBinding = MainHostLayoutBinding.inflate(layoutInflater)
+        setContentView(mainMenuHostBinding.root)
+        val currentMonth = getCurrentDate()
+        createMonthSpinner(currentMonth)
+        setupTopBar()
+    }
+
+    private fun getCurrentDate(): Int {
+        val cal = Calendar.getInstance()
+        return cal.get(Calendar.MONTH)
+    }
+
+    private fun setupTopBar() {
+        mainMenuHostBinding.materialTopBar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.notifications -> {
+                    Log.i(MAIN_MENU_ACTIVITY_TAG, "Notifications")
+                    true
+                }
+                R.id.logout -> {
+                    Log.i(MAIN_MENU_ACTIVITY_TAG, "Logout")
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun createMonthSpinner(currentMonth: Int) {
+        val monthArray = resources.getStringArray(R.array.months_of_year)
+
+        val spinnerAdapter: ArrayAdapter<String?> = object :
+            ArrayAdapter<String?>(applicationContext, R.layout.spinner_adapter_view, monthArray) {
+        }
+
+        val dropdown = mainMenuHostBinding.monthSpinner
+        dropdown.adapter = spinnerAdapter
+        dropdown.setSelection(currentMonth)
+
+        dropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                Log.i(MAIN_MENU_ACTIVITY_TAG, (position + 1).toString())
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                Log.i(MAIN_MENU_ACTIVITY_TAG, "Nothing selected")
+                return
+            }
+        }
+    }
+
+    override fun onBackPressed() {
+        createBackButtonDelay()
     }
 
     private fun createBackButtonDelay() {
@@ -45,31 +105,16 @@ class MainMenuActivity : AppCompatActivity() {
             return
         }
         doubleCheckButton = true
-        this.createToast(resources.getString(R.string.double_press_to_exit))
-        handler.postDelayed(runnable, BACK_BUTTON_DELAY)
+
+        handler.postDelayed({
+            this.createToast(resources.getString(R.string.double_press_to_exit))
+            doubleCheckButton = false
+        }, BACK_BUTTON_DELAY)
     }
 
     override fun onDestroy() {
-        handler.removeCallbacks(runnable)
+        handler.removeCallbacksAndMessages(Unit)
+        _mainMenuHostBinding = null
         super.onDestroy()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.app_bar_top_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.notifications ->{
-                Log.d(MAIN_MENU_ACTIVITY_TAG, "Notifications")
-                return true
-            }
-            R.id.logout->{
-                Log.d(MAIN_MENU_ACTIVITY_TAG, "Logout")
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 }

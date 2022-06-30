@@ -3,6 +3,7 @@ package com.lukasz.galinski.fluffy.view.main
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.TransactionsSingleItemBinding
 import com.lukasz.galinski.fluffy.model.DataModel
 
@@ -21,6 +22,8 @@ class TransactionsAdapter(private val transactionsList: ArrayList<DataModel>) :
         with(holder) {
             with(transactionsList[position]) {
                 binding.transactionName.text = name
+                binding.transactionDescription.text = description
+                binding.amount.text = holder.binding.root.resources.getString(R.string.amount, amount)
             }
         }
     }

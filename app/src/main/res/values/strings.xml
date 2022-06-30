@@ -26,6 +26,7 @@
     <string name="double_press_to_exit">Press back button twice to exit the application</string>
     <string name="register_error_empty">empty!</string>
     <string name="user_balance">%s, your account balance</string>
+    <string name="amount">$%s</string>
     <string name="icon_income">icon_income</string>
     <string name="icon_outcome">icon_outcome</string>
     <string name="notifications">Notifications</string>
@@ -36,4 +37,20 @@
     <string name="amount_test_one">$5000</string>
     <string name="expenses">Expenses</string>
     <string name="amount_test_second">$1200</string>
+    <string name="food_icon">food_icon</string>
+
+    <string-array name="months_of_year">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
 </resources>
