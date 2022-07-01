@@ -1,4 +1,4 @@
-package com.lukasz.galinski.fluffy.repository.database
+package com.lukasz.galinski.fluffy.repository.preferences
 
 import android.content.Context
 import android.content.SharedPreferences

@@ -6,7 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.lukasz.galinski.fluffy.repository.database.AppDatabase
-import com.lukasz.galinski.fluffy.repository.database.DatabaseDao
+import com.lukasz.galinski.fluffy.repository.database.user.UsersDao
 import com.lukasz.galinski.fluffy.repository.database.LoginSharedPreferences
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -17,7 +17,7 @@ import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
 class DatabaseEntityTest {
-    private lateinit var usersDao: DatabaseDao
+    private lateinit var usersDao: UsersDao
     private lateinit var usersDatabase: AppDatabase
 
     @Test

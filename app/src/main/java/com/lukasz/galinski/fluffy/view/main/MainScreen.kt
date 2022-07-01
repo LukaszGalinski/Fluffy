@@ -12,7 +12,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.lukasz.galinski.fluffy.databinding.MainMenuFragmentBinding
-import com.lukasz.galinski.fluffy.model.DataModel
+import com.lukasz.galinski.fluffy.model.TransactionModel
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -41,6 +41,7 @@ class MainScreen : Fragment() {
         mainMenuBinding.mainViewModel = hostViewModel
         handleTransactions()
         mainMenuBinding.transactions.adapter = TransactionsAdapter(ArrayList())
+
     }
 
     private fun handleTransactions() = lifecycleScope.launchWhenStarted {
@@ -65,7 +66,7 @@ class MainScreen : Fragment() {
         }
     }
 
-    private fun configureLineChart(data: ArrayList<DataModel>) {
+    private fun configureLineChart(data: ArrayList<TransactionModel>) {
         mainMenuBinding.chart.description.text = "My own Data Chart"
         mainMenuBinding.chart.description.textSize = 24F
         mainMenuBinding.chart.isActivated = true

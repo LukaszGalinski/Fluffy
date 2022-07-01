@@ -6,11 +6,11 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(indices = [Index(value = ["transactionId"], unique = true)])
-data class DataModel(
+data class TransactionModel(
     @ColumnInfo(name = "name")
     var name: String?,
     @ColumnInfo(name = "date")
-    var date: String?,
+    var date: Long,
     @ColumnInfo(name = "category")
     var category: String?,
     @ColumnInfo(name = "amount")
