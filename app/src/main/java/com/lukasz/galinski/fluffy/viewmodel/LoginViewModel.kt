@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lukasz.galinski.fluffy.HiltApplication
 import com.lukasz.galinski.fluffy.model.UserModel
-import com.lukasz.galinski.fluffy.repository.database.DatabaseRepositoryImpl
-import com.lukasz.galinski.fluffy.repository.database.LoginSharedPreferences
+import com.lukasz.galinski.fluffy.repository.database.user.UsersRepositoryImpl
+import com.lukasz.galinski.fluffy.repository.preferences.LoginSharedPreferences
 import com.lukasz.galinski.fluffy.view.account.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val dbRepo: DatabaseRepositoryImpl,
+    private val dbRepo: UsersRepositoryImpl,
     private val loginSharedPreferences: LoginSharedPreferences,
     @HiltApplication.IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {

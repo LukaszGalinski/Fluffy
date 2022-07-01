@@ -3,10 +3,10 @@ package com.lukasz.galinski.fluffy
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
-import com.lukasz.galinski.fluffy.repository.database.AppDatabase
-import com.lukasz.galinski.fluffy.repository.database.DatabaseDao
-import com.lukasz.galinski.fluffy.repository.database.TransactionsDao
-import com.lukasz.galinski.fluffy.repository.database.TransactionsDatabase
+import com.lukasz.galinski.fluffy.repository.database.transaction.TransactionsDao
+import com.lukasz.galinski.fluffy.repository.database.transaction.TransactionsDatabase
+import com.lukasz.galinski.fluffy.repository.database.user.AppDatabase
+import com.lukasz.galinski.fluffy.repository.database.user.UsersDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,14 +20,15 @@ import javax.inject.Singleton
 
 private const val TRANSACTIONS_DATABASE_NAME = "TransactionsDatabase"
 private const val USERS_DATABASE_NAME = "UsersDatabase"
+
 @HiltAndroidApp
-class HiltApplication: Application() {
+class HiltApplication : Application() {
 
     @InstallIn(SingletonComponent::class)
     @Module
     class DatabaseModule {
         @Provides
-        fun provideChannelDao(appDatabase: AppDatabase): DatabaseDao {
+        fun provideChannelDao(appDatabase: AppDatabase): UsersDao {
             return appDatabase.usersDao()
         }
 
@@ -59,7 +60,7 @@ class HiltApplication: Application() {
 
     @InstallIn(SingletonComponent::class)
     @Module
-    class SharedPreferences{
+    class SharedPreferences {
         @Provides
         @Singleton
         fun provideContext(@ApplicationContext context: Context): Context {

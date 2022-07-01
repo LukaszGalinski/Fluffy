@@ -56,6 +56,8 @@ class MainMenuActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.notifications -> {
                     Log.i(MAIN_MENU_ACTIVITY_TAG, "Notifications")
+                    mainViewModel.addNewRow()
+
                     true
                 }
                 R.id.logout -> {
@@ -89,7 +91,6 @@ class MainMenuActivity : AppCompatActivity() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                Log.i(MAIN_MENU_ACTIVITY_TAG, "Nothing selected")
                 return
             }
         }

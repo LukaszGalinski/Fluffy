@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.TransactionsSingleItemBinding
-import com.lukasz.galinski.fluffy.model.DataModel
+import com.lukasz.galinski.fluffy.model.TransactionModel
 
-class TransactionsAdapter(private val transactionsList: ArrayList<DataModel>) :
+class TransactionsAdapter(private val transactionsList: ArrayList<TransactionModel>) :
     RecyclerView.Adapter<TransactionsAdapter.TransactionsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionsViewHolder {

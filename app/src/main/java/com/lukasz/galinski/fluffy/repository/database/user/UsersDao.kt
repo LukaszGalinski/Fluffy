@@ -1,4 +1,4 @@
-package com.lukasz.galinski.fluffy.repository.database
+package com.lukasz.galinski.fluffy.repository.database.user
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -6,7 +6,7 @@ import androidx.room.Query
 import com.lukasz.galinski.fluffy.model.UserModel
 
 @Dao
-interface DatabaseDao {
+interface UsersDao {
 
     @Insert
     fun addNewUser(user: UserModel): Long

@@ -1,4 +1,4 @@
-package com.lukasz.galinski.fluffy.repository.database
+package com.lukasz.galinski.fluffy.repository.database.user
 
 
 import androidx.room.Database
@@ -12,5 +12,5 @@ private const val DATABASE_VERSION = 1
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun usersDao(): DatabaseDao
+    abstract fun usersDao(): UsersDao
 }
