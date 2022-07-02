@@ -14,9 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.common.createToast
 import com.lukasz.galinski.fluffy.databinding.MainHostLayoutBinding
+import com.lukasz.galinski.fluffy.view.account.LoginHostActivity
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 
 
 private const val BACK_BUTTON_DELAY = 1000L
@@ -41,27 +41,23 @@ class MainMenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _mainMenuHostBinding = MainHostLayoutBinding.inflate(layoutInflater)
         setContentView(mainMenuHostBinding.root)
-        val currentMonth = getCurrentDate()
+        val currentMonth = mainViewModel.getCurrentMonth()
         createMonthSpinner(currentMonth)
         setupTopBar()
     }
 
-    private fun getCurrentDate(): Int {
-        val cal = Calendar.getInstance()
-        return cal.get(Calendar.MONTH)
-    }
 
     private fun setupTopBar() {
         mainMenuHostBinding.materialTopBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.notifications -> {
                     Log.i(MAIN_MENU_ACTIVITY_TAG, "Notifications")
-                    mainViewModel.addNewRow()
-
                     true
                 }
                 R.id.logout -> {
                     Log.i(MAIN_MENU_ACTIVITY_TAG, "Logout")
+                    mainViewModel.logoutUser()
+                    LoginHostActivity.createIntent(applicationContext, "")
                     true
                 }
                 else -> false

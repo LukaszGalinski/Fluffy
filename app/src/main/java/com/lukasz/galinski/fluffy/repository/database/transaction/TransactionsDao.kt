@@ -9,7 +9,7 @@ import com.lukasz.galinski.fluffy.model.TransactionModel
 interface TransactionsDao {
 
     @Insert
-    fun addNewTransaction(transactionModel: TransactionModel)
+    fun addNewTransaction(transactionModel: TransactionModel): Long
 
     @Query("SELECT * FROM TransactionModel WHERE userId LIKE :userId AND date BETWEEN :startDate AND :endDate")
     fun getMonthTransactions(userId: Long, startDate: Long, endDate: Long): List<TransactionModel>

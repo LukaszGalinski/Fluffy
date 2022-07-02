@@ -7,3 +7,4 @@ object Idle : MainMenuStates()
 object Loading : MainMenuStates()
 object Failure : MainMenuStates()
 data class Success(val transactionsList: ArrayList<TransactionModel>) : MainMenuStates()
+
