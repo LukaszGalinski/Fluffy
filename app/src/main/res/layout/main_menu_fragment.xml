@@ -21,11 +21,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_default_8"
             android:gravity="center"
-            android:text="@{@string/user_balance(mainViewModel.loggedUserDetails.name)}"
+            android:text="@string/user_balance"
             android:textColor="@color/gray"
             android:textSize="@dimen/onboarding_subtitle_text_size"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Roger, your account balance: " />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/account_balance"
@@ -34,12 +33,13 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/amount_text"
+            android:textSize="26sp"
             app:layout_constraintTop_toBottomOf="@id/balance_label" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/button_income"
             android:layout_width="0dp"
-            android:layout_height="75dp"
+            android:layout_height="65dp"
             android:layout_marginTop="@dimen/margin_medium_16"
             android:background="@drawable/shape_button_rounded"
             app:layout_constraintEnd_toStartOf="@+id/button_outcome"
@@ -100,7 +100,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/button_outcome"
             android:layout_width="0dp"
-            android:layout_height="75dp"
+            android:layout_height="65dp"
             android:layout_marginTop="@dimen/margin_medium_16"
             android:background="@drawable/shape_button_rounded"
             android:backgroundTint="@color/dark_red"
@@ -169,11 +169,43 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/transactions"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/chart" />
+            app:layout_constraintBottom_toTopOf="@id/app_bar_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chart"
+            app:layout_constraintWidth_percent=".95" />
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <com.google.android.material.bottomappbar.BottomAppBar
+                android:id="@+id/bottomAppBar"
+                style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:gravity="bottom"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:menu="@menu/app_bar_top_menu"
+                app:navigationIcon="@drawable/ic_baseline_account_circle_24" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_anchor="@id/bottomAppBar"
+                app:layout_constraintBottom_toBottomOf="@+id/transactions"
+                app:layout_constraintEnd_toEndOf="@+id/bottomAppBar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/transactions"
+                app:srcCompat="@drawable/food_icon" />
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -7,8 +7,14 @@ import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.TransactionsSingleItemBinding
 import com.lukasz.galinski.fluffy.model.TransactionModel
 
-class TransactionsAdapter(private val transactionsList: ArrayList<TransactionModel>) :
+class TransactionsAdapter:
     RecyclerView.Adapter<TransactionsAdapter.TransactionsViewHolder>() {
+
+    var transactionsList: ArrayList<TransactionModel> = arrayListOf()
+        set(value) {
+            field = value
+            notifyItemRangeChanged(0, transactionsList.size)
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionsViewHolder {
         val binding = TransactionsSingleItemBinding
