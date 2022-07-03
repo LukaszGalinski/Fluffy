@@ -38,6 +38,12 @@
     <string name="expenses">Expenses</string>
     <string name="amount_test_second">$1200</string>
     <string name="food_icon">food_icon</string>
+    <string name="add_new_expense">AddNewExpense</string>
+    <string name="add_new_income">addNewIncome</string>
+    <string name="home">Home</string>
+    <string name="transactions">Transactions</string>
+    <string name="budget">Budget</string>
+    <string name="profile">Profile</string>
 
     <string-array name="months_of_year">
         <item>January</item>

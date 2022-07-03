@@ -1,5 +1,6 @@
 package com.lukasz.galinski.fluffy.view.main
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -29,6 +30,7 @@ class MainScreen : Fragment() {
     private val mainMenuBinding get() = _mainMenuBinding!!
     private val hostViewModel: MainMenuViewModel by viewModels()
     private var transactionAdapter = TransactionsAdapter()
+    private var isRotate = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,20 +47,42 @@ class MainScreen : Fragment() {
         mainMenuBinding.mainViewModel = hostViewModel
         mainMenuBinding.transactions.adapter = transactionAdapter
 
+        createBottomNavigation()
         handleTransactions()
         mainMenuBinding.buttonIncome.setOnClickListener {
-            hostViewModel.addNewTransaction(
-                TransactionModel(
-                    "Macbook Pro",
-                    hostViewModel.getCurrentDate(),
-                    "Other",
-                    "659,20",
-                    "5 of 10 debt payment",
-                    "outcome",
-                    hostViewModel.loggedUserDetails.value.userId
-                )
-            )
+            addDummyTransaction()
         }
+    }
+
+    private fun addDummyTransaction() = hostViewModel.addNewTransaction(
+        TransactionModel(
+            "Macbook Pro",
+            hostViewModel.getCurrentDate(),
+            "Other",
+            "659.20",
+            "5 of 10 debt payment",
+            "outcome",
+            hostViewModel.loggedUserDetails.value.userId
+        )
+    )
+
+    private fun createBottomNavigation() {
+        mainMenuBinding.bottomNavigationView.background = null
+        mainMenuBinding.bottomNavigationView.menu.getItem(2).isEnabled = false
+
+        mainMenuBinding.floatingButton.setOnClickListener {
+
+            isRotate = AnimatedFab().rotateFab(it, !isRotate)
+            if (isRotate) {
+                AnimatedFab().showIn(mainMenuBinding.fabIncome)
+                AnimatedFab().showIn(mainMenuBinding.fabOutcome)
+            } else {
+                AnimatedFab().showOut(mainMenuBinding.fabIncome)
+                AnimatedFab().showOut(mainMenuBinding.fabOutcome)
+            }
+        }
+        AnimatedFab().init(mainMenuBinding.fabIncome)
+        AnimatedFab().init(mainMenuBinding.fabOutcome)
     }
 
     private fun handleTransactions() = lifecycleScope.launch {
@@ -85,17 +109,24 @@ class MainScreen : Fragment() {
     }
 
     private fun configureLineChart(data: ArrayList<TransactionModel>) {
-        mainMenuBinding.chart.description.text = "My own Data Chart"
-        mainMenuBinding.chart.description.textSize = 24F
+        mainMenuBinding.chart.description.text = ""
+        mainMenuBinding.chart.description.textSize = 0F
         mainMenuBinding.chart.isActivated = true
+        mainMenuBinding.chart.setDrawGridBackground(false)
+        mainMenuBinding.chart.setGridBackgroundColor(Color.MAGENTA)
+        mainMenuBinding.chart.axisLeft.isEnabled = false
+        mainMenuBinding.chart.axisRight.isEnabled = false
+        mainMenuBinding.chart.axisRight.setDrawGridLines(false)
+        mainMenuBinding.chart.axisLeft.setDrawGridLines(false)
 
         val entryList = ArrayList<Entry>()
 
         for (i in data.indices) {
-            entryList.add(Entry(i.toFloat(), (2 * i).toFloat(), data[i].amount))
+            entryList.add(Entry((10+i).toFloat(), data[i].amount?.toFloat()!!, data[i].date))
         }
 
         val lineDataSet = LineDataSet(entryList, "Expenses")
+        lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
         val lineData = LineData(lineDataSet)
 
         mainMenuBinding.chart.data = lineData
