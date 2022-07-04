@@ -1,11 +1,12 @@
 package com.lukasz.galinski.fluffy.repository.database.user
 
 import com.lukasz.galinski.fluffy.model.UserModel
+import com.lukasz.galinski.fluffy.repository.database.DatabaseDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class UsersRepositoryImpl @Inject constructor(private val db: UsersDao) : UsersRepository {
+class UsersRepositoryImpl @Inject constructor(private val db: DatabaseDao) : UsersRepository {
 
     override fun addNewUser(user: UserModel) =
         flow {

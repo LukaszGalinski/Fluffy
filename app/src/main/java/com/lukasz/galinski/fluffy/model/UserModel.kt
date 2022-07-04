@@ -5,7 +5,9 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(indices = [Index(value = ["userEmail"], unique = true)])
+private const val USERS_TABLE = "usersTable"
+
+@Entity(indices = [Index(value = ["userEmail"], unique = true)], tableName = USERS_TABLE)
 data class UserModel(
     @ColumnInfo(name = "name") var name: String?,
     @ColumnInfo(name = "userEmail") var userEmail: String?,

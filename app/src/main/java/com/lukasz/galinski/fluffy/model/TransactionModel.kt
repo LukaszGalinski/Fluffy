@@ -5,7 +5,9 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(indices = [Index(value = ["transactionId"], unique = true)])
+private const val TRANSACTIONS_TABLE = "TransactionsTable"
+
+@Entity(indices = [Index(value = ["transactionId"], unique = true)], tableName = TRANSACTIONS_TABLE)
 data class TransactionModel(
     @ColumnInfo(name = "name")
     var name: String?,

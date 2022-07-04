@@ -3,10 +3,8 @@ package com.lukasz.galinski.fluffy
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
-import com.lukasz.galinski.fluffy.repository.database.transaction.TransactionsDao
-import com.lukasz.galinski.fluffy.repository.database.transaction.TransactionsDatabase
-import com.lukasz.galinski.fluffy.repository.database.user.AppDatabase
-import com.lukasz.galinski.fluffy.repository.database.user.UsersDao
+import com.lukasz.galinski.fluffy.repository.database.AppDatabase
+import com.lukasz.galinski.fluffy.repository.database.DatabaseDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,8 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
-private const val TRANSACTIONS_DATABASE_NAME = "TransactionsDatabase"
-private const val USERS_DATABASE_NAME = "UsersDatabase"
+private const val DATABASE_NAME = "FLUFFY_DATABASE"
 
 @HiltAndroidApp
 class HiltApplication : Application() {
@@ -28,13 +25,8 @@ class HiltApplication : Application() {
     @Module
     class DatabaseModule {
         @Provides
-        fun provideChannelDao(appDatabase: AppDatabase): UsersDao {
-            return appDatabase.usersDao()
-        }
-
-        @Provides
-        fun provideTransactionsDao(transactionsDatabase: TransactionsDatabase): TransactionsDao {
-            return transactionsDatabase.transactionsDao()
+        fun provideChannelDao(appDatabase: AppDatabase): DatabaseDao {
+            return appDatabase.databaseDao()
         }
 
         @Provides
@@ -43,18 +35,8 @@ class HiltApplication : Application() {
             return Room.databaseBuilder(
                 appContext,
                 AppDatabase::class.java,
-                USERS_DATABASE_NAME
+                DATABASE_NAME
             ).build()
-        }
-
-        @Provides
-        @Singleton
-        fun provideTransactionsDatabase(@ApplicationContext appContext: Context): TransactionsDatabase {
-            return Room.databaseBuilder(
-                appContext,
-                TransactionsDatabase::class.java,
-                TRANSACTIONS_DATABASE_NAME
-            ).allowMainThreadQueries().build()
         }
     }
 
