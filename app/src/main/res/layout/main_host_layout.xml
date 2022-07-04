@@ -9,6 +9,7 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
+            app:elevation="0dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent">
@@ -18,7 +19,7 @@
                 style="@style/Widget.MaterialComponents.Toolbar.Surface"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:backgroundTint="#FFF6E8"
+                android:backgroundTint="#FDFAF4"
                 app:menu="@menu/app_bar_top_menu"
                 app:navigationIcon="@drawable/ic_baseline_account_circle_24"
                 app:titleCentered="true"

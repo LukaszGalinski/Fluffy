@@ -72,17 +72,17 @@ class MainScreen : Fragment() {
 
         mainMenuBinding.floatingButton.setOnClickListener {
 
-            isRotate = AnimatedFab().rotateFab(it, !isRotate)
+            isRotate = FabAnimation().rotateFab(it, !isRotate)
             if (isRotate) {
-                AnimatedFab().showIn(mainMenuBinding.fabIncome)
-                AnimatedFab().showIn(mainMenuBinding.fabOutcome)
+                FabAnimation().showIn(mainMenuBinding.fabIncome)
+                FabAnimation().showIn(mainMenuBinding.fabOutcome)
             } else {
-                AnimatedFab().showOut(mainMenuBinding.fabIncome)
-                AnimatedFab().showOut(mainMenuBinding.fabOutcome)
+                FabAnimation().showOut(mainMenuBinding.fabIncome)
+                FabAnimation().showOut(mainMenuBinding.fabOutcome)
             }
         }
-        AnimatedFab().init(mainMenuBinding.fabIncome)
-        AnimatedFab().init(mainMenuBinding.fabOutcome)
+        FabAnimation().init(mainMenuBinding.fabIncome)
+        FabAnimation().init(mainMenuBinding.fabOutcome)
     }
 
     private fun handleTransactions() = lifecycleScope.launch {

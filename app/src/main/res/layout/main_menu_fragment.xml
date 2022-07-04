@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="mainViewModel"
             type="com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel" />
@@ -162,7 +163,86 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_marginTop="@dimen/margin_default_8"
+            android:layoutDirection="rtl"
             app:layout_constraintTop_toBottomOf="@id/button_income" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_default_8"
+            app:checkedChip="@+id/today"
+            android:background="@android:color/transparent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chart"
+            app:layout_wrapBehaviorInParent="vertical_only"
+            app:selectionRequired="true"
+            app:singleLine="true"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/today"
+                style="@style/Colors_Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:width="84dp"
+                android:text="@string/today"
+                android:textAlignment="center"
+                app:chipMinTouchTargetSize="32dp" />
+
+            <com.google.android.material.chip.Chip
+                style="@style/Colors_Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:width="84dp"
+                android:text="@string/week"
+                android:textAlignment="center"
+                app:chipMinTouchTargetSize="32dp" />
+
+            <com.google.android.material.chip.Chip
+                style="@style/Colors_Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:width="84dp"
+                android:text="@string/month"
+                android:textAlignment="center"
+                app:chipMinTouchTargetSize="32dp" />
+
+            <com.google.android.material.chip.Chip
+                style="@style/Colors_Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:width="84dp"
+                android:text="@string/year"
+                android:textAlignment="center"
+                app:chipMinTouchTargetSize="32dp" />
+        </com.google.android.material.chip.ChipGroup>
+
+        <TextView
+            android:id="@+id/recentTransactionsLabel"
+            style="@style/Theme.Fluffy.Onboarding.titleStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_medium_16"
+            android:layout_marginTop="@dimen/margin_default_8"
+            android:text="@string/recent_transactions"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chipGroup" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/seeAllButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_medium_16"
+            android:backgroundTint="@color/purple_700"
+            android:text="@string/see_all"
+            android:textColor="@color/purple_primary"
+            android:textStyle="bold"
+            app:cornerRadius="@dimen/margin_medium_16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/recentTransactionsLabel" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/transactions"
@@ -173,7 +253,7 @@
             app:layout_constraintBottom_toTopOf="@id/app_bar_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/chart"
+            app:layout_constraintTop_toBottomOf="@id/seeAllButton"
             app:layout_constraintWidth_percent=".95" />
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -199,11 +279,11 @@
             android:backgroundTint="@color/purple_primary"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_baseline_add_24"
-            app:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/app_bar_layout"
-            app:layout_constraintTop_toBottomOf="@+id/transactions" />
+            app:layout_constraintTop_toBottomOf="@+id/transactions"
+            app:tint="@color/white" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_income"
@@ -211,22 +291,22 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_margin="10dp"
+            android:contentDescription="@string/add_new_expense"
             android:tint="@color/white"
             app:backgroundTint="@color/dark_red"
             app:layout_constraintBottom_toTopOf="@+id/floating_button"
-            app:layout_constraintStart_toEndOf="@+id/floating_button"
-            android:contentDescription="@string/add_new_expense" />
+            app:layout_constraintStart_toEndOf="@+id/floating_button" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabOutcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:contentDescription="@string/add_new_income"
             android:tint="@color/white"
             app:backgroundTint="@color/dark_green"
             app:layout_constraintBottom_toTopOf="@+id/floating_button"
-            app:layout_constraintEnd_toStartOf="@+id/floating_button"
-            android:contentDescription="@string/add_new_income" />
+            app:layout_constraintEnd_toStartOf="@+id/floating_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
