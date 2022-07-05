@@ -39,7 +39,7 @@ class MainMenuViewModel @Inject constructor(
     private var currentEndDate = 0L
 
     init {
-        userId = sharedPreferences.getLoggedUser()
+        viewModelScope.launch { userId = getLoggedUser() }
         getUser(userId)
         getTransactionsList(userId)
     }
@@ -75,6 +75,10 @@ class MainMenuViewModel @Inject constructor(
     fun getCurrentMonth(): Int {
         val cal = Calendar.getInstance()
         return cal.get(Calendar.MONTH)
+    }
+
+    private suspend fun getLoggedUser(): Long {
+        return sharedPreferences.getLoggedUser()
     }
 
     private fun getUser(userId: Long) =
@@ -137,6 +141,8 @@ class MainMenuViewModel @Inject constructor(
     }
 
     fun logoutUser() {
-        sharedPreferences.setLoggedUser(0)
+        viewModelScope.launch {
+            sharedPreferences.setLoggedUser(0)
+        }
     }
 }

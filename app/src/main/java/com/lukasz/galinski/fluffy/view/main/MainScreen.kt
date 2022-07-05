@@ -18,7 +18,6 @@ import com.lukasz.galinski.fluffy.databinding.MainMenuFragmentBinding
 import com.lukasz.galinski.fluffy.model.TransactionModel
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
@@ -118,17 +117,17 @@ class MainScreen : Fragment() {
         mainMenuBinding.chart.axisRight.isEnabled = false
         mainMenuBinding.chart.axisRight.setDrawGridLines(false)
         mainMenuBinding.chart.axisLeft.setDrawGridLines(false)
+        mainMenuBinding.chart.legend.isEnabled = false
 
         val entryList = ArrayList<Entry>()
 
         for (i in data.indices) {
-            entryList.add(Entry((10+i).toFloat(), data[i].amount?.toFloat()!!, data[i].date))
+            entryList.add(Entry((10 + i).toFloat(), data[i].amount?.toFloat()!!, data[i].date))
         }
 
         val lineDataSet = LineDataSet(entryList, "Expenses")
         lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
         val lineData = LineData(lineDataSet)
-
         mainMenuBinding.chart.data = lineData
     }
 

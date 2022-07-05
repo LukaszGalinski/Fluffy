@@ -1,26 +1,43 @@
 package com.lukasz.galinski.fluffy.repository.preferences
 
 import android.content.Context
-import android.content.SharedPreferences
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.longPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import com.lukasz.galinski.fluffy.HiltApplication
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 private const val LOGGED_USER_LABEL = "LoggedUser"
+private const val SETTINGS_LABEL = "Settings"
+private val LOGGED_USER_SETTINGS = longPreferencesKey(LOGGED_USER_LABEL)
 
-class LoginSharedPreferences @Inject constructor(context: Context) {
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = SETTINGS_LABEL)
 
+class LoginSharedPreferences @Inject constructor(
+    context: Context,
+    @HiltApplication.IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) {
     private val appContext = context.applicationContext
 
-    private val sharedPreferences: SharedPreferences
-        get() = appContext.getSharedPreferences(LOGGED_USER_LABEL, Context.MODE_PRIVATE)
+    private val sharedPreferences: DataStore<Preferences>
+        get() = appContext.dataStore
 
-    fun setLoggedUser(id: Long) {
-        sharedPreferences.edit().putLong(
-            LOGGED_USER_LABEL,
-            id
-        ).apply()
+    suspend fun setLoggedUser(id: Long) {
+        sharedPreferences.edit { settings ->
+            settings[LOGGED_USER_SETTINGS] = id
+        }
     }
 
-    fun getLoggedUser(): Long {
-        return sharedPreferences.getLong(LOGGED_USER_LABEL, 0)
+    suspend fun getLoggedUser(): Long {
+        return appContext.dataStore.data
+            .map { preferences ->
+                preferences[LOGGED_USER_SETTINGS] ?: 0
+            }.flowOn(ioDispatcher).first()
     }
 }

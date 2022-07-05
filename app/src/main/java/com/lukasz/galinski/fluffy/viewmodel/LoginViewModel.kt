@@ -67,6 +67,7 @@ class LoginViewModel @Inject constructor(
                     if (it == 0L) {
                         _userAccountState.emit(UserNotFound(it))
                     } else {
+                        setLoggedUser(it)
                         _userAccountState.emit(Success(it))
                     }
                 }
@@ -75,7 +76,7 @@ class LoginViewModel @Inject constructor(
 
     fun setLoggedUser(userId: Long) {
         viewModelScope.launch {
-            withContext(ioDispatcher) { loginSharedPreferences.setLoggedUser(userId) }
+            loginSharedPreferences.setLoggedUser(userId)
         }
     }
 

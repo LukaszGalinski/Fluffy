@@ -18,7 +18,6 @@ import com.lukasz.galinski.fluffy.databinding.LoginScreenFragmentBinding
 import com.lukasz.galinski.fluffy.view.main.MainMenuActivity
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 
 private const val MARKED_SPANS_COUNT = 7
 private const val HIGHLIGHTED_COLOR = "#7F3DFF"
@@ -65,7 +64,6 @@ class LoginScreen : Fragment() {
             when (state) {
                 is Success -> {
                     Log.i(STATE_TAG, state.toString())
-                    hostViewModel.setLoggedUser(state.userId)
                     context?.let {
                         activity?.finishAndRemoveTask()
                         startActivity(MainMenuActivity.createIntent(it))
