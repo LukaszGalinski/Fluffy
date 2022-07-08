@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
@@ -16,7 +16,6 @@ import com.lukasz.galinski.fluffy.databinding.RegisterScreenFragmentBinding
 import com.lukasz.galinski.fluffy.model.UserModel
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 
 private const val HIGHLIGHTED_TERMS_SPANS_COUNT = 35
 private const val HIGHLIGHTED_LOGIN_SPANS_COUNT = 5
@@ -28,7 +27,7 @@ class RegisterScreen : Fragment() {
 
     private var _registerBinding: RegisterScreenFragmentBinding? = null
     private val registerBinding get() = _registerBinding!!
-    private val viewModel by viewModels<LoginViewModel>()
+    private val viewModel by activityViewModels<LoginViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

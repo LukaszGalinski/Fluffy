@@ -13,6 +13,7 @@ import com.lukasz.galinski.fluffy.view.account.LoginHostActivity
 import com.lukasz.galinski.fluffy.view.main.MainMenuActivity
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
 
 @AndroidEntryPoint
 class OnBoardingScreenActivity : FragmentActivity() {
@@ -39,9 +40,9 @@ class OnBoardingScreenActivity : FragmentActivity() {
     private fun checkLoginStatus(){
         lifecycleScope.launchWhenStarted {
             val loginStatus = viewModel.getLoggedUser()
-            if (loginStatus != 0L){
+            if (loginStatus.first() != 0L){
                 finish()
-                startActivity(MainMenuActivity.createIntent(applicationContext))
+                startActivity(MainMenuActivity.createIntent(applicationContext, loginStatus.first()))
             }
         }
     }

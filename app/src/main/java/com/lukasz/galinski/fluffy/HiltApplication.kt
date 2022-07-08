@@ -16,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
-private const val DATABASE_NAME = "FLUFFY_DATABASE"
+private const val DATABASE_NAME = "FluffyDatabase"
 
 @HiltAndroidApp
 class HiltApplication : Application() {

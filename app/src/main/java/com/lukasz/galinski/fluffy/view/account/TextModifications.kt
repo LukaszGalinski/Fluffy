@@ -1,4 +1,4 @@
-package com.lukasz.galinski.fluffy.common
+package com.lukasz.galinski.fluffy.view.account
 
 import android.graphics.Color
 import android.text.Spannable
@@ -14,8 +14,8 @@ fun highlightSelectedTextRange(
     val spannable = SpannableString(message)
     spannable.setSpan(
         ForegroundColorSpan(Color.parseColor(color)),
-        startPosition, // start
-        endPosition, // end
+        startPosition,
+        endPosition,
         Spannable.SPAN_EXCLUSIVE_INCLUSIVE
     )
     return spannable

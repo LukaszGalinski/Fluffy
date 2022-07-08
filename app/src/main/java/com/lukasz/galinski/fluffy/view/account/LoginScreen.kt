@@ -6,12 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.common.createToast
-import com.lukasz.galinski.fluffy.common.highlightSelectedTextRange
 import com.lukasz.galinski.fluffy.common.setInvisible
 import com.lukasz.galinski.fluffy.common.setVisible
 import com.lukasz.galinski.fluffy.databinding.LoginScreenFragmentBinding
@@ -27,7 +26,7 @@ private const val STATE_TAG = "State: "
 class LoginScreen : Fragment() {
     private var _loginBinding: LoginScreenFragmentBinding? = null
     private val loginBinding get() = _loginBinding!!
-    private val hostViewModel: LoginViewModel by viewModels()
+    private val hostViewModel: LoginViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,8 +64,7 @@ class LoginScreen : Fragment() {
                 is Success -> {
                     Log.i(STATE_TAG, state.toString())
                     context?.let {
-                        activity?.finishAndRemoveTask()
-                        startActivity(MainMenuActivity.createIntent(it))
+                        startActivity(MainMenuActivity.createIntent(it, state.userId))
                     }
                 }
                 is Failure -> {

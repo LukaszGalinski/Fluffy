@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -27,9 +27,8 @@ private const val MAIN_MENU_TAG = "MainMenu: "
 class MainScreen : Fragment() {
     private var _mainMenuBinding: MainMenuFragmentBinding? = null
     private val mainMenuBinding get() = _mainMenuBinding!!
-    private val hostViewModel: MainMenuViewModel by viewModels()
+    private val hostViewModel: MainMenuViewModel by activityViewModels()
     private var transactionAdapter = TransactionsAdapter()
-    private var isRotate = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,9 +47,19 @@ class MainScreen : Fragment() {
 
         createBottomNavigation()
         handleTransactions()
+        createFabAnimationButton()
         mainMenuBinding.buttonIncome.setOnClickListener {
             addDummyTransaction()
         }
+    }
+
+    private fun createFabAnimationButton() {
+        val fabAnimation = FabAnimation()
+        mainMenuBinding.floatingButton.setOnClickListener {
+            hostViewModel.setFabAnimation(it, mainMenuBinding.fabOutcome, mainMenuBinding.fabIncome)
+        }
+        fabAnimation.init(mainMenuBinding.fabIncome)
+        fabAnimation.init(mainMenuBinding.fabOutcome)
     }
 
     private fun addDummyTransaction() = hostViewModel.addNewTransaction(
@@ -61,27 +70,13 @@ class MainScreen : Fragment() {
             "659.20",
             "5 of 10 debt payment",
             "outcome",
-            hostViewModel.loggedUserDetails.value.userId
+            hostViewModel.userID
         )
     )
 
     private fun createBottomNavigation() {
         mainMenuBinding.bottomNavigationView.background = null
         mainMenuBinding.bottomNavigationView.menu.getItem(2).isEnabled = false
-
-        mainMenuBinding.floatingButton.setOnClickListener {
-
-            isRotate = FabAnimation().rotateFab(it, !isRotate)
-            if (isRotate) {
-                FabAnimation().showIn(mainMenuBinding.fabIncome)
-                FabAnimation().showIn(mainMenuBinding.fabOutcome)
-            } else {
-                FabAnimation().showOut(mainMenuBinding.fabIncome)
-                FabAnimation().showOut(mainMenuBinding.fabOutcome)
-            }
-        }
-        FabAnimation().init(mainMenuBinding.fabIncome)
-        FabAnimation().init(mainMenuBinding.fabOutcome)
     }
 
     private fun handleTransactions() = lifecycleScope.launch {
@@ -130,7 +125,6 @@ class MainScreen : Fragment() {
         val lineData = LineData(lineDataSet)
         mainMenuBinding.chart.data = lineData
     }
-
 
     override fun onDestroy() {
         _mainMenuBinding = null

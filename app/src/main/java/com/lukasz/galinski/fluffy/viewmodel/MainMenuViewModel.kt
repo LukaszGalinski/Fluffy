@@ -1,13 +1,15 @@
 package com.lukasz.galinski.fluffy.viewmodel
 
+import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.lukasz.galinski.fluffy.HiltApplication
 import com.lukasz.galinski.fluffy.model.TransactionModel
 import com.lukasz.galinski.fluffy.model.UserModel
 import com.lukasz.galinski.fluffy.repository.database.transaction.TransactionsRepositoryImpl
 import com.lukasz.galinski.fluffy.repository.database.user.UsersRepositoryImpl
-import com.lukasz.galinski.fluffy.repository.preferences.LoginSharedPreferences
+import com.lukasz.galinski.fluffy.repository.preferences.PreferencesData
 import com.lukasz.galinski.fluffy.view.main.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -23,25 +25,42 @@ private const val DATE_PATTERN = "dd-MM-yyyy"
 class MainMenuViewModel @Inject constructor(
     private val dbRepo: UsersRepositoryImpl,
     private val transactionRepository: TransactionsRepositoryImpl,
-    private val sharedPreferences: LoginSharedPreferences,
+    private val sharedPreferencesData: PreferencesData,
     @HiltApplication.IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
+    private var isRotate = false
     private val dummyUser = UserModel("User", "", "", "")
     private val _loggedUserDetails = MutableStateFlow(dummyUser)
-    val loggedUserDetails: StateFlow<UserModel> = _loggedUserDetails
+    //val loggedUserDetails: StateFlow<UserModel> = _loggedUserDetails
     private val _userMainMenuState: MutableStateFlow<MainMenuStates> = MutableStateFlow(Idle)
     val userMainMenuState: StateFlow<MainMenuStates> = _userMainMenuState
     private val _transactionList = MutableStateFlow(ArrayList<TransactionModel>())
-    val transactionList: Flow<ArrayList<TransactionModel>> = _transactionList
-    private var userId: Long = 0
+    //val transactionList: Flow<ArrayList<TransactionModel>> = _transactionList
+    var userID: Long = 0L
     private var currentStartDate = 0L
     private var currentEndDate = 0L
 
     init {
-        viewModelScope.launch { userId = getLoggedUser() }
-        getUser(userId)
-        getTransactionsList(userId)
+        viewModelScope.launch {
+            sharedPreferencesData.getLoggedUser().collect {
+                userID = it
+            }
+        }
+        getUser(userID)
+        getTransactionsList(userID)
+    }
+
+    fun setFabAnimation(view: View, buttonOutcome: FloatingActionButton, buttonIncome:FloatingActionButton) {
+        val fabAnimation = FabAnimation()
+        isRotate = fabAnimation.rotateFab(view, !isRotate)
+        if (isRotate) {
+            fabAnimation.showIn(buttonIncome)
+            fabAnimation.showIn(buttonOutcome)
+        } else {
+            fabAnimation.showOut(buttonIncome)
+            fabAnimation.showOut(buttonOutcome)
+        }
     }
 
     private fun getEndMonthDate(): Long {
@@ -77,10 +96,6 @@ class MainMenuViewModel @Inject constructor(
         return cal.get(Calendar.MONTH)
     }
 
-    private suspend fun getLoggedUser(): Long {
-        return sharedPreferences.getLoggedUser()
-    }
-
     private fun getUser(userId: Long) =
         viewModelScope.launch {
             dbRepo.getUser(userId)
@@ -100,7 +115,11 @@ class MainMenuViewModel @Inject constructor(
 
     private fun getTransactionsList(userId: Long) {
         viewModelScope.launch {
-            transactionRepository.getTransactions(userId, getStartMonthDate(), getEndMonthDate())
+            transactionRepository.getTransactions(
+                userId,
+                getStartMonthDate(),
+                getEndMonthDate()
+            )
                 .onStart {
                     _userMainMenuState.emit(Loading)
                 }
@@ -114,7 +133,6 @@ class MainMenuViewModel @Inject constructor(
                 .collect {
                     _userMainMenuState.emit(Success(it as ArrayList<TransactionModel>))
                     _transactionList.value = it
-
                 }
         }
     }
@@ -142,7 +160,7 @@ class MainMenuViewModel @Inject constructor(
 
     fun logoutUser() {
         viewModelScope.launch {
-            sharedPreferences.setLoggedUser(0)
+            sharedPreferencesData.setLoggedUser(0)
         }
     }
 }

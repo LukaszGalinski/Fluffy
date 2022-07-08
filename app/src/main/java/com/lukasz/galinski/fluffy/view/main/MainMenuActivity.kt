@@ -22,12 +22,16 @@ import dagger.hilt.android.AndroidEntryPoint
 private const val BACK_BUTTON_DELAY = 1000L
 private const val MAIN_MENU_ACTIVITY_TAG = "MainMenuActivity: "
 
+
 @AndroidEntryPoint
 class MainMenuActivity : AppCompatActivity() {
 
     companion object {
-        fun createIntent(context: Context): Intent {
-            return Intent(context, MainMenuActivity::class.java)
+        private const val USER_ID_TAG = "UserId"
+        fun createIntent(context: Context, userId: Long): Intent {
+            val intent = Intent(context, MainMenuActivity::class.java)
+            intent.putExtra(USER_ID_TAG, userId)
+            return intent
         }
     }
 
@@ -42,6 +46,8 @@ class MainMenuActivity : AppCompatActivity() {
         _mainMenuHostBinding = MainHostLayoutBinding.inflate(layoutInflater)
         setContentView(mainMenuHostBinding.root)
         val currentMonth = mainViewModel.getCurrentMonth()
+        val userId = intent.extras?.getLong(USER_ID_TAG)
+        mainViewModel.userID = userId ?: 0
         createMonthSpinner(currentMonth)
         setupTopBar()
     }
