@@ -16,7 +16,6 @@
             android:layout_marginTop="@dimen/margin_medium_16"
             android:layout_marginBottom="@dimen/margin_medium_16"
             android:contentDescription="@string/onBoarding_logo"
-            android:src="@drawable/onboarding_two_logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
