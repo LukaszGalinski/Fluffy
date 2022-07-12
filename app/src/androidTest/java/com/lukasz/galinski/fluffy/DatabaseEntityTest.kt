@@ -5,9 +5,11 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.lukasz.galinski.fluffy.common.getCurrentDate
+import com.lukasz.galinski.fluffy.common.getEndMonthDate
+import com.lukasz.galinski.fluffy.common.getStartMonthDate
 import com.lukasz.galinski.fluffy.repository.database.AppDatabase
-import com.lukasz.galinski.fluffy.repository.database.user.UsersDao
-import com.lukasz.galinski.fluffy.repository.database.LoginSharedPreferences
+import com.lukasz.galinski.fluffy.repository.database.DatabaseDao
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -15,9 +17,12 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
 
+private const val DUMMY_USER_LOGIN = "test@test.com"
+private const val DUMMY_USER_PASSWORD = "test"
+
 @RunWith(AndroidJUnit4::class)
 class DatabaseEntityTest {
-    private lateinit var usersDao: UsersDao
+    private lateinit var usersDao: DatabaseDao
     private lateinit var usersDatabase: AppDatabase
 
     @Test
@@ -27,21 +32,31 @@ class DatabaseEntityTest {
     }
 
     @Before
-    fun createDb(){
+    fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         usersDatabase = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
-        usersDao = usersDatabase.usersDao()
+        usersDao = usersDatabase.databaseDao()
     }
 
     @After
     @Throws(IOException::class)
-    fun closeDb(){
+    fun closeDb() {
         usersDatabase.close()
     }
 
     @Test
+    fun insertNewUser() {
+        val testUser = TestUtilities.createTestUsers(0).apply {
+            get(0).name = "Clint"
+        }
+        usersDao.addNewUser(testUser[0])
+        val allUsers = usersDao.getAllUsers()
+        assertEquals(true, allUsers.contains(testUser[0]))
+    }
+
+    @Test
     @Throws(Exception::class)
-    fun entityWriteAndReadDatabaseElementTest(){
+    fun entityWriteAndReadDatabaseElementTest() {
         val testUsers = TestUtilities.createTestUsers(1).apply {
             get(0).name = "Mark"
             get(1).name = "John"
@@ -56,19 +71,17 @@ class DatabaseEntityTest {
 
     @Test
     @Throws(Exception::class)
-    fun entityDeleteTest(){
-        val testUsers = TestUtilities.createTestUsers(1)
+    fun entityDeleteTest() {
+        val testUsers = TestUtilities.createTestUsers(0)
         usersDao.addNewUser(testUsers[0])
-        usersDao.addNewUser(testUsers[1])
         usersDao.deleteUser(1)
-
-        val list = usersDao.getAllUsers()
-        assertEquals(1, list.size)
+        val allUsers = usersDao.getAllUsers()
+        assertEquals(false, allUsers.contains(testUsers[0]))
     }
 
     @Test
     @Throws(Exception::class)
-    fun getSingleUser(){
+    fun loadSingleUser() {
         val testUsers = TestUtilities.createTestUsers(1)
         val newUser = usersDao.addNewUser(testUsers[0])
         val loadedUser = usersDao.getUser(newUser)
@@ -76,12 +89,38 @@ class DatabaseEntityTest {
     }
 
     @Test
-    @Throws(Exception::class)
-    fun saveAndReadSharedPreferences(){
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val loginSP = LoginSharedPreferences(context)
-        loginSP.setLoggedUser(2)
-        val readUser = loginSP.getLoggedUser()
-        assertEquals(2, readUser)
+    fun loginUserWithSuccess() {
+        val testUser = TestUtilities.createTestUsers(0).apply {
+            get(0).userEmail = DUMMY_USER_LOGIN
+            get(0).password = DUMMY_USER_PASSWORD
+        }
+        usersDao.addNewUser(testUser[0])
+
+        val userLoginSuccessValue = usersDao.loginUser(DUMMY_USER_LOGIN, DUMMY_USER_PASSWORD)
+        assertEquals(1, userLoginSuccessValue)
+    }
+
+    @Test
+    fun loginUserWithFailure() {
+        val userLoggedOutValue = usersDao.loginUser(DUMMY_USER_LOGIN, DUMMY_USER_PASSWORD)
+        assertEquals(0, userLoggedOutValue)
+    }
+
+    @Test
+    fun loadTransactionsInDateRange(){
+        val currentDate = getCurrentDate()
+        val startMonthDate = getStartMonthDate()
+        val endMonthDate = getEndMonthDate()
+        val dummyTransaction = TestUtilities.createTestTransactions(2).apply {
+            get(0).date = currentDate
+            get(1).date = 9999
+            get(2).date = currentDate+4000
+        }
+        usersDao.addNewTransaction(dummyTransaction[0])
+        usersDao.addNewTransaction(dummyTransaction[1])
+        usersDao.addNewTransaction(dummyTransaction[2])
+
+        val transactionsCount = usersDao.getMonthTransactions(1, startMonthDate, endMonthDate).count()
+        assertEquals(2, transactionsCount)
     }
 }

@@ -14,8 +14,8 @@ android {
         targetSdk 31
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.lukasz.galinski.fluffy.TestRunner"
     }
 
     buildTypes {
@@ -25,7 +25,7 @@ android {
         }
     }
 
-    buildFeatures{
+    buildFeatures {
         viewBinding true
         dataBinding true
     }
@@ -50,6 +50,13 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     testImplementation "org.mockito.kotlin:mockito-kotlin:3.3.3"
 
+    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.42'
+    kaptAndroidTest 'com.google.dagger:hilt-compiler:2.42'
+    testImplementation 'com.google.dagger:hilt-android-testing:2.42'
+    kaptTest 'com.google.dagger:hilt-compiler:2.42'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.3'
+    androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.3'
+
     implementation "androidx.room:room-runtime:2.4.2"
     implementation "androidx.room:room-ktx:2.4.2"
     kapt "androidx.room:room-compiler:2.4.2"
@@ -69,9 +76,14 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.0"
 
     implementation "androidx.hilt:hilt-navigation-fragment:1.0.0"
-    implementation "com.google.dagger:hilt-android:2.38.1"
-    kapt "com.google.dagger:hilt-android-compiler:2.38.1"
+    implementation "com.google.dagger:hilt-android:2.42"
+    kapt "com.google.dagger:hilt-android-compiler:2.42"
 
     implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
     implementation "androidx.datastore:datastore-preferences:1.0.0"
+
+}
+
+kapt {
+    correctErrorTypes true
 }
