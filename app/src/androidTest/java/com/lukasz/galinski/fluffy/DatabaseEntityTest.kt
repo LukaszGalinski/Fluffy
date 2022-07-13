@@ -5,9 +5,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.lukasz.galinski.fluffy.common.getCurrentDate
-import com.lukasz.galinski.fluffy.common.getEndMonthDate
-import com.lukasz.galinski.fluffy.common.getStartMonthDate
+import com.lukasz.galinski.fluffy.common.DateTools
 import com.lukasz.galinski.fluffy.repository.database.AppDatabase
 import com.lukasz.galinski.fluffy.repository.database.DatabaseDao
 import org.junit.After
@@ -108,9 +106,10 @@ class DatabaseEntityTest {
 
     @Test
     fun loadTransactionsInDateRange(){
-        val currentDate = getCurrentDate()
-        val startMonthDate = getStartMonthDate()
-        val endMonthDate = getEndMonthDate()
+        val date = DateTools()
+        val currentDate = date.getCurrentDateInLong()
+        val startMonthDate = date.getStartMonthDate()
+        val endMonthDate = date.getEndMonthDate()
         val dummyTransaction = TestUtilities.createTestTransactions(2).apply {
             get(0).date = currentDate
             get(1).date = 9999
@@ -119,6 +118,7 @@ class DatabaseEntityTest {
         usersDao.addNewTransaction(dummyTransaction[0])
         usersDao.addNewTransaction(dummyTransaction[1])
         usersDao.addNewTransaction(dummyTransaction[2])
+        println(dummyTransaction)
 
         val transactionsCount = usersDao.getMonthTransactions(1, startMonthDate, endMonthDate).count()
         assertEquals(2, transactionsCount)
