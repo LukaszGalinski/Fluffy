@@ -2,10 +2,8 @@ package com.lukasz.galinski.fluffy.view.onboarding
 
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lukasz.galinski.fluffy.databinding.OnboardingScreenLayoutBinding
@@ -15,12 +13,10 @@ import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 
+private const val REGISTER_SCREEN_LABEL = "REGISTER"
+
 @AndroidEntryPoint
 class OnBoardingScreenActivity : FragmentActivity() {
-    companion object {
-        private const val REGISTER_SCREEN_LABEL = "REGISTER"
-        private const val ONBOARDING_PAGES = 3
-    }
 
     private lateinit var viewPager: ViewPager2
     private var _onboardingViewBinding: OnboardingScreenLayoutBinding? = null
@@ -49,23 +45,18 @@ class OnBoardingScreenActivity : FragmentActivity() {
 
     private fun setButtons() {
         onboardingViewBinding.onboardingLoginButton.setOnClickListener {
-            moveToLogin()
+            moveToAccountScreen()
         }
 
         onboardingViewBinding.onboardingRegisterButton.setOnClickListener {
-            moveToLogin(REGISTER_SCREEN_LABEL)
+            moveToAccountScreen(REGISTER_SCREEN_LABEL)
         }
     }
 
-    private fun moveToLogin(intentLabel: String = "") {
+    private fun moveToAccountScreen(intentLabel: String = "") {
         finish()
         val intent = LoginHostActivity.createIntent(baseContext, intentLabel)
         startActivity(intent)
-    }
-
-    private inner class ScreenSlidePagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
-        override fun getItemCount(): Int = ONBOARDING_PAGES
-        override fun createFragment(position: Int): Fragment = OnboardingFragment(position)
     }
 
     private fun buildViewPager() {
