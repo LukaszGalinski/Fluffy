@@ -16,12 +16,12 @@ class ScreenSlidePagerAdapter(private val fragment: FragmentActivity) :
 
     private fun getFragmentDetails(screenNumber: Int): OnboardingDetailsModel {
         return when (screenNumber) {
-            1 -> OnboardingDetailsModel(
+            0 -> OnboardingDetailsModel(
                 title = fragment.getString(R.string.onBoarding_one_title),
                 subtitle = fragment.getString(R.string.onBoarding_one_subtitle),
                 logoImage = R.drawable.onboarding_one_logo
             )
-            2 -> OnboardingDetailsModel(
+            1 -> OnboardingDetailsModel(
                 title = fragment.getString(R.string.onBoarding_two_title),
                 subtitle = fragment.getString(R.string.onBoarding_two_subtitle),
                 logoImage = R.drawable.onboarding_two_logo

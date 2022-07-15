@@ -30,5 +30,6 @@ class OnboardingFragment(private val fragmentDetails: OnboardingDetailsModel) : 
             .into(onboardingBinding.onboardingLogo)
         onboardingBinding.onboardingTitle.text = fragmentDetails.title
         onboardingBinding.onboardingSubTitle.text = fragmentDetails.subtitle
+        onboardingBinding.onboardingLogo.tag = fragmentDetails.logoImage
     }
 }
