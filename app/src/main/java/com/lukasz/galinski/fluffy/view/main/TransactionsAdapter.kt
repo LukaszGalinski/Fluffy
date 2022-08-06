@@ -2,12 +2,13 @@ package com.lukasz.galinski.fluffy.view.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.TransactionsSingleItemBinding
 import com.lukasz.galinski.fluffy.model.TransactionModel
 
-class TransactionsAdapter:
+class TransactionsAdapter :
     RecyclerView.Adapter<TransactionsAdapter.TransactionsViewHolder>() {
 
     var transactionsList: ArrayList<TransactionModel> = arrayListOf()
@@ -27,13 +28,22 @@ class TransactionsAdapter:
     override fun onBindViewHolder(holder: TransactionsViewHolder, position: Int) {
         with(holder) {
             with(transactionsList[position]) {
+
                 binding.transactionName.text = name
                 binding.transactionDescription.text = description
-                binding.amount.text = holder.binding.root.resources.getString(R.string.amount, amount)
+                binding.amount.text =
+                    holder.binding.root.resources.getString(R.string.amount, amount)
+                binding.amount.setTextColor(ContextCompat.getColor(itemView.context, getAmountTextColor(type!!)))
             }
         }
     }
 
     inner class TransactionsViewHolder(val binding: TransactionsSingleItemBinding) :
         RecyclerView.ViewHolder(binding.root)
+
+    private fun getAmountTextColor(type: String): Int {
+        return if (type == TransactionType.OUTCOME.label){
+            R.color.dark_green
+        } else R.color.dark_red
+    }
 }

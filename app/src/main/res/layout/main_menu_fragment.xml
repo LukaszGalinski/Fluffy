@@ -286,7 +286,7 @@
             app:tint="@color/white" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_income"
+            android:id="@+id/fab_Outcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -298,7 +298,7 @@
             app:layout_constraintStart_toEndOf="@+id/floating_button" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabOutcome"
+            android:id="@+id/fabIncome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"

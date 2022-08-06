@@ -52,7 +52,6 @@ class MainMenuActivity : AppCompatActivity() {
         setupTopBar()
     }
 
-
     private fun setupTopBar() {
         mainMenuHostBinding.materialTopBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {

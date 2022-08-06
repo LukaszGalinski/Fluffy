@@ -7,6 +7,7 @@
         <entry key="..\:/Portfolio/Fluffy/app/src/main/res/layout/onboarding_screen_first_layout.xml" value="0.25" />
         <entry key="app/src/main/res/drawable-anydpi/food_icon.xml" value="0.189" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.207" />
+        <entry key="app/src/main/res/drawable/card_view_round_top.xml" value="0.1795" />
         <entry key="app/src/main/res/drawable/chart_gradient.xml" value="0.207" />
         <entry key="app/src/main/res/drawable/chip_style.xml" value="0.1685" />
         <entry key="app/src/main/res/drawable/gradient_background.xml" value="0.641078369140625" />
@@ -25,12 +26,13 @@
         <entry key="app/src/main/res/drawable/progress_bar.xml" value="0.191" />
         <entry key="app/src/main/res/drawable/shape_button_rounded.xml" value="0.207" />
         <entry key="app/src/main/res/drawable/spinner_drop_down.xml" value="0.10080566406250001" />
+        <entry key="app/src/main/res/layout/expense_add_layout.xml" value="0.32415110270182296" />
         <entry key="app/src/main/res/layout/insert_pin_screen_fragment.xml" value="0.2823702967446329" />
         <entry key="app/src/main/res/layout/login_host_layout.xml" value="0.13179347826086957" />
         <entry key="app/src/main/res/layout/login_screen_fragment.xml" value="0.3874216715494792" />
         <entry key="app/src/main/res/layout/login_screen_layout.xml" value="0.24653175602828897" />
         <entry key="app/src/main/res/layout/main_host_layout.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/main_menu_fragment.xml" value="0.5385452270507813" />
+        <entry key="app/src/main/res/layout/main_menu_fragment.xml" value="0.2962245885769603" />
         <entry key="app/src/main/res/layout/main_menu_host_layout.xml" value="0.16757246376811594" />
         <entry key="app/src/main/res/layout/main_menu_layout.xml" value="0.19010416666666666" />
         <entry key="app/src/main/res/layout/onboarding_screen_first_fragment.xml" value="0.178125" />

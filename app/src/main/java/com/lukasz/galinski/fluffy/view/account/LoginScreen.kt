@@ -48,7 +48,7 @@ class LoginScreen : Fragment() {
         )
 
         loginBinding.createAccountInfo.setOnClickListener {
-            findNavController(view).navigate(R.id.action_loginScreen_to_registerScreen)
+            findNavController(it).navigate(R.id.action_loginScreen_to_registerScreen)
         }
 
         loginBinding.loginButton.setOnClickListener {

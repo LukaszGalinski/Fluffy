@@ -11,9 +11,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.Navigation.findNavController
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.MainMenuFragmentBinding
 import com.lukasz.galinski.fluffy.model.TransactionModel
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
@@ -48,9 +50,6 @@ class MainScreen : Fragment() {
         createBottomNavigation()
         handleTransactions()
         createFabAnimationButton()
-        mainMenuBinding.buttonIncome.setOnClickListener {
-            addDummyTransaction()
-        }
     }
 
     private fun createFabAnimationButton() {
@@ -60,19 +59,29 @@ class MainScreen : Fragment() {
         }
         fabAnimation.init(mainMenuBinding.fabIncome)
         fabAnimation.init(mainMenuBinding.fabOutcome)
+
+        mainMenuBinding.fabIncome.setOnClickListener {
+            addNewTransaction(TransactionType.INCOME.label)
+        }
+
+        mainMenuBinding.fabOutcome.setOnClickListener {
+            findNavController(it).navigate(R.id.action_mainScreen_to_addTransactionScreen)
+        }
     }
 
-    private fun addDummyTransaction() = hostViewModel.addNewTransaction(
-        TransactionModel(
-            "Macbook Pro",
-            hostViewModel.getCurrentDate(),
-            "Other",
-            "659.20",
-            "5 of 10 debt payment",
-            "outcome",
-            hostViewModel.userID
+    private fun addNewTransaction(transactionType: String) {
+        val newTransaction = TransactionModel(
+            name = "Macbook Pro",
+            date = hostViewModel.getCurrentDate(),
+            category = "Other",
+            amount = "659.20",
+            description = "5 of 10 debt payment",
+            type = transactionType,
+            userId = hostViewModel.userID
         )
-    )
+        hostViewModel.addNewTransaction(newTransaction)
+    }
+
 
     private fun createBottomNavigation() {
         mainMenuBinding.bottomNavigationView.background = null

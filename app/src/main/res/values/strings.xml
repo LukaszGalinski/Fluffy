@@ -50,6 +50,13 @@
     <string name="week">Week</string>
     <string name="month">Month</string>
     <string name="year">Year</string>
+    <string name="moveBack">moveBack</string>
+    <string name="how_much_label">How much?</string>
+    <string name="default_value_zero">$0</string>
+    <string name="description">description</string>
+    <string name="add_attachment_label">Add attachment</string>
+    <string name="repeat_label">Repeat</string>
+    <string name="repeat_transaction">Repeat transaction</string>
 
     <string-array name="months_of_year">
         <item>January</item>
