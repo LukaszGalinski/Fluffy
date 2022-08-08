@@ -7,43 +7,6 @@
         android:layout_height="match_parent"
         android:background="@drawable/gradient_background">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appbar"
-            app:elevation="0dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/material_top_bar"
-                style="@style/Widget.MaterialComponents.Toolbar.Surface"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:backgroundTint="#FDFAF4"
-                app:menu="@menu/app_bar_top_menu"
-                app:navigationIcon="@drawable/ic_baseline_account_circle_24"
-                app:titleCentered="true"
-                app:titleTextAppearance="@style/Toolbar.TitleText">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/date_drop_down"
-                    android:src="@drawable/ic_baseline_keyboard_arrow_down_24" />
-
-                <Spinner
-                    android:id="@+id/month_spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@null"
-                    android:paddingVertical="@dimen/margin_default_8"
-                    android:textAlignment="center" />
-            </com.google.android.material.appbar.MaterialToolbar>
-        </com.google.android.material.appbar.AppBarLayout>
-
-
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView"
             android:name="androidx.navigation.fragment.NavHostFragment"
@@ -51,7 +14,7 @@
             android:layout_height="0dp"
             app:defaultNavHost="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appbar"
+            app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/main_navigation_graph" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

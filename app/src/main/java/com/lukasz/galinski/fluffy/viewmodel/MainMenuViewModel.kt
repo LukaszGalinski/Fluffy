@@ -30,13 +30,10 @@ class MainMenuViewModel @Inject constructor(
     private val dateTools = DateTools()
     private val dummyUser = UserModel("User", "", "", "")
     private val _loggedUserDetails = MutableStateFlow(dummyUser)
-
-    //val loggedUserDetails: StateFlow<UserModel> = _loggedUserDetails
     private val _userMainMenuState: MutableStateFlow<MainMenuStates> = MutableStateFlow(Idle)
     val userMainMenuState: StateFlow<MainMenuStates> = _userMainMenuState
     private val _transactionList = MutableStateFlow(ArrayList<TransactionModel>())
 
-    //val transactionList: Flow<ArrayList<TransactionModel>> = _transactionList
     var userID: Long = 0L
     private var currentStartDate = 0L
     private var currentEndDate = 0L

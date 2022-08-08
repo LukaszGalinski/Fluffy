@@ -57,6 +57,7 @@
     <string name="add_attachment_label">Add attachment</string>
     <string name="repeat_label">Repeat</string>
     <string name="repeat_transaction">Repeat transaction</string>
+    <string name="continue_text">Continue</string>
 
     <string-array name="months_of_year">
         <item>January</item>
@@ -71,5 +72,19 @@
         <item>October</item>
         <item>November</item>
         <item>December</item>
+    </string-array>
+
+    <string-array name="category_array">
+        <item>Category</item>
+        <item>Food</item>
+        <item>Car</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="wallet_array">
+        <item>Wallet</item>
+        <item>PayPal</item>
+        <item>CreditCard</item>
+        <item>Cash</item>
     </string-array>
 </resources>

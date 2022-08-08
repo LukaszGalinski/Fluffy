@@ -6,7 +6,7 @@
     <fragment
         android:id="@+id/mainScreen"
         android:name="com.lukasz.galinski.fluffy.view.main.MainScreen"
-        android:label="MainScreen" >
+        android:label="MainScreen">
         <action
             android:id="@+id/action_mainScreen_to_addTransactionScreen"
             app:destination="@id/addTransactionScreen" />

@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.ExpenseAddLayoutBinding
 import com.lukasz.galinski.fluffy.model.TransactionModel
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
@@ -17,14 +18,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 
-private const val MAIN_MENU_TAG = "MainMenu: "
+private const val ADD_TRANSACTION_TAG = "AddNewTransaction: "
 
 @AndroidEntryPoint
 class AddTransactionScreen : Fragment() {
     private var _expenseScreenBinding: ExpenseAddLayoutBinding? = null
     private val expenseScreenBinding get() = _expenseScreenBinding!!
     private val hostViewModel: MainMenuViewModel by activityViewModels()
-    private var transactionAdapter = TransactionsAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,8 +38,16 @@ class AddTransactionScreen : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         expenseScreenBinding.lifecycleOwner = viewLifecycleOwner
-//        expenseScreenBinding.mainViewModel = hostViewModel
-//        expenseScreenBinding.transactions.adapter = transactionAdapter
+
+        val categoryList = resources.getStringArray(R.array.category_array)
+        val walletList = resources.getStringArray(R.array.wallet_array)
+
+        val categoryAdapter = SpinnerWithHintAdapter(requireContext(), categoryList)
+        val wallerAdapter = SpinnerWithHintAdapter(requireContext(), walletList)
+
+        expenseScreenBinding.spinnerCategory.adapter = categoryAdapter
+        expenseScreenBinding.spinnerPaymentMethod.adapter = wallerAdapter
+        handleTransactions()
     }
 
     private fun addNewTransaction(transactionType: String) {
@@ -60,16 +68,16 @@ class AddTransactionScreen : Fragment() {
             hostViewModel.userMainMenuState.collect { state ->
                 when (state) {
                     is Success -> {
-                        Log.i(MAIN_MENU_TAG, state.toString())
+                        Log.i(ADD_TRANSACTION_TAG, state.toString())
                     }
                     is Failure -> {
-                        Log.i(MAIN_MENU_TAG, state.toString())
+                        Log.i(ADD_TRANSACTION_TAG, state.toString())
                     }
                     is Loading -> {
-                        Log.i(MAIN_MENU_TAG, state.toString())
+                        Log.i(ADD_TRANSACTION_TAG, state.toString())
                     }
                     is Idle -> {
-                        Log.i(MAIN_MENU_TAG, state.toString())
+                        Log.i(ADD_TRANSACTION_TAG, state.toString())
                     }
                 }
             }
