@@ -1,9 +1,7 @@
 package com.lukasz.galinski.fluffy.viewmodel
 
-import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.lukasz.galinski.fluffy.HiltApplication
 import com.lukasz.galinski.fluffy.common.DateTools
 import com.lukasz.galinski.fluffy.model.TransactionModel
@@ -26,41 +24,25 @@ class MainMenuViewModel @Inject constructor(
     @HiltApplication.IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-    private var isRotate = false
     private val dateTools = DateTools()
     private val dummyUser = UserModel("User", "", "", "")
     private val _loggedUserDetails = MutableStateFlow(dummyUser)
     private val _userMainMenuState: MutableStateFlow<MainMenuStates> = MutableStateFlow(Idle)
     val userMainMenuState: StateFlow<MainMenuStates> = _userMainMenuState
     private val _transactionList = MutableStateFlow(ArrayList<TransactionModel>())
-
-    var userID: Long = 0L
+    val transactionList: StateFlow<ArrayList<TransactionModel>> = _transactionList
+    var userID: MutableStateFlow<Long> = MutableStateFlow(0L)
     private var currentStartDate = 0L
     private var currentEndDate = 0L
 
     init {
         viewModelScope.launch {
             sharedPreferencesData.getLoggedUser().collect {
-                userID = it
+                userID.value = it
+            }.apply {
+                getUser(userID.value)
+                getTransactionsList(userID.value)
             }
-        }
-        getUser(userID)
-        getTransactionsList(userID)
-    }
-
-    fun setFabAnimation(
-        view: View,
-        buttonOutcome: FloatingActionButton,
-        buttonIncome: FloatingActionButton
-    ) {
-        val fabAnimation = FabAnimation()
-        isRotate = fabAnimation.rotateFab(view, !isRotate)
-        if (isRotate) {
-            fabAnimation.showIn(buttonIncome)
-            fabAnimation.showIn(buttonOutcome)
-        } else {
-            fabAnimation.showOut(buttonIncome)
-            fabAnimation.showOut(buttonOutcome)
         }
     }
 
@@ -82,15 +64,15 @@ class MainMenuViewModel @Inject constructor(
         viewModelScope.launch {
             dbRepo.getUser(userId)
                 .onStart {
-                    _userMainMenuState.emit(Loading)
+                    _userMainMenuState.value = Loading
                 }
                 .catch {
-                    _userMainMenuState.emit(Failure)
+                    _userMainMenuState.value = Failure
                 }.onCompletion {
-                    _userMainMenuState.emit(Idle)
+                    _userMainMenuState.value = Idle
                 }
                 .flowOn(ioDispatcher)
-                .collectLatest {
+                .collect {
                     _loggedUserDetails.value = it
                 }
         }
@@ -103,17 +85,17 @@ class MainMenuViewModel @Inject constructor(
                 getEndMonthDate()
             )
                 .onStart {
-                    _userMainMenuState.emit(Loading)
+                    _userMainMenuState.value = Loading
                 }
                 .catch {
-                    _userMainMenuState.emit(Failure)
+                    _userMainMenuState.value = Failure
                     _transactionList.value = ArrayList()
                 }.onCompletion {
-                    _userMainMenuState.emit(Idle)
+                    _userMainMenuState.value = Idle
                 }
                 .flowOn(ioDispatcher)
                 .collect {
-                    _userMainMenuState.emit(Success(it as ArrayList<TransactionModel>))
+                    _userMainMenuState.value = Success(it as ArrayList<TransactionModel>)
                     _transactionList.value = it
                 }
         }
@@ -123,18 +105,18 @@ class MainMenuViewModel @Inject constructor(
         viewModelScope.launch {
             transactionRepository.addTransaction(transactionModel)
                 .onStart {
-                    _userMainMenuState.emit(Loading)
+                    _userMainMenuState.value = Loading
                 }
                 .catch {
-                    _userMainMenuState.emit(Failure)
+                    _userMainMenuState.value = Failure
                 }.onCompletion {
-                    _userMainMenuState.emit(Idle)
+                    _userMainMenuState.value = Idle
                 }
                 .flowOn(ioDispatcher)
                 .collect {
-                    if ((currentStartDate < transactionModel.date) && (transactionModel.date < currentEndDate)) {
+                    if ((currentStartDate <= transactionModel.date) && (transactionModel.date <= currentEndDate)) {
                         _transactionList.value.add(transactionModel)
-                        _userMainMenuState.emit(Success(_transactionList.value))
+                        _userMainMenuState.value = Success(_transactionList.value)
                     }
                 }
         }
@@ -143,6 +125,7 @@ class MainMenuViewModel @Inject constructor(
     fun logoutUser() {
         viewModelScope.launch {
             sharedPreferencesData.setLoggedUser(0)
+            userID.value = 0
         }
     }
 }

@@ -12,11 +12,6 @@ class DateUnitTest {
     private var date = DateTools()
 
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
-    }
-
-    @Test
     fun getDateFromLong() {
         val dateFromLong = date.getDateFromLong(DUMMY_DATE_IN_LONG)
         assertEquals(DUMMY_DATE, dateFromLong)

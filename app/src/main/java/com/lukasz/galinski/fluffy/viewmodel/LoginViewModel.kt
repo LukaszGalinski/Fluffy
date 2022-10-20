@@ -1,6 +1,5 @@
 package com.lukasz.galinski.fluffy.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,6 +27,7 @@ class LoginViewModel @Inject constructor(
     private val _userAccountState: MutableStateFlow<AccountStates> =
         MutableStateFlow(Idle)
     val userAccountState: StateFlow<AccountStates> = _userAccountState
+    private var currentlyLoggedUserId: Long = 0L
 
     fun setSaveButtonState(state: Boolean) {
         _saveButtonState.value = state
@@ -41,12 +41,10 @@ class LoginViewModel @Inject constructor(
                 }
                 .flowOn(ioDispatcher)
                 .catch {
-                    _userAccountState.emit(Failure(it))
-                }.onCompletion {
-                    _userAccountState.emit(Idle)
+                    _userAccountState.value = Failure(it)
                 }
                 .collect {
-                    _userAccountState.emit(Success(it))
+                    _userAccountState.value = Success(it)
                 }
         }
     }
@@ -60,18 +58,16 @@ class LoginViewModel @Inject constructor(
                     }
                     .flowOn(ioDispatcher)
                     .catch {
-                        _userAccountState.emit(Failure(it))
+                        _userAccountState.value = Failure(it)
                     }.onCompletion {
-                        _userAccountState.emit(Idle)
+                        _userAccountState.value = Idle
                     }
                     .collect {
                         if (it == 0L) {
-                            _userAccountState.emit(UserNotFound(it))
+                            _userAccountState.value = UserNotFound(it)
                         } else {
-                            Log.i("ADDING RO SHARED", it.toString())
                             setLoggedUser(it)
-                            Log.i("ADDING RO", getLoggedUser().toString())
-                            _userAccountState.emit(Success(it))
+                            _userAccountState.value = Success(it)
                         }
                     }
             }
@@ -81,10 +77,15 @@ class LoginViewModel @Inject constructor(
     private fun setLoggedUser(userId: Long) {
         viewModelScope.launch {
             preferencesData.setLoggedUser(userId)
+            currentlyLoggedUserId = userId
         }
     }
 
     fun getLoggedUser(): Flow<Long> {
-        return preferencesData.getLoggedUser()
+        return if (currentlyLoggedUserId == 0L) {
+            preferencesData.getLoggedUser()
+        } else {
+            flowOf(currentlyLoggedUserId)
+        }
     }
 }

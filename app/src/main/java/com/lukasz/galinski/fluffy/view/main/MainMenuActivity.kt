@@ -12,6 +12,8 @@ import com.lukasz.galinski.fluffy.common.createToast
 import com.lukasz.galinski.fluffy.databinding.MainHostLayoutBinding
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 
 
 private const val BACK_BUTTON_DELAY = 1000L
@@ -39,7 +41,7 @@ class MainMenuActivity : AppCompatActivity() {
         _mainMenuHostBinding = MainHostLayoutBinding.inflate(layoutInflater)
         setContentView(mainMenuHostBinding.root)
         val userId = intent.extras?.getLong(USER_ID_TAG)
-        mainViewModel.userID = userId ?: 0
+        mainViewModel.userID = flowOf(userId ?: 0) as MutableStateFlow<Long>
     }
 
     override fun onBackPressed() {

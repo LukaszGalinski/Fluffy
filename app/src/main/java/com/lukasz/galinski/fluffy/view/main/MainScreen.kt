@@ -17,6 +17,7 @@ import androidx.navigation.Navigation.findNavController
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.MainMenuFragmentBinding
 import com.lukasz.galinski.fluffy.model.TransactionModel
@@ -34,6 +35,7 @@ class MainScreen : Fragment() {
     private val mainMenuBinding get() = _mainMenuBinding!!
     private val hostViewModel: MainMenuViewModel by activityViewModels()
     private var transactionAdapter = TransactionsAdapter()
+    private var isRotate = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,7 +63,7 @@ class MainScreen : Fragment() {
     private fun createFabAnimationButton() {
         val fabAnimation = FabAnimation()
         mainMenuBinding.floatingButton.setOnClickListener {
-            hostViewModel.setFabAnimation(it, mainMenuBinding.fabOutcome, mainMenuBinding.fabIncome)
+            setFabAnimation(it, mainMenuBinding.fabOutcome, mainMenuBinding.fabIncome)
         }
         fabAnimation.init(mainMenuBinding.fabIncome)
         fabAnimation.init(mainMenuBinding.fabOutcome)
@@ -83,7 +85,7 @@ class MainScreen : Fragment() {
             amount = "659.20",
             description = "5 of 10 debt payment",
             type = transactionType,
-            userId = hostViewModel.userID
+            userId = hostViewModel.userID.value
         )
         hostViewModel.addNewTransaction(newTransaction)
     }
@@ -184,6 +186,22 @@ class MainScreen : Fragment() {
         lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
         val lineData = LineData(lineDataSet)
         mainMenuBinding.chart.data = lineData
+    }
+
+    private fun setFabAnimation(
+        view: View,
+        buttonOutcome: FloatingActionButton,
+        buttonIncome: FloatingActionButton
+    ) {
+        val fabAnimation = FabAnimation()
+        isRotate = fabAnimation.rotateFab(view, !isRotate)
+        if (isRotate) {
+            fabAnimation.showIn(buttonIncome)
+            fabAnimation.showIn(buttonOutcome)
+        } else {
+            fabAnimation.showOut(buttonIncome)
+            fabAnimation.showOut(buttonOutcome)
+        }
     }
 
     override fun onDestroy() {

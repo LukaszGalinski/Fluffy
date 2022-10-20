@@ -58,7 +58,7 @@ class AddTransactionScreen : Fragment() {
             amount = "659.20",
             description = "5 of 10 debt payment",
             type = transactionType,
-            userId = hostViewModel.userID
+            userId = hostViewModel.userID.value
         )
         hostViewModel.addNewTransaction(newTransaction)
     }
