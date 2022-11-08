@@ -13,7 +13,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.Navigation.findNavController
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -28,6 +27,7 @@ import kotlinx.coroutines.launch
 
 
 private const val MAIN_MENU_TAG = "MainMenu: "
+private const val RECENT_TRANSACTIONS_LIMIT = 20
 
 @AndroidEntryPoint
 class MainScreen : Fragment() {
@@ -69,11 +69,14 @@ class MainScreen : Fragment() {
         fabAnimation.init(mainMenuBinding.fabOutcome)
 
         mainMenuBinding.fabIncome.setOnClickListener {
+            mainMenuBinding.floatingButton.performClick()
             addNewTransaction(TransactionType.INCOME.label)
         }
 
         mainMenuBinding.fabOutcome.setOnClickListener {
-            findNavController(it).navigate(R.id.action_mainScreen_to_addTransactionScreen)
+            addNewTransaction(TransactionType.OUTCOME.label)
+            mainMenuBinding.floatingButton.performClick()
+//            findNavController(it).navigate(R.id.action_mainScreen_to_addTransactionScreen)
         }
     }
 
@@ -82,7 +85,7 @@ class MainScreen : Fragment() {
             name = "Macbook Pro",
             date = hostViewModel.getCurrentDate(),
             category = "Other",
-            amount = "659.20",
+            amount = "359.20",
             description = "5 of 10 debt payment",
             type = transactionType,
             userId = hostViewModel.userID.value
@@ -135,7 +138,6 @@ class MainScreen : Fragment() {
         }
     }
 
-
     private fun createBottomNavigation() {
         mainMenuBinding.bottomNavigationView.background = null
         mainMenuBinding.bottomNavigationView.menu.getItem(2).isEnabled = false
@@ -147,7 +149,12 @@ class MainScreen : Fragment() {
                 when (state) {
                     is Success -> {
                         Log.i(MAIN_MENU_TAG, state.toString())
-                        transactionAdapter.transactionsList = state.transactionsList
+//                        val sortedList = state.transactionsList.sortedByDescending {
+//                            it.date
+//                        }
+                       // println("filtered: " + sortedList.take(20))
+//                      createRecentTransactionsList()
+                        transactionAdapter.transactionsList = getRecentTransactionsList(state.transactionsList)
                         configureLineChart(state.transactionsList)
                     }
                     is Failure -> {
@@ -162,6 +169,14 @@ class MainScreen : Fragment() {
                 }
             }
         }
+    }
+
+    private fun getRecentTransactionsList(transactionList: ArrayList<TransactionModel>): ArrayList<TransactionModel> {
+        val recentTransactionsList = ArrayList<TransactionModel>()
+        for (i in transactionList.take(RECENT_TRANSACTIONS_LIMIT).indices){
+            recentTransactionsList.add(transactionList[i])
+        }
+        return recentTransactionsList
     }
 
     private fun configureLineChart(data: ArrayList<TransactionModel>) {

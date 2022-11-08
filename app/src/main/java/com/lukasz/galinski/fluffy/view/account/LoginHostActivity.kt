@@ -58,17 +58,18 @@ class LoginHostActivity : AppCompatActivity() {
         actionBar?.hide()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() =
         when (findNavController(R.id.fragmentContainerView).graph.startDestinationId) {
             findNavController(R.id.fragmentContainerView).currentDestination?.id -> {
                 createBackButtonDelay()
             }
-            else -> super.onBackPressed()
+            else -> onBackPressedDispatcher.onBackPressed()
         }
 
     private fun createBackButtonDelay() {
         if (doubleCheckButton) {
-            super.onBackPressed()
+            finishAndRemoveTask()
             return
         }
         doubleCheckButton = true

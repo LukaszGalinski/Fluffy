@@ -13,11 +13,6 @@ private const val ON_VALUE = 1f
 class FabAnimation {
     fun rotateFab(v: View, rotate: Boolean): Boolean {
         v.animate().setDuration(ROTATE_DURATION)
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    super.onAnimationEnd(animation)
-                }
-            })
             .rotation(if (rotate) ROTATE_ANGLE else DEFAULT_ANGLE)
         return rotate
     }

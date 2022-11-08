@@ -15,6 +15,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.round
+
+private const val ACCOUNT_BALANCE = 8600.00 // Until setup bank connection
 
 @HiltViewModel
 class MainMenuViewModel @Inject constructor(
@@ -31,17 +34,25 @@ class MainMenuViewModel @Inject constructor(
     val userMainMenuState: StateFlow<MainMenuStates> = _userMainMenuState
     private val _transactionList = MutableStateFlow(ArrayList<TransactionModel>())
     val transactionList: StateFlow<ArrayList<TransactionModel>> = _transactionList
-    var userID: MutableStateFlow<Long> = MutableStateFlow(0L)
+    private var _userID = MutableStateFlow(0L)
+    val userID: StateFlow<Long> = _userID
+    private var _transactionIncome = MutableStateFlow(0.0)
+    val transactionIncome: MutableStateFlow<Double> = _transactionIncome
+    private var _transactionOutcome = MutableStateFlow(0.0)
+    val transactionOutcome: MutableStateFlow<Double> = _transactionOutcome
+    private var _accountBalance = MutableStateFlow(0.0)
+    val accountBalance: MutableStateFlow<Double> = _accountBalance
     private var currentStartDate = 0L
     private var currentEndDate = 0L
+
 
     init {
         viewModelScope.launch {
             sharedPreferencesData.getLoggedUser().collect {
-                userID.value = it
-            }.apply {
+                _userID.value = it
                 getUser(userID.value)
                 getTransactionsList(userID.value)
+                _accountBalance.value = getUserBalance()
             }
         }
     }
@@ -94,11 +105,37 @@ class MainMenuViewModel @Inject constructor(
                     _userMainMenuState.value = Idle
                 }
                 .flowOn(ioDispatcher)
-                .collect {
-                    _userMainMenuState.value = Success(it as ArrayList<TransactionModel>)
-                    _transactionList.value = it
+                .collect { list ->
+                    if (list.isNotEmpty()) {
+                        _userMainMenuState.value = Success(list as ArrayList<TransactionModel>)
+                        _transactionList.value = list
+                    }
+                    _transactionIncome.value =
+                        round(getIncomeSumOfTransaction(_transactionList.value))
+                    _transactionOutcome.value =
+                        round(getOutcomeSumOfTransaction(_transactionList.value))
                 }
         }
+    }
+
+    private fun getOutcomeSumOfTransaction(outcomeList: List<TransactionModel>): Double {
+        return outcomeList.filter { item ->
+            item.type == TransactionType.OUTCOME.label
+        }.sumOf {
+            it.amount?.toDouble()!!
+        }
+    }
+
+    private fun getIncomeSumOfTransaction(incomeList: List<TransactionModel>): Double {
+        return incomeList.filter { item ->
+            item.type == TransactionType.INCOME.label
+        }.sumOf {
+            it.amount?.toDouble()!!
+        }
+    }
+
+    private fun getUserBalance(): Double {
+        return ACCOUNT_BALANCE
     }
 
     fun addNewTransaction(transactionModel: TransactionModel) {
@@ -115,8 +152,11 @@ class MainMenuViewModel @Inject constructor(
                 .flowOn(ioDispatcher)
                 .collect {
                     if ((currentStartDate <= transactionModel.date) && (transactionModel.date <= currentEndDate)) {
-                        _transactionList.value.add(transactionModel)
+                        _transactionList.value.add(0, transactionModel)
                         _userMainMenuState.value = Success(_transactionList.value)
+                        _transactionIncome.value = round(getIncomeSumOfTransaction(_transactionList.value))
+                        _transactionOutcome.value = round(
+                            getOutcomeSumOfTransaction(_transactionList.value))
                     }
                 }
         }
@@ -125,7 +165,8 @@ class MainMenuViewModel @Inject constructor(
     fun logoutUser() {
         viewModelScope.launch {
             sharedPreferencesData.setLoggedUser(0)
-            userID.value = 0
+
         }
     }
 }
+

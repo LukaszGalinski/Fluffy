@@ -6,7 +6,6 @@ import java.util.*
 
 private const val DATE_PATTERN = "dd-MM-yyyy"
 
-
 class DateTools {
     private val simpleDateFormat = SimpleDateFormat(DATE_PATTERN, Locale.getDefault())
 

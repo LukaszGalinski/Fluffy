@@ -24,11 +24,10 @@ interface DatabaseDao {
     @Query("DELETE FROM usersTable WHERE userId LIKE:userId")
     fun deleteUser(userId: Long)
 
-
     @Insert
     fun addNewTransaction(transactionModel: TransactionModel): Long
 
-    @Query("SELECT * FROM TransactionsTable WHERE userId LIKE :userId AND date BETWEEN :startDate AND :endDate")
+    @Query("SELECT * FROM TransactionsTable WHERE userId LIKE :userId AND date BETWEEN :startDate AND :endDate ORDER BY date DESC")
     fun getMonthTransactions(userId: Long, startDate: Long, endDate: Long): List<TransactionModel>
 
     @Query("DELETE FROM TransactionsTable WHERE transactionId LIKE:transactionId")

@@ -5,15 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.common.createToast
 import com.lukasz.galinski.fluffy.databinding.MainHostLayoutBinding
-import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
 
 
 private const val BACK_BUTTON_DELAY = 1000L
@@ -32,36 +29,37 @@ class MainMenuActivity : AppCompatActivity() {
 
     private var _mainMenuHostBinding: MainHostLayoutBinding? = null
     private val mainMenuHostBinding get() = _mainMenuHostBinding!!
-    private val mainViewModel: MainMenuViewModel by viewModels()
     private var doubleCheckButton = false
     private var handler = Handler(Looper.getMainLooper())
+    private lateinit var runnable: Runnable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _mainMenuHostBinding = MainHostLayoutBinding.inflate(layoutInflater)
         setContentView(mainMenuHostBinding.root)
-        val userId = intent.extras?.getLong(USER_ID_TAG)
-        mainViewModel.userID = flowOf(userId ?: 0) as MutableStateFlow<Long>
+        runnable = Runnable { doubleCheckButton = false }
     }
 
-    override fun onBackPressed() {
-        createBackButtonDelay()
-    }
+    override fun onBackPressed() =
+        when (findNavController(R.id.fragmentContainerView).graph.startDestinationId) {
+            findNavController(R.id.fragmentContainerView).currentDestination?.id -> {
+                createBackButtonDelay()
+            }
+            else -> onBackPressedDispatcher.onBackPressed()
+        }
 
     private fun createBackButtonDelay() {
         if (doubleCheckButton) {
-            super.onBackPressed()
+            finishAndRemoveTask()
             return
         }
         doubleCheckButton = true
-
-        handler.postDelayed({
-            this.createToast(resources.getString(R.string.double_press_to_exit))
-            doubleCheckButton = false
-        }, BACK_BUTTON_DELAY)
+        this.createToast(resources.getString(R.string.double_press_to_exit))
+        handler.postDelayed(runnable, BACK_BUTTON_DELAY)
     }
 
     override fun onDestroy() {
+        handler.removeCallbacks(runnable)
         handler.removeCallbacksAndMessages(Unit)
         _mainMenuHostBinding = null
         super.onDestroy()

@@ -70,10 +70,12 @@ class RegisterScreen : Fragment() {
                     Log.i(STATE_TAG, state.toString())
                     context?.createToast(resources.getString(R.string.user_created))
                     findNavController().navigate(R.id.action_registerScreen_to_loginScreen)
+                    registerBinding.registerProgressBar.setInvisible()
                 }
                 is Failure -> {
                     Log.i(STATE_TAG, state.toString())
                     context?.createToast(resources.getString(R.string.email_occupied))
+                    registerBinding.registerProgressBar.setInvisible()
                 }
                 is Loading -> {
                     Log.i(STATE_TAG, state.toString())

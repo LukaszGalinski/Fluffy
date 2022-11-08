@@ -15,13 +15,12 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
 
-private const val DUMMY_USER_LOGIN = "test@test.com"
-private const val DUMMY_USER_PASSWORD = "test"
-
 @RunWith(AndroidJUnit4::class)
 class DatabaseEntityTest {
     private lateinit var usersDao: DatabaseDao
     private lateinit var usersDatabase: AppDatabase
+    private val dummyUserLogin = "test@test.com"
+    private val dummyUserPassword = "test"
 
     @Test
     fun useAppContext() {
@@ -89,18 +88,18 @@ class DatabaseEntityTest {
     @Test
     fun loginUserWithSuccess() {
         val testUser = TestUtilities.createTestUsers(0).apply {
-            get(0).userEmail = DUMMY_USER_LOGIN
-            get(0).password = DUMMY_USER_PASSWORD
+            get(0).userEmail = dummyUserLogin
+            get(0).password = dummyUserPassword
         }
         usersDao.addNewUser(testUser[0])
 
-        val userLoginSuccessValue = usersDao.loginUser(DUMMY_USER_LOGIN, DUMMY_USER_PASSWORD)
+        val userLoginSuccessValue = usersDao.loginUser(dummyUserLogin, dummyUserPassword)
         assertEquals(1, userLoginSuccessValue)
     }
 
     @Test
     fun loginUserWithFailure() {
-        val userLoggedOutValue = usersDao.loginUser(DUMMY_USER_LOGIN, DUMMY_USER_PASSWORD)
+        val userLoggedOutValue = usersDao.loginUser(dummyUserLogin, dummyUserPassword)
         assertEquals(0, userLoggedOutValue)
     }
 

@@ -28,11 +28,9 @@ class TransactionsAdapter :
     override fun onBindViewHolder(holder: TransactionsViewHolder, position: Int) {
         with(holder) {
             with(transactionsList[position]) {
-
                 binding.transactionName.text = name
                 binding.transactionDescription.text = description
-                binding.amount.text =
-                    holder.binding.root.resources.getString(R.string.amount, amount)
+                binding.amount.text = holder.binding.root.resources.getString(getAmountStringPattern(type!!), amount)
                 binding.amount.setTextColor(ContextCompat.getColor(itemView.context, getAmountTextColor(type!!)))
             }
         }
@@ -42,8 +40,14 @@ class TransactionsAdapter :
         RecyclerView.ViewHolder(binding.root)
 
     private fun getAmountTextColor(type: String): Int {
-        return if (type == TransactionType.OUTCOME.label){
+        return if (type == TransactionType.INCOME.label){
             R.color.dark_green
         } else R.color.dark_red
+    }
+
+    private fun getAmountStringPattern(type: String): Int {
+        return if (type == TransactionType.INCOME.label){
+            R.string.amount_income_pattern
+        } else R.string.amount_outcome_pattern
     }
 }
