@@ -17,11 +17,13 @@ import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-
-private const val ADD_TRANSACTION_TAG = "AddNewTransaction: "
-
 @AndroidEntryPoint
 class AddTransactionScreen : Fragment() {
+
+    companion object{
+        private const val ADD_TRANSACTION_TAG = "AddNewTransaction: "
+    }
+
     private var _expenseScreenBinding: ExpenseAddLayoutBinding? = null
     private val expenseScreenBinding get() = _expenseScreenBinding!!
     private val hostViewModel: MainMenuViewModel by activityViewModels()

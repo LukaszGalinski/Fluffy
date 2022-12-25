@@ -26,9 +26,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 
-private const val MAIN_MENU_TAG = "MainMenu: "
-private const val RECENT_TRANSACTIONS_LIMIT = 20
-
 @AndroidEntryPoint
 class MainScreen : Fragment() {
     private var _mainMenuBinding: MainMenuFragmentBinding? = null
@@ -36,6 +33,11 @@ class MainScreen : Fragment() {
     private val hostViewModel: MainMenuViewModel by activityViewModels()
     private var transactionAdapter = TransactionsAdapter()
     private var isRotate = false
+
+    companion object {
+        private const val MAIN_MENU_TAG = "MainMenu: "
+        private const val RECENT_TRANSACTIONS_LIMIT = 20
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -152,9 +154,10 @@ class MainScreen : Fragment() {
 //                        val sortedList = state.transactionsList.sortedByDescending {
 //                            it.date
 //                        }
-                       // println("filtered: " + sortedList.take(20))
+                        // println("filtered: " + sortedList.take(20))
 //                      createRecentTransactionsList()
-                        transactionAdapter.transactionsList = getRecentTransactionsList(state.transactionsList)
+                        transactionAdapter.transactionsList =
+                            getRecentTransactionsList(state.transactionsList)
                         configureLineChart(state.transactionsList)
                     }
                     is Failure -> {
@@ -173,7 +176,7 @@ class MainScreen : Fragment() {
 
     private fun getRecentTransactionsList(transactionList: ArrayList<TransactionModel>): ArrayList<TransactionModel> {
         val recentTransactionsList = ArrayList<TransactionModel>()
-        for (i in transactionList.take(RECENT_TRANSACTIONS_LIMIT).indices){
+        for (i in transactionList.take(RECENT_TRANSACTIONS_LIMIT).indices) {
             recentTransactionsList.add(transactionList[i])
         }
         return recentTransactionsList

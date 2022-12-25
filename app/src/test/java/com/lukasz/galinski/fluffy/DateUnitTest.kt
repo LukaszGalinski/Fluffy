@@ -1,6 +1,7 @@
 package com.lukasz.galinski.fluffy
 
 import com.lukasz.galinski.fluffy.common.DateTools
+import io.mockk.spyk
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -9,7 +10,7 @@ private const val DUMMY_DATE = "13-08-2022" //13-08-2022
 
 
 class DateUnitTest {
-    private var date = DateTools()
+    private var date = spyk<DateTools>()
 
     @Test
     fun getDateFromLong() {
@@ -18,7 +19,7 @@ class DateUnitTest {
     }
 
     @Test
-    fun getLongFromDate(){
+    fun getLongFromDate() {
         val dateInLong = date.getLongValueFromDate(13, 7, 2022)
         assertEquals(DUMMY_DATE_IN_LONG, dateInLong)
     }

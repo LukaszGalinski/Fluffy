@@ -50,9 +50,7 @@ class MainMenuViewModelUnitTest {
                 testDispatcher
             ), recordPrivateCalls = true
         )
-        val transactionList = ArrayList<TransactionModel>()
-        transactionList.add(mockedTransaction)
-        transactionList.add(mockedTransaction)
+        val transactionList = arrayListOf(mockedTransaction, mockedTransaction)
 
         coEvery { transactionRepository.getTransactions(any(), any(), any()) }.returns(
             flowOf(transactionList)

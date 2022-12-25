@@ -10,21 +10,23 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Fluffy.OnBoarding">
         <activity
-            android:name="com.lukasz.galinski.fluffy.view.onboarding.OnBoardingScreenActivity"
-            android:exported="true">
+            android:name=".view.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Fluffy.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.lukasz.galinski.fluffy.view.account.LoginHostActivity"
+            android:name=".view.onboarding.OnBoardingScreenActivity"
+            android:theme="@style/Theme.Fluffy.OnBoarding" />
+        <activity
+            android:name=".view.account.LoginHostActivity"
             android:theme="@style/Theme.Fluffy.OnBoarding"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".view.main.MainMenuActivity"
-            android:theme="@style/Theme.Fluffy.OnBoarding"
-            />
+            android:theme="@style/Theme.Fluffy.OnBoarding" />
     </application>
 </manifest>

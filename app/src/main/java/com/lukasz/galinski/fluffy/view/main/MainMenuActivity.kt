@@ -12,14 +12,13 @@ import com.lukasz.galinski.fluffy.common.createToast
 import com.lukasz.galinski.fluffy.databinding.MainHostLayoutBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-
-private const val BACK_BUTTON_DELAY = 1000L
-
 @AndroidEntryPoint
 class MainMenuActivity : AppCompatActivity() {
 
     companion object {
+        private const val BACK_BUTTON_DELAY = 1000L
         private const val USER_ID_TAG = "UserId"
+
         fun createIntent(context: Context, userId: Long): Intent {
             val intent = Intent(context, MainMenuActivity::class.java)
             intent.putExtra(USER_ID_TAG, userId)

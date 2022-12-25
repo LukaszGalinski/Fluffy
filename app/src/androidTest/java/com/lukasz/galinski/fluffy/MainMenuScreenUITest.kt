@@ -14,6 +14,7 @@ import com.lukasz.galinski.fluffy.view.main.MainScreen
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
@@ -22,6 +23,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -61,22 +63,19 @@ class MainMenuScreenUITest {
     }
 
     @Test
+    @Ignore("Will be turned on when reflection function will be added")
     fun checkIncomeAndOutcomePriceDisplayed() {
+        every { mainMenuViewModel.transactionIncome.value } returns 12.0
+        every { mainMenuViewModel.transactionOutcome.value } returns 25.0
         launchFragmentInHiltContainer<MainScreen> {
-            //coEvery { mainMenuViewModel.transactionIncome.value.toString() } returns "2521"
-            //coEvery { mainMenuViewModel.transactionIncome.value } returns 2222
+            coEvery { mainMenuViewModel.transactionIncome.value } returns 222.0
         }
-        //coEvery { mainMenuViewModel.transactionIncome.value } returns 222
+//        coEvery { mainMenuViewModel.transactionIncome.value } returns 222.0
         every { mainMenuViewModel.userID.value } returns 4
-        
-
-        mainMenuViewModel.transactionIncome.value = 12
-
-        Thread.sleep(2000)
 
         onView(ViewMatchers.withId(R.id.income_amount)).check(
             ViewAssertions.matches(
-                ViewMatchers.withText("222")
+                ViewMatchers.withText("12.0")
             )
         )
 

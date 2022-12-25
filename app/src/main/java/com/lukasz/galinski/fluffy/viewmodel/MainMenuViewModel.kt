@@ -37,14 +37,13 @@ class MainMenuViewModel @Inject constructor(
     private var _userID = MutableStateFlow(0L)
     val userID: StateFlow<Long> = _userID
     private var _transactionIncome = MutableStateFlow(0.0)
-    val transactionIncome: MutableStateFlow<Double> = _transactionIncome
+    val transactionIncome: StateFlow<Double> = _transactionIncome
     private var _transactionOutcome = MutableStateFlow(0.0)
-    val transactionOutcome: MutableStateFlow<Double> = _transactionOutcome
+    val transactionOutcome: StateFlow<Double> = _transactionOutcome
     private var _accountBalance = MutableStateFlow(0.0)
-    val accountBalance: MutableStateFlow<Double> = _accountBalance
+    val accountBalance: StateFlow<Double> = _accountBalance
     private var currentStartDate = 0L
     private var currentEndDate = 0L
-
 
     init {
         viewModelScope.launch {
@@ -165,7 +164,7 @@ class MainMenuViewModel @Inject constructor(
     fun logoutUser() {
         viewModelScope.launch {
             sharedPreferencesData.setLoggedUser(0)
-
+            _userID.value = 0
         }
     }
 }

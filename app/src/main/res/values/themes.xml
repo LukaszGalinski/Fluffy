@@ -13,7 +13,13 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <item name="android:textStyle">normal</item>
         <item name="fontFamily">@font/inter_regular</item>
+    </style>
 
+    <style name="Theme.Fluffy.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/purple_primary</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/launch_screen</item>
+        <item name="windowSplashScreenAnimationDuration">3000</item>
+        <item name="postSplashScreenTheme">@style/Theme.Fluffy.OnBoarding</item>
     </style>
 
     <style name="Theme.Fluffy.Onboarding.titleStyle" parent="Theme.MaterialComponents.DayNight">
@@ -75,4 +81,12 @@
         <item name="rippleColor">@color/chip_light_orange</item>
         <item name="chipSurfaceColor">@android:color/transparent</item>
     </style>
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/purple_primary</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/screen</item>
+        <item name="windowSplashScreenAnimationDuration">200</item>
+        <item name="postSplashScreenTheme">@style/Theme.Fluffy.OnBoarding</item>
+    </style>
+
 </resources>
