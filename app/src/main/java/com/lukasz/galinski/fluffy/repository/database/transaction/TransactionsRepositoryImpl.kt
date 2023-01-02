@@ -1,14 +1,14 @@
 package com.lukasz.galinski.fluffy.repository.database.transaction
 
 import com.lukasz.galinski.fluffy.model.TransactionModel
-import com.lukasz.galinski.fluffy.repository.database.DatabaseDao
+import com.lukasz.galinski.fluffy.repository.database.TransactionsDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 
 class TransactionsRepositoryImpl @Inject constructor(
-    private val transactionsDao: DatabaseDao
+    private val transactionsDao: TransactionsDao
 ) : TransactionsRepository {
 
     override fun getTransactions(

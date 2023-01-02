@@ -21,7 +21,7 @@ private const val ACCOUNT_BALANCE = 8600.00 // Until setup bank connection
 
 @HiltViewModel
 class MainMenuViewModel @Inject constructor(
-    private val dbRepo: UsersRepositoryImpl,
+    private val usersRepo: UsersRepositoryImpl,
     private val transactionRepository: TransactionsRepositoryImpl,
     private val sharedPreferencesData: PreferencesData,
     @HiltApplication.IoDispatcher private val ioDispatcher: CoroutineDispatcher
@@ -72,7 +72,7 @@ class MainMenuViewModel @Inject constructor(
 
     private fun getUser(userId: Long) =
         viewModelScope.launch {
-            dbRepo.getUser(userId)
+            usersRepo.getUser(userId)
                 .onStart {
                     _userMainMenuState.value = Loading
                 }

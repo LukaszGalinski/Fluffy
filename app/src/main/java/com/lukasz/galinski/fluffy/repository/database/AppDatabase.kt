@@ -17,5 +17,6 @@ private const val DATABASE_VERSION = 2
     ]
 )
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun databaseDao(): DatabaseDao
+    abstract fun usersDao(): UsersDao
+    abstract fun transactionsDao(): TransactionsDao
 }

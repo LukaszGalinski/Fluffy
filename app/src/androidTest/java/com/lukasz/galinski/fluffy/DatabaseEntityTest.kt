@@ -7,7 +7,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.lukasz.galinski.fluffy.common.DateTools
 import com.lukasz.galinski.fluffy.repository.database.AppDatabase
-import com.lukasz.galinski.fluffy.repository.database.DatabaseDao
+import com.lukasz.galinski.fluffy.repository.database.TransactionsDao
+import com.lukasz.galinski.fluffy.repository.database.UsersDao
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -17,8 +18,9 @@ import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
 class DatabaseEntityTest {
-    private lateinit var usersDao: DatabaseDao
-    private lateinit var usersDatabase: AppDatabase
+    private lateinit var usersDao: UsersDao
+    private lateinit var transactionsDao: TransactionsDao
+    private lateinit var appDatabase: AppDatabase
     private val dummyUserLogin = "test@test.com"
     private val dummyUserPassword = "test"
 
@@ -31,14 +33,15 @@ class DatabaseEntityTest {
     @Before
     fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
-        usersDatabase = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
-        usersDao = usersDatabase.databaseDao()
+        appDatabase = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
+        usersDao = appDatabase.usersDao()
+        transactionsDao = appDatabase.transactionsDao()
     }
 
     @After
     @Throws(IOException::class)
     fun closeDb() {
-        usersDatabase.close()
+        appDatabase.close()
     }
 
     @Test
@@ -114,12 +117,12 @@ class DatabaseEntityTest {
             get(1).date = 9999
             get(2).date = currentDate+4000
         }
-        usersDao.addNewTransaction(dummyTransaction[0])
-        usersDao.addNewTransaction(dummyTransaction[1])
-        usersDao.addNewTransaction(dummyTransaction[2])
+        transactionsDao.addNewTransaction(dummyTransaction[0])
+        transactionsDao.addNewTransaction(dummyTransaction[1])
+        transactionsDao.addNewTransaction(dummyTransaction[2])
         println(dummyTransaction)
 
-        val transactionsCount = usersDao.getMonthTransactions(1, startMonthDate, endMonthDate).count()
+        val transactionsCount = transactionsDao.getMonthTransactions(1, startMonthDate, endMonthDate).count()
         assertEquals(2, transactionsCount)
     }
 }
