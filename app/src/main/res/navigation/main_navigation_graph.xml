@@ -14,5 +14,7 @@
     <fragment
         android:id="@+id/addTransactionScreen"
         android:name="com.lukasz.galinski.fluffy.view.main.AddTransactionScreen"
-        android:label="AddTransactionScreen" />
+        android:label="AddTransactionScreen">
+        <argument android:name="transactionTypeArgument" />
+    </fragment>
 </navigation>

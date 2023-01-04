@@ -1,6 +1,7 @@
 package com.lukasz.galinski.fluffy
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.lukasz.galinski.fluffy.common.DateTools
 import com.lukasz.galinski.fluffy.model.TransactionModel
 import com.lukasz.galinski.fluffy.model.UserModel
 import com.lukasz.galinski.fluffy.repository.database.transaction.TransactionsRepositoryImpl
@@ -25,13 +26,14 @@ import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class MainMenuViewModelUnitTest {
+    private lateinit var mainMenuViewModel: MainMenuViewModel
     private val testDispatcher = StandardTestDispatcher()
     private val transactionRepository = mockk<TransactionsRepositoryImpl>()
     private val userRepository = mockk<UsersRepositoryImpl>()
     private val mockedUser = mockk<UserModel>()
     private val userPreferences = mockk<PreferencesData>(relaxed = true)
-    private lateinit var mainMenuViewModel: MainMenuViewModel
     private val mockedTransaction = mockk<TransactionModel>(relaxed = true)
+    private val mockedDateTools = mockk<DateTools>()
 
     @Rule
     @JvmField
@@ -52,6 +54,7 @@ class MainMenuViewModelUnitTest {
         )
         val transactionList = arrayListOf(mockedTransaction, mockedTransaction)
 
+        replacePrivateField(mainMenuViewModel, "dateTools", mockedDateTools)
         coEvery { transactionRepository.getTransactions(any(), any(), any()) }.returns(
             flowOf(transactionList)
         )
@@ -108,5 +111,18 @@ class MainMenuViewModelUnitTest {
         }
         verify(timeout = 1000, exactly = 1) { transactionRepository.addTransaction(any()) }
         assertEquals(3, mainMenuViewModel.transactionList.value.size)
+    }
+
+    @Test
+    fun checkCurrentMonthNumberLoaded() {
+        every { mockedDateTools.getCurrentMonthNumber() }.returns(3)
+        val loadedMonth = mainMenuViewModel.getCurrentMonth()
+        assertEquals(3, loadedMonth)
+    }
+
+    @Test
+    fun checkCurrentDateValueLoaded() {
+        every { mockedDateTools.getCurrentDateInLong() } returns 987
+        assertEquals(987, mainMenuViewModel.getCurrentDate())
     }
 }

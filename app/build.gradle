@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id "androidx.navigation.safeargs.kotlin"
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
 }
@@ -54,7 +55,7 @@ dependencies {
     def glide_version = "4.13.2"
     def retrofit_version = "2.6.2"
     def lifecycle_version = "2.5.1"
-    def navigation_version = "2.5.2"
+    def navigation_version = "2.5.3"
 
     implementation "androidx.core:core-ktx:1.9.0"
     implementation "androidx.appcompat:appcompat:1.5.1"

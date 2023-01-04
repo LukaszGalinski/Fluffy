@@ -18,7 +18,6 @@
     <string name="existing_account_info">Already have an account? <b><u>Login</u></b></string>
     <string name="terms_info"><b>By signing up, you agree to Terms of Service and Privacy Policy</b></string>
 
-    //States
     <string name="user_not_found">User not found. Please try again&#8230;</string>
     <string name="user_created">User created, try to Log In</string>
     <string name="email_occupied">Email is not available. Please use another email</string>
@@ -57,6 +56,9 @@
     <string name="repeat_label">Repeat</string>
     <string name="repeat_transaction">Repeat transaction</string>
     <string name="continue_text">Continue</string>
+
+    <string name="add_new_income_label">Add new INCOME</string>
+    <string name="add_new_expense_label">New new EXPENSE</string>
 
     <string-array name="months_of_year">
         <item>January</item>

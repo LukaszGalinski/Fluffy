@@ -26,7 +26,7 @@ class DateTools {
     }
 
     fun getLongValueFromDate(dayOfMonth: Int, month: Int, year: Int): Long {
-        val endDate = "$dayOfMonth-${month+1}-$year"
+        val endDate = "$dayOfMonth-${month + 1}-$year"
         val date = simpleDateFormat.parse(endDate)
         return date?.time!!
     }

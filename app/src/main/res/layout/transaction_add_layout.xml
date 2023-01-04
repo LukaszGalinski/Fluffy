@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
+        android:id="@+id/transaction_add_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/dark_red"
@@ -119,18 +120,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_medium_16"
-                android:text="@string/add_attachment_label"
-                android:textSize="@dimen/screen_add_transaction_text_size"
+                android:background="@drawable/shape_dashed_rounded_corners"
+                android:drawablePadding="@dimen/padding_small_8"
                 android:gravity="center"
                 android:padding="@dimen/padding_small_8"
-                android:background="@drawable/shape_dashed_rounded_corners"
+                android:text="@string/add_attachment_label"
+                android:textSize="@dimen/screen_add_transaction_text_size"
+                app:drawableStartCompat="@drawable/ic_baseline_attach_file_24"
                 app:drawableTint="@color/black"
-                android:drawablePadding="@dimen/padding_small_8"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/spinner_payment_method"
-                app:layout_constraintWidth_percent=".8"
-                app:drawableStartCompat="@drawable/ic_baseline_attach_file_24" />
+                app:layout_constraintWidth_percent=".8" />
 
             <TextView
                 android:id="@+id/repeat_label"
@@ -163,18 +164,17 @@
                 app:layout_constraintTop_toTopOf="@id/repeat_label" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/register_button"
+                android:id="@+id/add_new_transaction"
                 style="@style/Theme.Fluffy.ButtonDefault"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/button_height"
                 android:layout_marginTop="@dimen/margin_medium_16"
                 android:layout_marginBottom="@dimen/margin_medium_16"
-                android:textSize="@dimen/onboarding_button_text_size"
                 android:text="@string/continue_text"
+                android:textSize="@dimen/onboarding_button_text_size"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/repeat_explanation"
-
                 app:layout_constraintWidth_percent="0.9" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

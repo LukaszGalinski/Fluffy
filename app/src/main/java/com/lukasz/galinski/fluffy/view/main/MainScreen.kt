@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -71,15 +72,21 @@ class MainScreen : Fragment() {
         fabAnimation.init(mainMenuBinding.fabOutcome)
 
         mainMenuBinding.fabIncome.setOnClickListener {
-            mainMenuBinding.floatingButton.performClick()
             addNewTransaction(TransactionType.INCOME.label)
+            mainMenuBinding.floatingButton.performClick()
+            createNavigateToNewTransaction(TransactionType.OUTCOME.label)
         }
 
         mainMenuBinding.fabOutcome.setOnClickListener {
             addNewTransaction(TransactionType.OUTCOME.label)
             mainMenuBinding.floatingButton.performClick()
-//            findNavController(it).navigate(R.id.action_mainScreen_to_addTransactionScreen)
+            createNavigateToNewTransaction(TransactionType.INCOME.label)
         }
+    }
+
+    private fun createNavigateToNewTransaction(transactionType: String) {
+        val action = MainScreenDirections.actionMainScreenToAddTransactionScreen(transactionType)
+        findNavController().navigate(action)
     }
 
     private fun addNewTransaction(transactionType: String) {
