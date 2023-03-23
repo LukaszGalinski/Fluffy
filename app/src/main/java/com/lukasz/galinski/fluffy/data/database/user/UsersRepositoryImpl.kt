@@ -1,7 +1,6 @@
-package com.lukasz.galinski.fluffy.repository.database.user
+package com.lukasz.galinski.fluffy.data.database.user
 
-import com.lukasz.galinski.fluffy.model.UserModel
-import com.lukasz.galinski.fluffy.repository.database.UsersDao
+import com.lukasz.galinski.fluffy.data.model.UserModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

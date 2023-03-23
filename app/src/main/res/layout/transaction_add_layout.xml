@@ -15,6 +15,7 @@
             android:layout_weight="1">
 
             <ImageButton
+                android:id="@+id/icon_back_arrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
@@ -38,6 +39,21 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent=".8" />
 
+            <EditText
+                android:id="@+id/transaction_name"
+                style="@style/Theme.Fluffy.Onboarding.subTitleStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/transaction_name"
+                android:textColor="@color/white"
+                android:background="@android:color/transparent"
+                android:textSize="@dimen/screen_add_transaction_text_size"
+                app:layout_constraintBottom_toTopOf="@+id/how_much_label_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/onboarding_title"
+                app:layout_constraintWidth_percent=".8" />
+
             <TextView
                 android:id="@+id/how_much_label_text"
                 style="@style/Theme.Fluffy.Onboarding.subTitleStyle"
@@ -48,23 +64,37 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/screen_add_transaction_text_size"
                 app:layout_constraintBottom_toTopOf="@+id/et_amount"
-                app:layout_constraintStart_toStartOf="@+id/et_amount"
+                app:layout_constraintStart_toStartOf="@id/transaction_icon_dollar"
                 app:layout_constraintWidth_percent=".8" />
+
+            <TextView
+                android:id="@+id/transaction_icon_dollar"
+                style="@style/Theme.Fluffy.Onboarding.subTitleStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dollar_sign"
+                android:layout_margin="@dimen/margin_medium_16"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/screen_title_large_text_size"
+                app:layout_constraintBottom_toBottomOf="@id/et_amount"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/how_much_label_text" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_amount"
                 style="@style/Theme.Fluffy.Onboarding.subTitleStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_medium_16"
+                android:layout_marginEnd="@dimen/margin_medium_16"
+                android:layout_marginTop="@dimen/margin_medium_16"
+                android:layout_marginBottom="@dimen/margin_medium_16"
                 android:background="@android:color/transparent"
-                android:inputType="numberDecimal"
                 android:text="@string/default_value_zero"
                 android:textColor="@android:color/white"
                 android:textColorHint="@color/gray"
                 android:textSize="@dimen/screen_title_large_text_size"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toEndOf="@id/transaction_icon_dollar" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

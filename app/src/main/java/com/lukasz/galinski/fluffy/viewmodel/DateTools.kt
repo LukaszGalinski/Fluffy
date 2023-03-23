@@ -1,4 +1,4 @@
-package com.lukasz.galinski.fluffy.common
+package com.lukasz.galinski.fluffy.viewmodel
 
 import java.text.SimpleDateFormat
 import java.util.*

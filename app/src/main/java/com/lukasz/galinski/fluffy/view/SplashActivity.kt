@@ -29,8 +29,7 @@ class SplashActivity : AppCompatActivity() {
             if (loginStatus.first() != 0L) {
                 startActivity(
                     MainMenuActivity.createIntent(
-                        applicationContext,
-                        loginStatus.first()
+                        applicationContext
                     )
                 )
             } else {

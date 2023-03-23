@@ -17,12 +17,9 @@ class MainMenuActivity : AppCompatActivity() {
 
     companion object {
         private const val BACK_BUTTON_DELAY = 1000L
-        private const val USER_ID_TAG = "UserId"
 
-        fun createIntent(context: Context, userId: Long): Intent {
-            val intent = Intent(context, MainMenuActivity::class.java)
-            intent.putExtra(USER_ID_TAG, userId)
-            return intent
+        fun createIntent(context: Context): Intent {
+            return Intent(context, MainMenuActivity::class.java)
         }
     }
 
@@ -36,6 +33,7 @@ class MainMenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _mainMenuHostBinding = MainHostLayoutBinding.inflate(layoutInflater)
         setContentView(mainMenuHostBinding.root)
+
         runnable = Runnable { doubleCheckButton = false }
     }
 
@@ -50,6 +48,7 @@ class MainMenuActivity : AppCompatActivity() {
     private fun createBackButtonDelay() {
         if (doubleCheckButton) {
             finishAndRemoveTask()
+            finishAffinity()
             return
         }
         doubleCheckButton = true

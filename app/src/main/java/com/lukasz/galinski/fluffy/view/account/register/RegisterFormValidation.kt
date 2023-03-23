@@ -1,4 +1,4 @@
-package com.lukasz.galinski.fluffy.view.account
+package com.lukasz.galinski.fluffy.view.account.register
 
 import android.text.Editable
 import android.text.TextWatcher
@@ -6,6 +6,7 @@ import android.widget.CheckBox
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.lukasz.galinski.fluffy.R
+import com.lukasz.galinski.fluffy.view.account.FormValidationRules
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 
 private const val NAME = "NAME"

@@ -1,10 +1,12 @@
-package com.lukasz.galinski.fluffy.repository.database
+package com.lukasz.galinski.fluffy.data.database
 
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.lukasz.galinski.fluffy.model.TransactionModel
-import com.lukasz.galinski.fluffy.model.UserModel
+import com.lukasz.galinski.fluffy.data.model.TransactionModel
+import com.lukasz.galinski.fluffy.data.model.UserModel
+import com.lukasz.galinski.fluffy.data.database.transaction.TransactionsDao
+import com.lukasz.galinski.fluffy.data.database.user.UsersDao
 
 private const val DATABASE_VERSION = 2
 

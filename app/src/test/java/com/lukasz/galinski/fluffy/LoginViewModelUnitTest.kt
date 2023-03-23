@@ -1,9 +1,9 @@
 package com.lukasz.galinski.fluffy
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.lukasz.galinski.fluffy.model.UserModel
-import com.lukasz.galinski.fluffy.repository.database.user.UsersRepositoryImpl
-import com.lukasz.galinski.fluffy.repository.preferences.PreferencesData
+import com.lukasz.galinski.fluffy.data.model.UserModel
+import com.lukasz.galinski.fluffy.data.database.user.UsersRepositoryImpl
+import com.lukasz.galinski.fluffy.data.preferences.PreferencesData
 import com.lukasz.galinski.fluffy.view.account.Success
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 import io.mockk.*

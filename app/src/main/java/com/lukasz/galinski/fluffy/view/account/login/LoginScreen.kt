@@ -1,4 +1,4 @@
-package com.lukasz.galinski.fluffy.view.account
+package com.lukasz.galinski.fluffy.view.account.login
 
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +14,7 @@ import com.lukasz.galinski.fluffy.common.createToast
 import com.lukasz.galinski.fluffy.common.setInvisible
 import com.lukasz.galinski.fluffy.common.setVisible
 import com.lukasz.galinski.fluffy.databinding.LoginScreenFragmentBinding
+import com.lukasz.galinski.fluffy.view.account.*
 import com.lukasz.galinski.fluffy.view.main.MainMenuActivity
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,7 +65,7 @@ class LoginScreen : Fragment() {
                 is Success -> {
                     Log.i(STATE_TAG, state.toString())
                     context?.let {
-                        startActivity(MainMenuActivity.createIntent(it, state.userId))
+                        startActivity(MainMenuActivity.createIntent(it))
                     }
                 }
                 is Failure -> {

@@ -1,6 +1,6 @@
-package com.lukasz.galinski.fluffy.repository.database.transaction
+package com.lukasz.galinski.fluffy.data.database.transaction
 
-import com.lukasz.galinski.fluffy.model.TransactionModel
+import com.lukasz.galinski.fluffy.data.model.TransactionModel
 import kotlinx.coroutines.flow.Flow
 
 interface TransactionsRepository {

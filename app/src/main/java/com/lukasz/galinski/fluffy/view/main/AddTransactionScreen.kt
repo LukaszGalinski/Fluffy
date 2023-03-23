@@ -11,10 +11,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.TransactionAddLayoutBinding
-import com.lukasz.galinski.fluffy.model.TransactionModel
+import com.lukasz.galinski.fluffy.data.model.TransactionModel
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -51,6 +52,10 @@ class AddTransactionScreen : Fragment() {
         transactionScreenBinding.addNewTransaction.setOnClickListener {
             addNewTransaction(arguments.transactionTypeArgument)
         }
+
+        transactionScreenBinding.iconBackArrow.setOnClickListener {
+            findNavController().navigate(R.id.action_addTransactionScreen_to_mainScreen)
+        }
     }
 
     private fun buildCategoryList() {
@@ -85,11 +90,11 @@ class AddTransactionScreen : Fragment() {
 
     private fun addNewTransaction(transactionType: String) {
         val newTransaction = TransactionModel(
-            name = "Macbook Pro",
+            name = transactionScreenBinding.transactionName.text.toString(),
             date = hostViewModel.getCurrentDate(),
-            category = "Other",
-            amount = "659.20",
-            description = "5 of 10 debt payment",
+            category = transactionScreenBinding.spinnerCategory.selectedItem.toString(),
+            amount = transactionScreenBinding.etAmount.text.toString(),
+            description = transactionScreenBinding.etDescription.text.toString(),
             type = transactionType,
             userId = hostViewModel.userID.value
         )

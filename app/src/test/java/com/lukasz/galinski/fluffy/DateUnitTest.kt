@@ -1,6 +1,6 @@
 package com.lukasz.galinski.fluffy
 
-import com.lukasz.galinski.fluffy.common.DateTools
+import com.lukasz.galinski.fluffy.viewmodel.DateTools
 import io.mockk.spyk
 import org.junit.Assert.assertEquals
 import org.junit.Test

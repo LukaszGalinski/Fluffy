@@ -3,12 +3,11 @@ package com.lukasz.galinski.fluffy.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lukasz.galinski.fluffy.HiltApplication
-import com.lukasz.galinski.fluffy.common.DateTools
-import com.lukasz.galinski.fluffy.model.TransactionModel
-import com.lukasz.galinski.fluffy.model.UserModel
-import com.lukasz.galinski.fluffy.repository.database.transaction.TransactionsRepositoryImpl
-import com.lukasz.galinski.fluffy.repository.database.user.UsersRepositoryImpl
-import com.lukasz.galinski.fluffy.repository.preferences.PreferencesData
+import com.lukasz.galinski.fluffy.data.database.transaction.TransactionsRepositoryImpl
+import com.lukasz.galinski.fluffy.data.database.user.UsersRepositoryImpl
+import com.lukasz.galinski.fluffy.data.model.TransactionModel
+import com.lukasz.galinski.fluffy.data.model.UserModel
+import com.lukasz.galinski.fluffy.data.preferences.PreferencesData
 import com.lukasz.galinski.fluffy.view.main.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -105,6 +104,7 @@ class MainMenuViewModel @Inject constructor(
                 }
                 .flowOn(ioDispatcher)
                 .collect { list ->
+                    println("moja lista" + list)
                     if (list.isNotEmpty()) {
                         _userMainMenuState.value = Success(list as ArrayList<TransactionModel>)
                         _transactionList.value = list

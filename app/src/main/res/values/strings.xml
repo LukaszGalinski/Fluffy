@@ -50,7 +50,8 @@
     <string name="year">Year</string>
     <string name="moveBack">moveBack</string>
     <string name="how_much_label">How much?</string>
-    <string name="default_value_zero">$0</string>
+    <string name="default_value_zero">0</string>
+    <string name="dollar_sign">$</string>
     <string name="description">description</string>
     <string name="add_attachment_label">Add attachment</string>
     <string name="repeat_label">Repeat</string>
@@ -59,6 +60,7 @@
 
     <string name="add_new_income_label">Add new INCOME</string>
     <string name="add_new_expense_label">New new EXPENSE</string>
+    <string name="transaction_name">Transaction Name</string>
 
     <string-array name="months_of_year">
         <item>January</item>

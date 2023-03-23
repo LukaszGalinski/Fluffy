@@ -5,9 +5,9 @@ import android.content.Context
 import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
-import com.lukasz.galinski.fluffy.repository.database.AppDatabase
-import com.lukasz.galinski.fluffy.repository.database.TransactionsDao
-import com.lukasz.galinski.fluffy.repository.database.UsersDao
+import com.lukasz.galinski.fluffy.data.database.AppDatabase
+import com.lukasz.galinski.fluffy.data.database.transaction.TransactionsDao
+import com.lukasz.galinski.fluffy.data.database.user.UsersDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,9 +1,9 @@
-package com.lukasz.galinski.fluffy.repository.database
+package com.lukasz.galinski.fluffy.data.database.user
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.lukasz.galinski.fluffy.model.UserModel
+import com.lukasz.galinski.fluffy.data.model.UserModel
 
 @Dao
 interface UsersDao {

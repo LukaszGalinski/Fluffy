@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lukasz.galinski.fluffy.databinding.OnboardingScreenLayoutBinding
-import com.lukasz.galinski.fluffy.view.account.LoginHostActivity
+import com.lukasz.galinski.fluffy.view.account.login.LoginHostActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val REGISTER_SCREEN_LABEL = "REGISTER"

@@ -1,4 +1,4 @@
-package com.lukasz.galinski.fluffy.repository.preferences
+package com.lukasz.galinski.fluffy.data.preferences
 
 import android.content.Context
 import androidx.datastore.core.DataStore

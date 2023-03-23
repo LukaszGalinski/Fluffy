@@ -6,7 +6,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.TransactionsSingleItemBinding
-import com.lukasz.galinski.fluffy.model.TransactionModel
+import com.lukasz.galinski.fluffy.data.model.TransactionModel
 
 class TransactionsAdapter :
     RecyclerView.Adapter<TransactionsAdapter.TransactionsViewHolder>() {

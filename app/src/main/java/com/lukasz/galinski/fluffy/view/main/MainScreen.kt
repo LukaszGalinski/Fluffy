@@ -19,9 +19,9 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.lukasz.galinski.fluffy.R
+import com.lukasz.galinski.fluffy.data.model.TransactionModel
 import com.lukasz.galinski.fluffy.databinding.MainMenuFragmentBinding
-import com.lukasz.galinski.fluffy.model.TransactionModel
-import com.lukasz.galinski.fluffy.view.account.LoginHostActivity
+import com.lukasz.galinski.fluffy.view.account.login.LoginHostActivity
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -72,34 +72,19 @@ class MainScreen : Fragment() {
         fabAnimation.init(mainMenuBinding.fabOutcome)
 
         mainMenuBinding.fabIncome.setOnClickListener {
-            addNewTransaction(TransactionType.INCOME.label)
             mainMenuBinding.floatingButton.performClick()
-            createNavigateToNewTransaction(TransactionType.OUTCOME.label)
+            createNavigateToNewTransaction(TransactionType.INCOME.label)
         }
 
         mainMenuBinding.fabOutcome.setOnClickListener {
-            addNewTransaction(TransactionType.OUTCOME.label)
             mainMenuBinding.floatingButton.performClick()
-            createNavigateToNewTransaction(TransactionType.INCOME.label)
+            createNavigateToNewTransaction(TransactionType.OUTCOME.label)
         }
     }
 
     private fun createNavigateToNewTransaction(transactionType: String) {
         val action = MainScreenDirections.actionMainScreenToAddTransactionScreen(transactionType)
         findNavController().navigate(action)
-    }
-
-    private fun addNewTransaction(transactionType: String) {
-        val newTransaction = TransactionModel(
-            name = "Macbook Pro",
-            date = hostViewModel.getCurrentDate(),
-            category = "Other",
-            amount = "359.20",
-            description = "5 of 10 debt payment",
-            type = transactionType,
-            userId = hostViewModel.userID.value
-        )
-        hostViewModel.addNewTransaction(newTransaction)
     }
 
     private fun setupTopBar() {
@@ -155,14 +140,11 @@ class MainScreen : Fragment() {
     private fun handleTransactions() = lifecycleScope.launch {
         viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
             hostViewModel.userMainMenuState.collect { state ->
+                println("to to")
                 when (state) {
                     is Success -> {
+                        println("transactions")
                         Log.i(MAIN_MENU_TAG, state.toString())
-//                        val sortedList = state.transactionsList.sortedByDescending {
-//                            it.date
-//                        }
-                        // println("filtered: " + sortedList.take(20))
-//                      createRecentTransactionsList()
                         transactionAdapter.transactionsList =
                             getRecentTransactionsList(state.transactionsList)
                         configureLineChart(state.transactionsList)
@@ -186,6 +168,7 @@ class MainScreen : Fragment() {
         for (i in transactionList.take(RECENT_TRANSACTIONS_LIMIT).indices) {
             recentTransactionsList.add(transactionList[i])
         }
+        println("loaded list : " + transactionList)
         return recentTransactionsList
     }
 

@@ -1,4 +1,4 @@
-package com.lukasz.galinski.fluffy.view.account
+package com.lukasz.galinski.fluffy.view.account.login
 
 import android.content.Context
 import android.content.Intent

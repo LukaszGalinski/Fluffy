@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.lukasz.galinski.fluffy.R
-import com.lukasz.galinski.fluffy.model.OnboardingDetailsModel
+import com.lukasz.galinski.fluffy.data.model.OnboardingDetailsModel
 
 private const val ONBOARDING_PAGES = 3
 

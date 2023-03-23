@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.lukasz.galinski.fluffy.databinding.OnboardingScreenFirstFragmentBinding
-import com.lukasz.galinski.fluffy.model.OnboardingDetailsModel
+import com.lukasz.galinski.fluffy.data.model.OnboardingDetailsModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

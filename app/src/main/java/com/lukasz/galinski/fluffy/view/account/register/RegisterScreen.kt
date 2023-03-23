@@ -1,4 +1,4 @@
-package com.lukasz.galinski.fluffy.view.account
+package com.lukasz.galinski.fluffy.view.account.register
 
 import android.os.Bundle
 import android.util.Log
@@ -12,18 +12,21 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.common.*
+import com.lukasz.galinski.fluffy.data.model.UserModel
 import com.lukasz.galinski.fluffy.databinding.RegisterScreenFragmentBinding
-import com.lukasz.galinski.fluffy.model.UserModel
+import com.lukasz.galinski.fluffy.view.account.*
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
-private const val HIGHLIGHTED_TERMS_SPANS_COUNT = 35
-private const val HIGHLIGHTED_LOGIN_SPANS_COUNT = 5
-private const val HIGHLIGHTED_COLOR = "#7F3DFF"
-private const val STATE_TAG = "State: "
-
 @AndroidEntryPoint
 class RegisterScreen : Fragment() {
+
+    companion object {
+        private const val HIGHLIGHTED_TERMS_SPANS_COUNT = 35
+        private const val HIGHLIGHTED_LOGIN_SPANS_COUNT = 5
+        private const val HIGHLIGHTED_COLOR = "#7F3DFF"
+        private const val STATE_TAG = "State: "
+    }
 
     private var _registerBinding: RegisterScreenFragmentBinding? = null
     private val registerBinding get() = _registerBinding!!
@@ -85,7 +88,9 @@ class RegisterScreen : Fragment() {
                     Log.i(STATE_TAG, state.toString())
                     registerBinding.registerProgressBar.setInvisible()
                 }
-                else -> {Log.i(STATE_TAG, state.toString()) }
+                else -> {
+                    Log.i(STATE_TAG, state.toString())
+                }
             }
         }
     }

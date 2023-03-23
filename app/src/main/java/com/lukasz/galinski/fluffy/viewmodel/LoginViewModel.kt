@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lukasz.galinski.fluffy.HiltApplication
-import com.lukasz.galinski.fluffy.model.UserModel
-import com.lukasz.galinski.fluffy.repository.database.user.UsersRepositoryImpl
-import com.lukasz.galinski.fluffy.repository.preferences.PreferencesData
+import com.lukasz.galinski.fluffy.data.model.UserModel
+import com.lukasz.galinski.fluffy.data.database.user.UsersRepositoryImpl
+import com.lukasz.galinski.fluffy.data.preferences.PreferencesData
 import com.lukasz.galinski.fluffy.view.account.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher

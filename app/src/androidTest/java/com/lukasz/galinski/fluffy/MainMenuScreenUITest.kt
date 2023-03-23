@@ -5,11 +5,11 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.lukasz.galinski.fluffy.model.TransactionModel
-import com.lukasz.galinski.fluffy.model.UserModel
-import com.lukasz.galinski.fluffy.repository.database.transaction.TransactionsRepositoryImpl
-import com.lukasz.galinski.fluffy.repository.database.user.UsersRepositoryImpl
-import com.lukasz.galinski.fluffy.repository.preferences.PreferencesData
+import com.lukasz.galinski.fluffy.data.database.transaction.TransactionsRepositoryImpl
+import com.lukasz.galinski.fluffy.data.database.user.UsersRepositoryImpl
+import com.lukasz.galinski.fluffy.data.model.TransactionModel
+import com.lukasz.galinski.fluffy.data.model.UserModel
+import com.lukasz.galinski.fluffy.data.preferences.PreferencesData
 import com.lukasz.galinski.fluffy.view.main.MainScreen
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.testing.HiltAndroidRule

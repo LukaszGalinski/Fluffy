@@ -1,6 +1,6 @@
-package com.lukasz.galinski.fluffy.repository.database.user
+package com.lukasz.galinski.fluffy.data.database.user
 
-import com.lukasz.galinski.fluffy.model.UserModel
+import com.lukasz.galinski.fluffy.data.model.UserModel
 import kotlinx.coroutines.flow.Flow
 
 interface UsersRepository {

@@ -1,12 +1,12 @@
 package com.lukasz.galinski.fluffy
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.lukasz.galinski.fluffy.common.DateTools
-import com.lukasz.galinski.fluffy.model.TransactionModel
-import com.lukasz.galinski.fluffy.model.UserModel
-import com.lukasz.galinski.fluffy.repository.database.transaction.TransactionsRepositoryImpl
-import com.lukasz.galinski.fluffy.repository.database.user.UsersRepositoryImpl
-import com.lukasz.galinski.fluffy.repository.preferences.PreferencesData
+import com.lukasz.galinski.fluffy.viewmodel.DateTools
+import com.lukasz.galinski.fluffy.data.model.TransactionModel
+import com.lukasz.galinski.fluffy.data.model.UserModel
+import com.lukasz.galinski.fluffy.data.database.transaction.TransactionsRepositoryImpl
+import com.lukasz.galinski.fluffy.data.database.user.UsersRepositoryImpl
+import com.lukasz.galinski.fluffy.data.preferences.PreferencesData
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import io.mockk.*
 import io.reactivex.android.plugins.RxAndroidPlugins
