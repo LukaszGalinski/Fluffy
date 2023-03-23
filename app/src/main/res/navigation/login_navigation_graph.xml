@@ -6,7 +6,7 @@
     app:startDestination="@id/loginScreen">
     <fragment
         android:id="@+id/loginScreen"
-        android:name="com.lukasz.galinski.fluffy.view.account.LoginScreen"
+        android:name="com.lukasz.galinski.fluffy.view.account.login.LoginScreen"
         android:label="LoginScreen"
         tools:layout="@layout/login_screen_fragment">
         <action

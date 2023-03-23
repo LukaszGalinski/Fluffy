@@ -16,7 +16,7 @@ data class TransactionModel(
     @ColumnInfo(name = "category")
     var category: String?,
     @ColumnInfo(name = "amount")
-    var amount: String?,
+    var amount: Double?,
     @ColumnInfo(name = "description")
     var description: String?,
     @ColumnInfo(name = "type")

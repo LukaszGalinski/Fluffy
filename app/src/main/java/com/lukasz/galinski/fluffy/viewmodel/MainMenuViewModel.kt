@@ -29,8 +29,10 @@ class MainMenuViewModel @Inject constructor(
     private val dateTools = DateTools()
     private val dummyUser = UserModel("User", "", "", "")
     private val _loggedUserDetails = MutableStateFlow(dummyUser)
-    private val _userMainMenuState: MutableStateFlow<MainMenuStates> = MutableStateFlow(Idle)
-    val userMainMenuState: StateFlow<MainMenuStates> = _userMainMenuState
+    private val _transactionState: MutableStateFlow<TransactionStates> = MutableStateFlow(Idle)
+    val transactionState: StateFlow<TransactionStates> = _transactionState
+    private val _addNewTransactionStatus: MutableStateFlow<Boolean?> = MutableStateFlow(null)
+    val addNewTransactionStatus: StateFlow<Boolean?> = _addNewTransactionStatus
     private val _transactionList = MutableStateFlow(ArrayList<TransactionModel>())
     val transactionList: StateFlow<ArrayList<TransactionModel>> = _transactionList
     private var _userID = MutableStateFlow(0L)
@@ -73,12 +75,12 @@ class MainMenuViewModel @Inject constructor(
         viewModelScope.launch {
             usersRepo.getUser(userId)
                 .onStart {
-                    _userMainMenuState.value = Loading
+                    _transactionState.value = Loading
                 }
                 .catch {
-                    _userMainMenuState.value = Failure
+                    _transactionState.value = Failure
                 }.onCompletion {
-                    _userMainMenuState.value = Idle
+                    _transactionState.value = Idle
                 }
                 .flowOn(ioDispatcher)
                 .collect {
@@ -94,25 +96,22 @@ class MainMenuViewModel @Inject constructor(
                 getEndMonthDate()
             )
                 .onStart {
-                    _userMainMenuState.value = Loading
+                    _transactionState.value = Loading
                 }
                 .catch {
-                    _userMainMenuState.value = Failure
+                    _transactionState.value = Failure
                     _transactionList.value = ArrayList()
                 }.onCompletion {
-                    _userMainMenuState.value = Idle
+                    _transactionState.value = Idle
                 }
                 .flowOn(ioDispatcher)
                 .collect { list ->
-                    println("moja lista" + list)
                     if (list.isNotEmpty()) {
-                        _userMainMenuState.value = Success(list as ArrayList<TransactionModel>)
+                        _transactionState.value = Success(list as ArrayList<TransactionModel>)
                         _transactionList.value = list
                     }
-                    _transactionIncome.value =
-                        round(getIncomeSumOfTransaction(_transactionList.value))
-                    _transactionOutcome.value =
-                        round(getOutcomeSumOfTransaction(_transactionList.value))
+                    _transactionIncome.value = round(getIncomeSumOfTransaction(_transactionList.value))
+                    _transactionOutcome.value = round(getOutcomeSumOfTransaction(_transactionList.value))
                 }
         }
     }
@@ -121,7 +120,7 @@ class MainMenuViewModel @Inject constructor(
         return outcomeList.filter { item ->
             item.type == TransactionType.OUTCOME.label
         }.sumOf {
-            it.amount?.toDouble()!!
+            it.amount!!
         }
     }
 
@@ -129,7 +128,7 @@ class MainMenuViewModel @Inject constructor(
         return incomeList.filter { item ->
             item.type == TransactionType.INCOME.label
         }.sumOf {
-            it.amount?.toDouble()!!
+            it.amount!!
         }
     }
 
@@ -140,25 +139,34 @@ class MainMenuViewModel @Inject constructor(
     fun addNewTransaction(transactionModel: TransactionModel) {
         viewModelScope.launch {
             transactionRepository.addTransaction(transactionModel)
-                .onStart {
-                    _userMainMenuState.value = Loading
-                }
                 .catch {
-                    _userMainMenuState.value = Failure
-                }.onCompletion {
-                    _userMainMenuState.value = Idle
+                    _addNewTransactionStatus.value = false
+                }
+                .onCompletion {
+                    _addNewTransactionStatus.value = null
                 }
                 .flowOn(ioDispatcher)
                 .collect {
-                    if ((currentStartDate <= transactionModel.date) && (transactionModel.date <= currentEndDate)) {
+                    _addNewTransactionStatus.value = true
+                    if (newTransactionInTimeRange(transactionModel.date)) {
                         _transactionList.value.add(0, transactionModel)
-                        _userMainMenuState.value = Success(_transactionList.value)
+                        _transactionState.value = Success(_transactionList.value)
                         _transactionIncome.value = round(getIncomeSumOfTransaction(_transactionList.value))
-                        _transactionOutcome.value = round(
-                            getOutcomeSumOfTransaction(_transactionList.value))
+                        _transactionOutcome.value = round(getOutcomeSumOfTransaction(_transactionList.value))
                     }
+                    _addNewTransactionStatus.value = null
                 }
         }
+    }
+
+    fun getDoubleFromString(input: String): Double {
+        return if (input.isBlank())
+            0.toDouble()
+        else input.toDouble()
+    }
+
+    private fun newTransactionInTimeRange(date: Long): Boolean {
+        return (currentStartDate <= date) && (date <= currentEndDate)
     }
 
     fun logoutUser() {

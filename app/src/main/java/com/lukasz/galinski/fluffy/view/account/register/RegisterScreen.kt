@@ -15,6 +15,7 @@ import com.lukasz.galinski.fluffy.common.*
 import com.lukasz.galinski.fluffy.data.model.UserModel
 import com.lukasz.galinski.fluffy.databinding.RegisterScreenFragmentBinding
 import com.lukasz.galinski.fluffy.view.account.*
+import com.lukasz.galinski.fluffy.view.main.MainMenuActivity
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -72,8 +73,10 @@ class RegisterScreen : Fragment() {
                 is Success -> {
                     Log.i(STATE_TAG, state.toString())
                     context?.createToast(resources.getString(R.string.user_created))
-                    findNavController().navigate(R.id.action_registerScreen_to_loginScreen)
                     registerBinding.registerProgressBar.setInvisible()
+                    context?.let {
+                        startActivity(MainMenuActivity.createIntent(it))
+                    }
                 }
                 is Failure -> {
                     Log.i(STATE_TAG, state.toString())

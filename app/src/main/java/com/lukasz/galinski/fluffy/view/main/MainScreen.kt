@@ -21,7 +21,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.data.model.TransactionModel
 import com.lukasz.galinski.fluffy.databinding.MainMenuFragmentBinding
-import com.lukasz.galinski.fluffy.view.account.login.LoginHostActivity
+import com.lukasz.galinski.fluffy.view.account.LoginHostActivity
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -97,7 +97,8 @@ class MainScreen : Fragment() {
                 R.id.logout -> {
                     Log.i(MAIN_MENU_TAG, "Logout")
                     hostViewModel.logoutUser()
-                    LoginHostActivity.createIntent(requireContext(), "")
+                    val intent = LoginHostActivity.createIntent(requireContext(), "")
+                    startActivity(intent)
                     true
                 }
                 else -> false
@@ -139,11 +140,9 @@ class MainScreen : Fragment() {
 
     private fun handleTransactions() = lifecycleScope.launch {
         viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            hostViewModel.userMainMenuState.collect { state ->
-                println("to to")
+            hostViewModel.transactionState.collect { state ->
                 when (state) {
                     is Success -> {
-                        println("transactions")
                         Log.i(MAIN_MENU_TAG, state.toString())
                         transactionAdapter.transactionsList =
                             getRecentTransactionsList(state.transactionsList)

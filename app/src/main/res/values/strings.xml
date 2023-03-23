@@ -58,9 +58,10 @@
     <string name="repeat_transaction">Repeat transaction</string>
     <string name="continue_text">Continue</string>
 
-    <string name="add_new_income_label">Add new INCOME</string>
-    <string name="add_new_expense_label">New new EXPENSE</string>
+    <string name="add_new_income_label">INCOME</string>
+    <string name="add_new_expense_label">EXPENSE</string>
     <string name="transaction_name">Transaction Name</string>
+    <string name="transaction_add_failure">Error while adding new transaction</string>
 
     <string-array name="months_of_year">
         <item>January</item>

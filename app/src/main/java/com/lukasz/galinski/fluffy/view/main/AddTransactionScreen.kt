@@ -14,8 +14,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lukasz.galinski.fluffy.R
-import com.lukasz.galinski.fluffy.databinding.TransactionAddLayoutBinding
+import com.lukasz.galinski.fluffy.common.createToast
 import com.lukasz.galinski.fluffy.data.model.TransactionModel
+import com.lukasz.galinski.fluffy.databinding.TransactionAddLayoutBinding
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -93,7 +94,9 @@ class AddTransactionScreen : Fragment() {
             name = transactionScreenBinding.transactionName.text.toString(),
             date = hostViewModel.getCurrentDate(),
             category = transactionScreenBinding.spinnerCategory.selectedItem.toString(),
-            amount = transactionScreenBinding.etAmount.text.toString(),
+            amount = hostViewModel.getDoubleFromString(
+                transactionScreenBinding.etAmount.text.toString()
+            ),
             description = transactionScreenBinding.etDescription.text.toString(),
             type = transactionType,
             userId = hostViewModel.userID.value
@@ -103,19 +106,18 @@ class AddTransactionScreen : Fragment() {
 
     private fun handleTransactions() = lifecycleScope.launch {
         viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            hostViewModel.userMainMenuState.collect { state ->
-                when (state) {
-                    is Success -> {
-                        Log.i(ADD_TRANSACTION_TAG, state.toString())
+            hostViewModel.addNewTransactionStatus.collect { addTransactionStatus ->
+                when (addTransactionStatus) {
+                    true -> {
+                        Log.i(ADD_TRANSACTION_TAG, "Success")
+                        findNavController().popBackStack()
                     }
-                    is Failure -> {
-                        Log.i(ADD_TRANSACTION_TAG, state.toString())
+                    false -> {
+                        Log.i(ADD_TRANSACTION_TAG, "Failure")
+                        context?.createToast(resources.getString(R.string.transaction_add_failure))
                     }
-                    is Loading -> {
-                        Log.i(ADD_TRANSACTION_TAG, state.toString())
-                    }
-                    is Idle -> {
-                        Log.i(ADD_TRANSACTION_TAG, state.toString())
+                    else -> {
+                        Log.i(ADD_TRANSACTION_TAG, "IDLE")
                     }
                 }
             }
