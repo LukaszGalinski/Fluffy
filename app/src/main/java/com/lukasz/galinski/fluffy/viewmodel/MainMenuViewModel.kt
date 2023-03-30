@@ -2,11 +2,11 @@ package com.lukasz.galinski.fluffy.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lukasz.galinski.core.data.Transaction
+import com.lukasz.galinski.core.data.User
 import com.lukasz.galinski.fluffy.HiltApplication
-import com.lukasz.galinski.fluffy.data.database.transaction.TransactionsRepositoryImpl
-import com.lukasz.galinski.fluffy.data.database.user.UsersRepositoryImpl
-import com.lukasz.galinski.fluffy.data.model.TransactionModel
-import com.lukasz.galinski.fluffy.data.model.UserModel
+import com.lukasz.galinski.fluffy.data.database.transaction.TransactionUseCases
+import com.lukasz.galinski.fluffy.data.database.user.UserUseCases
 import com.lukasz.galinski.fluffy.data.preferences.PreferencesData
 import com.lukasz.galinski.fluffy.view.main.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,21 +20,21 @@ private const val ACCOUNT_BALANCE = 8600.00 // Until setup bank connection
 
 @HiltViewModel
 class MainMenuViewModel @Inject constructor(
-    private val usersRepo: UsersRepositoryImpl,
-    private val transactionRepository: TransactionsRepositoryImpl,
+    private val userUseCases: UserUseCases,
+    private val transactionUseCases: TransactionUseCases,
     private val sharedPreferencesData: PreferencesData,
     @HiltApplication.IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val dateTools = DateTools()
-    private val dummyUser = UserModel("User", "", "", "")
+    private val dummyUser = User("User", "", "", "")
     private val _loggedUserDetails = MutableStateFlow(dummyUser)
     private val _transactionState: MutableStateFlow<TransactionStates> = MutableStateFlow(Idle)
     val transactionState: StateFlow<TransactionStates> = _transactionState
     private val _addNewTransactionStatus: MutableStateFlow<Boolean?> = MutableStateFlow(null)
     val addNewTransactionStatus: StateFlow<Boolean?> = _addNewTransactionStatus
-    private val _transactionList = MutableStateFlow(ArrayList<TransactionModel>())
-    val transactionList: StateFlow<ArrayList<TransactionModel>> = _transactionList
+    private val _transactionList = MutableStateFlow(ArrayList<Transaction>())
+    val transactionList: StateFlow<ArrayList<Transaction>> = _transactionList
     private var _userID = MutableStateFlow(0L)
     val userID: StateFlow<Long> = _userID
     private var _transactionIncome = MutableStateFlow(0.0)
@@ -73,7 +73,7 @@ class MainMenuViewModel @Inject constructor(
 
     private fun getUser(userId: Long) =
         viewModelScope.launch {
-            usersRepo.getUser(userId)
+            userUseCases.getUser(userId)
                 .onStart {
                     _transactionState.value = Loading
                 }
@@ -83,6 +83,7 @@ class MainMenuViewModel @Inject constructor(
                     _transactionState.value = Idle
                 }
                 .flowOn(ioDispatcher)
+                .map { it.invoke() }
                 .collect {
                     _loggedUserDetails.value = it
                 }
@@ -90,7 +91,7 @@ class MainMenuViewModel @Inject constructor(
 
     private fun getTransactionsList(userId: Long) {
         viewModelScope.launch {
-            transactionRepository.getTransactions(
+            transactionUseCases.getTransactions(
                 userId,
                 getStartMonthDate(),
                 getEndMonthDate()
@@ -105,9 +106,10 @@ class MainMenuViewModel @Inject constructor(
                     _transactionState.value = Idle
                 }
                 .flowOn(ioDispatcher)
+                .map { it.invoke() }
                 .collect { list ->
                     if (list.isNotEmpty()) {
-                        _transactionState.value = Success(list as ArrayList<TransactionModel>)
+                        _transactionState.value = Success(list as ArrayList<Transaction>)
                         _transactionList.value = list
                     }
                     _transactionIncome.value = round(getIncomeSumOfTransaction(_transactionList.value))
@@ -116,7 +118,7 @@ class MainMenuViewModel @Inject constructor(
         }
     }
 
-    private fun getOutcomeSumOfTransaction(outcomeList: List<TransactionModel>): Double {
+    private fun getOutcomeSumOfTransaction(outcomeList: List<Transaction>): Double {
         return outcomeList.filter { item ->
             item.type == TransactionType.OUTCOME.label
         }.sumOf {
@@ -124,7 +126,7 @@ class MainMenuViewModel @Inject constructor(
         }
     }
 
-    private fun getIncomeSumOfTransaction(incomeList: List<TransactionModel>): Double {
+    private fun getIncomeSumOfTransaction(incomeList: List<Transaction>): Double {
         return incomeList.filter { item ->
             item.type == TransactionType.INCOME.label
         }.sumOf {
@@ -136,9 +138,9 @@ class MainMenuViewModel @Inject constructor(
         return ACCOUNT_BALANCE
     }
 
-    fun addNewTransaction(transactionModel: TransactionModel) {
+    fun addNewTransaction(transaction: Transaction) {
         viewModelScope.launch {
-            transactionRepository.addTransaction(transactionModel)
+            transactionUseCases.addTransaction(transaction)
                 .catch {
                     _addNewTransactionStatus.value = false
                 }
@@ -148,8 +150,8 @@ class MainMenuViewModel @Inject constructor(
                 .flowOn(ioDispatcher)
                 .collect {
                     _addNewTransactionStatus.value = true
-                    if (newTransactionInTimeRange(transactionModel.date)) {
-                        _transactionList.value.add(0, transactionModel)
+                    if (newTransactionInTimeRange(transaction.date)) {
+                        _transactionList.value.add(0, transaction)
                         _transactionState.value = Success(_transactionList.value)
                         _transactionIncome.value = round(getIncomeSumOfTransaction(_transactionList.value))
                         _transactionOutcome.value = round(getOutcomeSumOfTransaction(_transactionList.value))

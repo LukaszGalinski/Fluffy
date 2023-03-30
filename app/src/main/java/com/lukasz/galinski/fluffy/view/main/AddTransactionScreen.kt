@@ -13,10 +13,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.lukasz.galinski.core.data.Transaction
 import com.lukasz.galinski.fluffy.R
-import com.lukasz.galinski.fluffy.common.createToast
-import com.lukasz.galinski.fluffy.data.model.TransactionModel
 import com.lukasz.galinski.fluffy.databinding.TransactionAddLayoutBinding
+import com.lukasz.galinski.fluffy.view.createToast
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -90,7 +90,7 @@ class AddTransactionScreen : Fragment() {
     }
 
     private fun addNewTransaction(transactionType: String) {
-        val newTransaction = TransactionModel(
+        val newTransaction = Transaction(
             name = transactionScreenBinding.transactionName.text.toString(),
             date = hostViewModel.getCurrentDate(),
             category = transactionScreenBinding.spinnerCategory.selectedItem.toString(),
@@ -99,7 +99,8 @@ class AddTransactionScreen : Fragment() {
             ),
             description = transactionScreenBinding.etDescription.text.toString(),
             type = transactionType,
-            userId = hostViewModel.userID.value
+            userId = hostViewModel.userID.value,
+            transactionId = 0
         )
         hostViewModel.addNewTransaction(newTransaction)
     }

@@ -18,8 +18,8 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.lukasz.galinski.core.data.Transaction
 import com.lukasz.galinski.fluffy.R
-import com.lukasz.galinski.fluffy.data.model.TransactionModel
 import com.lukasz.galinski.fluffy.databinding.MainMenuFragmentBinding
 import com.lukasz.galinski.fluffy.view.account.LoginHostActivity
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
@@ -162,16 +162,15 @@ class MainScreen : Fragment() {
         }
     }
 
-    private fun getRecentTransactionsList(transactionList: ArrayList<TransactionModel>): ArrayList<TransactionModel> {
-        val recentTransactionsList = ArrayList<TransactionModel>()
+    private fun getRecentTransactionsList(transactionList: ArrayList<Transaction>): ArrayList<Transaction> {
+        val recentTransactionsList = ArrayList<Transaction>()
         for (i in transactionList.take(RECENT_TRANSACTIONS_LIMIT).indices) {
             recentTransactionsList.add(transactionList[i])
         }
-        println("loaded list : " + transactionList)
         return recentTransactionsList
     }
 
-    private fun configureLineChart(data: ArrayList<TransactionModel>) {
+    private fun configureLineChart(data: ArrayList<Transaction>) {
         mainMenuBinding.chart.description.text = ""
         mainMenuBinding.chart.description.textSize = 0F
         mainMenuBinding.chart.isActivated = true

@@ -5,8 +5,15 @@ import android.content.Context
 import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.lukasz.galinski.core.repository.TransactionsRepository
+import com.lukasz.galinski.core.repository.UsersRepository
+import com.lukasz.galinski.core.usecase.*
 import com.lukasz.galinski.fluffy.data.database.AppDatabase
+import com.lukasz.galinski.fluffy.data.database.transaction.RoomTransactionsDataSource
+import com.lukasz.galinski.fluffy.data.database.transaction.TransactionUseCases
 import com.lukasz.galinski.fluffy.data.database.transaction.TransactionsDao
+import com.lukasz.galinski.fluffy.data.database.user.RoomUsersDataSource
+import com.lukasz.galinski.fluffy.data.database.user.UserUseCases
 import com.lukasz.galinski.fluffy.data.database.user.UsersDao
 import dagger.Module
 import dagger.Provides
@@ -47,6 +54,31 @@ class HiltApplication : Application() {
                 DATABASE_NAME
             ).build()
         }
+
+        @Provides
+        fun provideTransactionRepository(transactionDao: TransactionsDao) =
+            TransactionsRepository(RoomTransactionsDataSource(transactionDao))
+
+        @Provides
+        fun provideUsersRepository(usersDao: UsersDao) =
+            UsersRepository(RoomUsersDataSource(usersDao))
+    }
+
+    @Module
+    @InstallIn(SingletonComponent::class)
+    class UseCasesModule {
+        @Provides
+        fun getTransactionUseCases(repository: TransactionsRepository) = TransactionUseCases(
+            AddTransaction(repository),
+            GetTransactions(repository)
+        )
+
+        @Provides
+        fun getUserUseCases(repository: UsersRepository) = UserUseCases(
+            AddUser(repository),
+            GetUser(repository),
+            LoginUser(repository)
+        )
     }
 
     @Module

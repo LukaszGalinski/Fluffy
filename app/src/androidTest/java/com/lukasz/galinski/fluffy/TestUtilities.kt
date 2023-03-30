@@ -1,14 +1,14 @@
 package com.lukasz.galinski.fluffy
 
-import com.lukasz.galinski.fluffy.data.model.TransactionModel
-import com.lukasz.galinski.fluffy.data.model.UserModel
+import com.lukasz.galinski.fluffy.data.model.TransactionEntity
+import com.lukasz.galinski.fluffy.data.model.UserEntity
 
 object TestUtilities {
-    fun createTestUsers(testUsersLastIndex: Int): ArrayList<UserModel> {
-        val usersList = arrayListOf<UserModel>()
+    fun createTestUsers(testUsersLastIndex: Int): ArrayList<UserEntity> {
+        val usersList = arrayListOf<UserEntity>()
         for (i in 0..testUsersLastIndex) {
             usersList.add(
-                UserModel(
+                UserEntity(
                     "George",
                     "emailExample$i@test.com",
                     "test",
@@ -19,15 +19,15 @@ object TestUtilities {
         return usersList
     }
 
-    fun createTestTransactions(testUsersLastIndex: Int): ArrayList<TransactionModel> {
-        val transactionList = arrayListOf<TransactionModel>()
+    fun createTestTransactions(testUsersLastIndex: Int): ArrayList<TransactionEntity> {
+        val transactionList = arrayListOf<TransactionEntity>()
         for (i in 0..testUsersLastIndex) {
             transactionList.add(
-                TransactionModel(
+                TransactionEntity(
                     "dummyTransaction",
                     0,
                     "food",
-                    "483.23",
+                    483.23,
                     "Dummy Description",
                     "income",
                     1

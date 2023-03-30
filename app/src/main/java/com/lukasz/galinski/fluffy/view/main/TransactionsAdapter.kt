@@ -4,14 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.lukasz.galinski.core.data.Transaction
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.TransactionsSingleItemBinding
-import com.lukasz.galinski.fluffy.data.model.TransactionModel
 
 class TransactionsAdapter :
     RecyclerView.Adapter<TransactionsAdapter.TransactionsViewHolder>() {
 
-    var transactionsList: ArrayList<TransactionModel> = arrayListOf()
+    var transactionsList: ArrayList<Transaction> = arrayListOf()
         set(value) {
             field = value
             notifyItemRangeChanged(0, transactionsList.size)

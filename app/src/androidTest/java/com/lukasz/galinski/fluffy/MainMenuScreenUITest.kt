@@ -5,10 +5,10 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.lukasz.galinski.fluffy.data.database.transaction.TransactionsRepositoryImpl
-import com.lukasz.galinski.fluffy.data.database.user.UsersRepositoryImpl
-import com.lukasz.galinski.fluffy.data.model.TransactionModel
-import com.lukasz.galinski.fluffy.data.model.UserModel
+import com.lukasz.galinski.fluffy.data.database.transaction.RoomTransactionsDataSource
+import com.lukasz.galinski.fluffy.data.database.user.RoomUsersDataSource
+import com.lukasz.galinski.fluffy.data.model.TransactionEntity
+import com.lukasz.galinski.fluffy.data.model.UserEntity
 import com.lukasz.galinski.fluffy.data.preferences.PreferencesData
 import com.lukasz.galinski.fluffy.view.main.MainScreen
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
@@ -34,12 +34,12 @@ import org.junit.runner.RunWith
 class MainMenuScreenUITest {
 
     private val testDispatcher = StandardTestDispatcher()
-    private val transactionRepository = mockk<TransactionsRepositoryImpl>()
-    private val userRepository = mockk<UsersRepositoryImpl>()
-    private val mockedUser = mockk<UserModel>()
+    private val transactionRepository = mockk<RoomTransactionsDataSource>()
+    private val userRepository = mockk<RoomUsersDataSource>()
+    private val mockedUser = mockk<UserEntity>()
     private val userPreferences = mockk<PreferencesData>(relaxed = true)
     private lateinit var mainMenuViewModel: MainMenuViewModel
-    private val mockedTransaction = mockk<TransactionModel>(relaxed = true)
+    private val mockedTransaction = mockk<TransactionEntity>(relaxed = true)
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)

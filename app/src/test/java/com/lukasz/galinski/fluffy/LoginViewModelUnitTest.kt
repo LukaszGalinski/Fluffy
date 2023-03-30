@@ -1,8 +1,9 @@
 package com.lukasz.galinski.fluffy
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.lukasz.galinski.fluffy.data.model.UserModel
-import com.lukasz.galinski.fluffy.data.database.user.UsersRepositoryImpl
+import com.lukasz.galinski.core.data.User
+import com.lukasz.galinski.fluffy.data.model.UserEntity
+import com.lukasz.galinski.fluffy.data.database.user.RoomUsersDataSource
 import com.lukasz.galinski.fluffy.data.preferences.PreferencesData
 import com.lukasz.galinski.fluffy.view.account.Success
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
@@ -27,8 +28,8 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class LoginViewModelUnitTest {
     private val testDispatcher = StandardTestDispatcher()
-    private val userRepository = mockk<UsersRepositoryImpl>()
-    private val mockedUser = mockk<UserModel>()
+    private val userRepository = mockk<RoomUsersDataSource>()
+    private val mockedUser = mockk<User>()
     private val userPreferences = mockk<PreferencesData>()
     private lateinit var loginViewModel: LoginViewModel
     private val userNameLogin = "admin"
@@ -44,7 +45,7 @@ class LoginViewModelUnitTest {
         Dispatchers.setMain(testDispatcher)
 
         coJustRun { userPreferences.setLoggedUser(any()) }
-        coEvery { userRepository.addNewUser(mockedUser) }.returns(flow { emit(5) })
+        coEvery { userRepository.addUser(mockedUser) }.returns(flow { emit(5) })
         loginViewModel = spyk(LoginViewModel(userRepository, userPreferences, testDispatcher))
     }
 

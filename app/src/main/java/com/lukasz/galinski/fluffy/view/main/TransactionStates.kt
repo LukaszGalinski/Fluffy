@@ -1,10 +1,10 @@
 package com.lukasz.galinski.fluffy.view.main
 
-import com.lukasz.galinski.fluffy.data.model.TransactionModel
+import com.lukasz.galinski.core.data.Transaction
 
 sealed class TransactionStates
 object Idle : TransactionStates()
 object Loading : TransactionStates()
 object Failure : TransactionStates()
-data class Success(val transactionsList: ArrayList<TransactionModel>) : TransactionStates()
+data class Success(val transactionsList: ArrayList<Transaction>) : TransactionStates()
 

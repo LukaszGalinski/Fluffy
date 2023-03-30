@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.lukasz.galinski.fluffy.R
-import com.lukasz.galinski.fluffy.common.createToast
+import com.lukasz.galinski.fluffy.view.createToast
 import com.lukasz.galinski.fluffy.databinding.LoginHostLayoutBinding
 import dagger.hilt.android.AndroidEntryPoint
 

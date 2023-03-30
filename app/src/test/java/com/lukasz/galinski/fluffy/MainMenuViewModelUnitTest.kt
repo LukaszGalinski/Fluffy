@@ -1,12 +1,12 @@
 package com.lukasz.galinski.fluffy
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.lukasz.galinski.fluffy.viewmodel.DateTools
-import com.lukasz.galinski.fluffy.data.model.TransactionModel
-import com.lukasz.galinski.fluffy.data.model.UserModel
-import com.lukasz.galinski.fluffy.data.database.transaction.TransactionsRepositoryImpl
-import com.lukasz.galinski.fluffy.data.database.user.UsersRepositoryImpl
+import com.lukasz.galinski.fluffy.data.database.transaction.RoomTransactionsDataSource
+import com.lukasz.galinski.fluffy.data.database.user.RoomUsersDataSource
+import com.lukasz.galinski.fluffy.data.model.TransactionEntity
+import com.lukasz.galinski.fluffy.data.model.UserEntity
 import com.lukasz.galinski.fluffy.data.preferences.PreferencesData
+import com.lukasz.galinski.fluffy.viewmodel.DateTools
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import io.mockk.*
 import io.reactivex.android.plugins.RxAndroidPlugins
@@ -28,11 +28,11 @@ import org.junit.Test
 class MainMenuViewModelUnitTest {
     private lateinit var mainMenuViewModel: MainMenuViewModel
     private val testDispatcher = StandardTestDispatcher()
-    private val transactionRepository = mockk<TransactionsRepositoryImpl>()
-    private val userRepository = mockk<UsersRepositoryImpl>()
-    private val mockedUser = mockk<UserModel>()
+    private val transactionRepository = mockk<RoomTransactionsDataSource>()
+    private val userRepository = mockk<RoomUsersDataSource>()
+    private val mockedUser = mockk<UserEntity>()
     private val userPreferences = mockk<PreferencesData>(relaxed = true)
-    private val mockedTransaction = mockk<TransactionModel>(relaxed = true)
+    private val mockedTransaction = mockk<TransactionEntity>(relaxed = true)
     private val mockedDateTools = mockk<DateTools>()
 
     @Rule
@@ -81,7 +81,7 @@ class MainMenuViewModelUnitTest {
     @Test
     fun checkUserDataLoadedWithCorrectUserID() {
         runTest {}
-        coVerify(exactly = 1, timeout = 1000) { userPreferences.getLoggedUser() }
+        coVerify(exactly = 1, timeout = 1000) { userPreferences.getLoggedUser()}
         assertEquals(5, mainMenuViewModel.userID.value)
     }
 

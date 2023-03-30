@@ -10,10 +10,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
+import com.lukasz.galinski.core.data.User
 import com.lukasz.galinski.fluffy.R
-import com.lukasz.galinski.fluffy.common.*
-import com.lukasz.galinski.fluffy.data.model.UserModel
 import com.lukasz.galinski.fluffy.databinding.RegisterScreenFragmentBinding
+import com.lukasz.galinski.fluffy.view.*
 import com.lukasz.galinski.fluffy.view.account.*
 import com.lukasz.galinski.fluffy.view.main.MainMenuActivity
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
@@ -63,7 +63,7 @@ class RegisterScreen : Fragment() {
             val userEmail = registerBinding.etLogin.text.toString()
             val userPassword = registerBinding.etPassword.text.toString()
             val userName = registerBinding.etName.text.toString()
-            viewModel.saveUserIntoDatabase(UserModel(userName, userEmail, userPassword, "9999"))
+            viewModel.saveUserIntoDatabase(User(userName, userEmail, userPassword, "9999"))
         }
     }
 

@@ -10,9 +10,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
 import com.lukasz.galinski.fluffy.R
-import com.lukasz.galinski.fluffy.common.createToast
-import com.lukasz.galinski.fluffy.common.setInvisible
-import com.lukasz.galinski.fluffy.common.setVisible
+import com.lukasz.galinski.fluffy.view.createToast
+import com.lukasz.galinski.fluffy.view.setInvisible
+import com.lukasz.galinski.fluffy.view.setVisible
 import com.lukasz.galinski.fluffy.databinding.LoginScreenFragmentBinding
 import com.lukasz.galinski.fluffy.view.account.*
 import com.lukasz.galinski.fluffy.view.main.MainMenuActivity
