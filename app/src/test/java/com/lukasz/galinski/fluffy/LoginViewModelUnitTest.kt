@@ -2,10 +2,9 @@ package com.lukasz.galinski.fluffy
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.lukasz.galinski.core.data.User
-import com.lukasz.galinski.fluffy.data.model.UserEntity
-import com.lukasz.galinski.fluffy.data.database.user.RoomUsersDataSource
-import com.lukasz.galinski.fluffy.data.preferences.PreferencesData
-import com.lukasz.galinski.fluffy.view.account.Success
+import com.lukasz.galinski.fluffy.framework.database.user.RoomUsersDataSource
+import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
+import com.lukasz.galinski.fluffy.presentation.account.Success
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 import io.mockk.*
 import io.reactivex.android.plugins.RxAndroidPlugins

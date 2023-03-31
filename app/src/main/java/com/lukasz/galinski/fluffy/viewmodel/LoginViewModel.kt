@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lukasz.galinski.core.data.User
 import com.lukasz.galinski.fluffy.HiltApplication
-import com.lukasz.galinski.fluffy.data.database.user.UserUseCases
-import com.lukasz.galinski.fluffy.data.preferences.PreferencesData
-import com.lukasz.galinski.fluffy.view.account.*
+import com.lukasz.galinski.fluffy.framework.database.user.UserUseCases
+import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
+import com.lukasz.galinski.fluffy.presentation.account.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
@@ -33,55 +33,51 @@ class LoginViewModel @Inject constructor(
         _saveButtonState.value = state
     }
 
-    fun saveUserIntoDatabase(userEntity: User) =
-        viewModelScope.launch {
-            if (_userAccountState.value !is Loading) {
-                useCases.addUser(userEntity)
+    fun saveUserIntoDatabase(user: User) {
+        if (_userAccountState.value !is Loading) {
+            viewModelScope.launch {
+                flowOf(useCases.addUser(user))
                     .onStart { _userAccountState.value = Loading }
                     .flowOn(ioDispatcher)
                     .catch { _userAccountState.value = Failure(it) }
-                    .collect { _userAccountState.value = Success(it.invoke()) }
+                    .collect { _userAccountState.value = Success(it) }
             }
         }
+    }
 
-            fun loginUser(userLogin: String, userPassword: String) {
-                viewModelScope.launch {
-                    if (_userAccountState.value !is Loading) {
-                        useCases.loginUser(userLogin, userPassword)
-                            .onStart {
-                                _userAccountState.value = Loading
-                            }
-                            .flowOn(ioDispatcher)
-                            .catch {
-                                _userAccountState.value = Failure(it)
-                            }.onCompletion {
-                                _userAccountState.value = Idle
-                            }
-                            .map { it.invoke() }
-                            .collect {
-                                if (it == 0L) {
-                                    _userAccountState.value = UserNotFound(it)
-                                } else {
-                                    setLoggedUser(it)
-                                    _userAccountState.value = Success(it)
-                                }
-                            }
+    fun loginUser(userLogin: String, userPassword: String) {
+        if (_userAccountState.value !is Loading) {
+            viewModelScope.launch {
+                useCases.loginUser(userLogin, userPassword)
+                    .onStart { _userAccountState.value = Loading }
+                    .catch { _userAccountState.value = Failure(it) }
+                    .onCompletion { _userAccountState.value = Idle }
+                    .flowOn(ioDispatcher)
+                    .collect {
+                        println("Wartosc: " + it)
+                        if (it == 0L) {
+                            _userAccountState.value = UserNotFound(it)
+                        } else {
+                            setLoggedUser(it)
+                            _userAccountState.value = Success(it)
+                        }
                     }
-                }
-            }
-
-            private fun setLoggedUser(userId: Long) {
-                viewModelScope.launch {
-                    preferencesData.setLoggedUser(userId)
-                    currentlyLoggedUserId = userId
-                }
-            }
-
-            fun getLoggedUser(): Flow<Long> {
-                return if (currentlyLoggedUserId == 0L) {
-                    preferencesData.getLoggedUser()
-                } else {
-                    flowOf(currentlyLoggedUserId)
-                }
             }
         }
+    }
+
+    private fun setLoggedUser(userId: Long) {
+        viewModelScope.launch {
+            preferencesData.setLoggedUser(userId)
+            currentlyLoggedUserId = userId
+        }
+    }
+
+    fun getLoggedUser(): Flow<Long> {
+        return if (currentlyLoggedUserId == 0L) {
+            preferencesData.getLoggedUser()
+        } else {
+            flowOf(currentlyLoggedUserId)
+        }
+    }
+}

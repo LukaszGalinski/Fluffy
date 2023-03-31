@@ -5,10 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.lukasz.galinski.core.data.Transaction
 import com.lukasz.galinski.core.data.User
 import com.lukasz.galinski.fluffy.HiltApplication
-import com.lukasz.galinski.fluffy.data.database.transaction.TransactionUseCases
-import com.lukasz.galinski.fluffy.data.database.user.UserUseCases
-import com.lukasz.galinski.fluffy.data.preferences.PreferencesData
-import com.lukasz.galinski.fluffy.view.main.*
+import com.lukasz.galinski.fluffy.framework.database.transaction.TransactionUseCases
+import com.lukasz.galinski.fluffy.framework.database.user.UserUseCases
+import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
+import com.lukasz.galinski.fluffy.presentation.main.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
@@ -73,47 +73,38 @@ class MainMenuViewModel @Inject constructor(
 
     private fun getUser(userId: Long) =
         viewModelScope.launch {
-            userUseCases.getUser(userId)
-                .onStart {
-                    _transactionState.value = Loading
-                }
-                .catch {
-                    _transactionState.value = Failure
-                }.onCompletion {
-                    _transactionState.value = Idle
-                }
+            flowOf(userUseCases.getUser(userId))
+                .onStart { _transactionState.value = Loading }
+                .catch { _transactionState.value = Failure }
+                .onCompletion { _transactionState.value = Idle }
                 .flowOn(ioDispatcher)
-                .map { it.invoke() }
-                .collect {
-                    _loggedUserDetails.value = it
-                }
+                .collect { _loggedUserDetails.value = it }
         }
 
     private fun getTransactionsList(userId: Long) {
         viewModelScope.launch {
-            transactionUseCases.getTransactions(
-                userId,
-                getStartMonthDate(),
-                getEndMonthDate()
+            flowOf(
+                transactionUseCases.getTransactions(
+                    userId,
+                    getStartMonthDate(),
+                    getEndMonthDate()
+                )
             )
-                .onStart {
-                    _transactionState.value = Loading
-                }
+                .onStart { _transactionState.value = Loading }
                 .catch {
                     _transactionState.value = Failure
                     _transactionList.value = ArrayList()
-                }.onCompletion {
-                    _transactionState.value = Idle
-                }
+                }.onCompletion { _transactionState.value = Idle }
                 .flowOn(ioDispatcher)
-                .map { it.invoke() }
                 .collect { list ->
                     if (list.isNotEmpty()) {
                         _transactionState.value = Success(list as ArrayList<Transaction>)
                         _transactionList.value = list
                     }
-                    _transactionIncome.value = round(getIncomeSumOfTransaction(_transactionList.value))
-                    _transactionOutcome.value = round(getOutcomeSumOfTransaction(_transactionList.value))
+                    _transactionIncome.value =
+                        round(getIncomeSumOfTransaction(_transactionList.value))
+                    _transactionOutcome.value =
+                        round(getOutcomeSumOfTransaction(_transactionList.value))
                 }
         }
     }
@@ -140,7 +131,7 @@ class MainMenuViewModel @Inject constructor(
 
     fun addNewTransaction(transaction: Transaction) {
         viewModelScope.launch {
-            transactionUseCases.addTransaction(transaction)
+            flowOf(transactionUseCases.addTransaction(transaction))
                 .catch {
                     _addNewTransactionStatus.value = false
                 }
@@ -153,8 +144,10 @@ class MainMenuViewModel @Inject constructor(
                     if (newTransactionInTimeRange(transaction.date)) {
                         _transactionList.value.add(0, transaction)
                         _transactionState.value = Success(_transactionList.value)
-                        _transactionIncome.value = round(getIncomeSumOfTransaction(_transactionList.value))
-                        _transactionOutcome.value = round(getOutcomeSumOfTransaction(_transactionList.value))
+                        _transactionIncome.value =
+                            round(getIncomeSumOfTransaction(_transactionList.value))
+                        _transactionOutcome.value =
+                            round(getOutcomeSumOfTransaction(_transactionList.value))
                     }
                     _addNewTransactionStatus.value = null
                 }

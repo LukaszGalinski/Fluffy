@@ -5,9 +5,9 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.lukasz.galinski.fluffy.data.database.AppDatabase
-import com.lukasz.galinski.fluffy.data.database.transaction.TransactionsDao
-import com.lukasz.galinski.fluffy.data.database.user.UsersDao
+import com.lukasz.galinski.fluffy.framework.database.AppDatabase
+import com.lukasz.galinski.fluffy.framework.database.transaction.TransactionsDao
+import com.lukasz.galinski.fluffy.framework.database.user.UsersDao
 import com.lukasz.galinski.fluffy.viewmodel.DateTools
 import org.junit.After
 import org.junit.Assert.assertEquals

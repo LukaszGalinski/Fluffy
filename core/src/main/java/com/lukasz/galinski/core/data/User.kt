@@ -5,6 +5,6 @@ data class User(
     val userEmail: String?,
     val password: String?,
     val pin: String,
-    val userId: Long = 0L
+    val userId: Long? = 0L
 )
 

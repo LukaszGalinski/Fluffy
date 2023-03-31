@@ -5,7 +5,7 @@
     app:startDestination="@id/mainScreen">
     <fragment
         android:id="@+id/mainScreen"
-        android:name="com.lukasz.galinski.fluffy.view.main.MainScreen"
+        android:name="com.lukasz.galinski.fluffy.presentation.main.MainScreen"
         android:label="MainScreen">
         <action
             android:id="@+id/action_mainScreen_to_addTransactionScreen"
@@ -13,7 +13,7 @@
     </fragment>
     <fragment
         android:id="@+id/addTransactionScreen"
-        android:name="com.lukasz.galinski.fluffy.view.main.AddTransactionScreen"
+        android:name="com.lukasz.galinski.fluffy.presentation.main.AddTransactionScreen"
         android:label="AddTransactionScreen">
         <argument android:name="transactionTypeArgument" />
         <action

@@ -6,7 +6,7 @@
     app:startDestination="@id/loginScreen">
     <fragment
         android:id="@+id/loginScreen"
-        android:name="com.lukasz.galinski.fluffy.view.account.login.LoginScreen"
+        android:name="com.lukasz.galinski.fluffy.presentation.account.login.LoginScreen"
         android:label="LoginScreen"
         tools:layout="@layout/login_screen_fragment">
         <action
@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerScreen"
-        android:name="com.lukasz.galinski.fluffy.view.account.register.RegisterScreen"
+        android:name="com.lukasz.galinski.fluffy.presentation.account.register.RegisterScreen"
         android:label="RegisterScreen">
         <action
             android:id="@+id/action_registerScreen_to_loginScreen"

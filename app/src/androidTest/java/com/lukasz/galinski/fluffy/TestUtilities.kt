@@ -1,7 +1,7 @@
 package com.lukasz.galinski.fluffy
 
-import com.lukasz.galinski.fluffy.data.model.TransactionEntity
-import com.lukasz.galinski.fluffy.data.model.UserEntity
+import com.lukasz.galinski.fluffy.framework.model.TransactionEntity
+import com.lukasz.galinski.fluffy.framework.model.UserEntity
 
 object TestUtilities {
     fun createTestUsers(testUsersLastIndex: Int): ArrayList<UserEntity> {
