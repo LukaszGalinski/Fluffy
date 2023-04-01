@@ -73,7 +73,7 @@ class MainMenuViewModel @Inject constructor(
 
     private fun getUser(userId: Long) =
         viewModelScope.launch {
-            flowOf(userUseCases.getUser(userId))
+            userUseCases.getUser(userId)
                 .onStart { _transactionState.value = Loading }
                 .catch { _transactionState.value = Failure }
                 .onCompletion { _transactionState.value = Idle }
@@ -83,14 +83,11 @@ class MainMenuViewModel @Inject constructor(
 
     private fun getTransactionsList(userId: Long) {
         viewModelScope.launch {
-            flowOf(
-                transactionUseCases.getTransactions(
-                    userId,
-                    getStartMonthDate(),
-                    getEndMonthDate()
-                )
-            )
-                .onStart { _transactionState.value = Loading }
+            transactionUseCases.getTransactions(
+                userId,
+                getStartMonthDate(),
+                getEndMonthDate()
+            ).onStart { _transactionState.value = Loading }
                 .catch {
                     _transactionState.value = Failure
                     _transactionList.value = ArrayList()

@@ -8,7 +8,11 @@ import javax.inject.Inject
 
 class RoomUsersDataSource @Inject constructor(private val usersDao: UsersDao) : UsersDataSource {
 
-    override suspend fun addUser(user: User) = usersDao.addNewUser(UserEntity.fromUser(user))
+    override fun addUser(user: User): Flow<Long> {
+        return flow {
+            emit(usersDao.addNewUser(UserEntity.fromUser(user)))
+        }
+    }
 
     override fun loginUser(userEmail: String, userPassword: String): Flow<Long> {
         return flow {
@@ -16,5 +20,9 @@ class RoomUsersDataSource @Inject constructor(private val usersDao: UsersDao) : 
         }
     }
 
-    override suspend fun getUser(userId: Long) = usersDao.getUser(userId).toUser()
+    override fun getUser(userId: Long): Flow<User> {
+        return flow {
+            emit(usersDao.getUser(userId).toUser())
+        }
+    }
 }

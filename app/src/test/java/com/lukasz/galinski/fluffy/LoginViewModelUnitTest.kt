@@ -2,7 +2,7 @@ package com.lukasz.galinski.fluffy
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.lukasz.galinski.core.data.User
-import com.lukasz.galinski.fluffy.framework.database.user.RoomUsersDataSource
+import com.lukasz.galinski.fluffy.framework.database.user.UserUseCases
 import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
 import com.lukasz.galinski.fluffy.presentation.account.Success
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
@@ -27,7 +27,7 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class LoginViewModelUnitTest {
     private val testDispatcher = StandardTestDispatcher()
-    private val userRepository = mockk<RoomUsersDataSource>()
+    private val mockedUserCases = mockk<UserUseCases>()
     private val mockedUser = mockk<User>()
     private val userPreferences = mockk<PreferencesData>()
     private lateinit var loginViewModel: LoginViewModel
@@ -44,8 +44,8 @@ class LoginViewModelUnitTest {
         Dispatchers.setMain(testDispatcher)
 
         coJustRun { userPreferences.setLoggedUser(any()) }
-        coEvery { userRepository.addUser(mockedUser) }.returns(flow { emit(5) })
-        loginViewModel = spyk(LoginViewModel(userRepository, userPreferences, testDispatcher))
+        coEvery { mockedUserCases.addUser(mockedUser) }.returns(flow { emit(5) })
+        loginViewModel = spyk(LoginViewModel(mockedUserCases, userPreferences, testDispatcher))
     }
 
     @After
@@ -106,7 +106,7 @@ class LoginViewModelUnitTest {
     }
 
     private fun setLoginOutputFromRepository(value: Long) {
-        every { userRepository.loginUser(any(), any()) }
+        every { mockedUserCases.loginUser(any(), any()) }
             .returns(flow {
                 emit(value)
             })

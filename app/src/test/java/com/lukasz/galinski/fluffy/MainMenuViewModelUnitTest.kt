@@ -1,10 +1,10 @@
 package com.lukasz.galinski.fluffy
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.lukasz.galinski.fluffy.framework.database.transaction.RoomTransactionsDataSource
-import com.lukasz.galinski.fluffy.framework.database.user.RoomUsersDataSource
-import com.lukasz.galinski.fluffy.framework.model.TransactionEntity
-import com.lukasz.galinski.fluffy.framework.model.UserEntity
+import com.lukasz.galinski.core.data.Transaction
+import com.lukasz.galinski.core.data.User
+import com.lukasz.galinski.fluffy.framework.database.transaction.TransactionUseCases
+import com.lukasz.galinski.fluffy.framework.database.user.UserUseCases
 import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
 import com.lukasz.galinski.fluffy.viewmodel.DateTools
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
@@ -28,11 +28,11 @@ import org.junit.Test
 class MainMenuViewModelUnitTest {
     private lateinit var mainMenuViewModel: MainMenuViewModel
     private val testDispatcher = StandardTestDispatcher()
-    private val transactionRepository = mockk<RoomTransactionsDataSource>()
-    private val userRepository = mockk<RoomUsersDataSource>()
-    private val mockedUser = mockk<UserEntity>()
+    private val transactionRepository = mockk<TransactionUseCases>()
+    private val userRepository = mockk<UserUseCases>()
+    private val mockedUser = mockk<User>()
     private val userPreferences = mockk<PreferencesData>(relaxed = true)
-    private val mockedTransaction = mockk<TransactionEntity>(relaxed = true)
+    private val mockedTransaction = mockk<Transaction>(relaxed = true)
     private val mockedDateTools = mockk<DateTools>()
 
     @Rule

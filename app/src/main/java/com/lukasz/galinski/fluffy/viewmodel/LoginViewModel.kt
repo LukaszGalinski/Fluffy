@@ -36,7 +36,7 @@ class LoginViewModel @Inject constructor(
     fun saveUserIntoDatabase(user: User) {
         if (_userAccountState.value !is Loading) {
             viewModelScope.launch {
-                flowOf(useCases.addUser(user))
+                useCases.addUser(user)
                     .onStart { _userAccountState.value = Loading }
                     .flowOn(ioDispatcher)
                     .catch { _userAccountState.value = Failure(it) }
@@ -54,7 +54,6 @@ class LoginViewModel @Inject constructor(
                     .onCompletion { _userAccountState.value = Idle }
                     .flowOn(ioDispatcher)
                     .collect {
-                        println("Wartosc: " + it)
                         if (it == 0L) {
                             _userAccountState.value = UserNotFound(it)
                         } else {
