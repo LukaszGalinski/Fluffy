@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lukasz.galinski.core.data.User
-import com.lukasz.galinski.fluffy.HiltApplication
 import com.lukasz.galinski.fluffy.framework.database.user.UserUseCases
+import com.lukasz.galinski.fluffy.framework.di.DispatchersModule
 import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
 import com.lukasz.galinski.fluffy.presentation.account.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +19,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val useCases: UserUseCases,
     private val preferencesData: PreferencesData,
-    @HiltApplication.IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @DispatchersModule.IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _saveButtonState = MutableLiveData(false)

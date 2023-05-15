@@ -1,17 +1,29 @@
 package com.lukasz.galinski.fluffy.viewmodel
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lukasz.galinski.core.data.Transaction
 import com.lukasz.galinski.core.data.User
-import com.lukasz.galinski.fluffy.HiltApplication
 import com.lukasz.galinski.fluffy.framework.database.transaction.TransactionUseCases
 import com.lukasz.galinski.fluffy.framework.database.user.UserUseCases
+import com.lukasz.galinski.fluffy.framework.di.DispatchersModule
 import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
-import com.lukasz.galinski.fluffy.presentation.main.*
+import com.lukasz.galinski.fluffy.presentation.main.Failure
+import com.lukasz.galinski.fluffy.presentation.main.Idle
+import com.lukasz.galinski.fluffy.presentation.main.Loading
+import com.lukasz.galinski.fluffy.presentation.main.Success
+import com.lukasz.galinski.fluffy.presentation.main.TransactionStates
+import com.lukasz.galinski.fluffy.presentation.main.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.round
@@ -23,7 +35,7 @@ class MainMenuViewModel @Inject constructor(
     private val userUseCases: UserUseCases,
     private val transactionUseCases: TransactionUseCases,
     private val sharedPreferencesData: PreferencesData,
-    @HiltApplication.IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @DispatchersModule.IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val dateTools = DateTools()
@@ -157,7 +169,8 @@ class MainMenuViewModel @Inject constructor(
         else input.toDouble()
     }
 
-    private fun newTransactionInTimeRange(date: Long): Boolean {
+    @VisibleForTesting
+    fun newTransactionInTimeRange(date: Long): Boolean {
         return (currentStartDate <= date) && (date <= currentEndDate)
     }
 

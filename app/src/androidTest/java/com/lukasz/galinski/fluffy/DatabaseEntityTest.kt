@@ -21,8 +21,10 @@ class DatabaseEntityTest {
     private lateinit var usersDao: UsersDao
     private lateinit var transactionsDao: TransactionsDao
     private lateinit var appDatabase: AppDatabase
+    private lateinit var testUser: AppDatabase
     private val dummyUserLogin = "test@test.com"
     private val dummyUserPassword = "test"
+    private var testUser
 
     @Test
     fun useAppContext() {
