@@ -13,9 +13,17 @@ import com.google.android.material.textfield.TextInputLayout
 import com.lukasz.galinski.core.data.User
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.RegisterScreenFragmentBinding
-import com.lukasz.galinski.fluffy.presentation.*
-import com.lukasz.galinski.fluffy.presentation.account.*
+import com.lukasz.galinski.fluffy.presentation.account.Failure
+import com.lukasz.galinski.fluffy.presentation.account.Idle
+import com.lukasz.galinski.fluffy.presentation.account.Loading
+import com.lukasz.galinski.fluffy.presentation.account.Success
+import com.lukasz.galinski.fluffy.presentation.account.highlightSelectedTextRange
+import com.lukasz.galinski.fluffy.presentation.createToast
 import com.lukasz.galinski.fluffy.presentation.main.MainMenuActivity
+import com.lukasz.galinski.fluffy.presentation.markAs
+import com.lukasz.galinski.fluffy.presentation.setInvisible
+import com.lukasz.galinski.fluffy.presentation.setStateAppearance
+import com.lukasz.galinski.fluffy.presentation.setVisible
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 

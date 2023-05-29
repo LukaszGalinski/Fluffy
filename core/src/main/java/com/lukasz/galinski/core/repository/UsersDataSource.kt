@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface UsersDataSource {
     fun getUser(userId: Long): Flow<User>
     fun addUser(user: User): Flow<Long>
-    fun loginUser(userEmail: String, userPassword: String): Flow<Long>
+    fun loginUser(userEmail: String, userPassword: String): Flow<Long?>
 }

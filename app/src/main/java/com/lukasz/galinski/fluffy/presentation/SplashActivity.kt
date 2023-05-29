@@ -26,7 +26,7 @@ class SplashActivity : AppCompatActivity() {
         lifecycleScope.launchWhenStarted {
             val loginStatus = viewModel.getLoggedUser()
 
-            if (loginStatus.first() != 0L) {
+            if (loginStatus.first() != null) {
                 startActivity(
                     MainMenuActivity.createIntent(
                         applicationContext

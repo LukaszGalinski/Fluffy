@@ -11,7 +11,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.LoginScreenFragmentBinding
-import com.lukasz.galinski.fluffy.presentation.account.*
+import com.lukasz.galinski.fluffy.presentation.account.Failure
+import com.lukasz.galinski.fluffy.presentation.account.Idle
+import com.lukasz.galinski.fluffy.presentation.account.Loading
+import com.lukasz.galinski.fluffy.presentation.account.Success
+import com.lukasz.galinski.fluffy.presentation.account.UserNotFound
+import com.lukasz.galinski.fluffy.presentation.account.highlightSelectedTextRange
 import com.lukasz.galinski.fluffy.presentation.createToast
 import com.lukasz.galinski.fluffy.presentation.main.MainMenuActivity
 import com.lukasz.galinski.fluffy.presentation.setInvisible

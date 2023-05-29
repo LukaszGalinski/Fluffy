@@ -14,7 +14,7 @@ class RoomUsersDataSource @Inject constructor(private val usersDao: UsersDao) : 
         }
     }
 
-    override fun loginUser(userEmail: String, userPassword: String): Flow<Long> {
+    override fun loginUser(userEmail: String, userPassword: String): Flow<Long?> {
         return flow {
             emit(usersDao.loginUser(userEmail, userPassword))
         }

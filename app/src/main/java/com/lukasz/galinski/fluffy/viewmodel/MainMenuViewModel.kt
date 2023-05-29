@@ -1,6 +1,5 @@
 package com.lukasz.galinski.fluffy.viewmodel
 
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lukasz.galinski.core.data.Transaction
@@ -20,7 +19,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
@@ -61,10 +59,12 @@ class MainMenuViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             sharedPreferencesData.getLoggedUser().collect {
-                _userID.value = it
-                getUser(userID.value)
-                getTransactionsList(userID.value)
-                _accountBalance.value = getUserBalance()
+                if (it != null) {
+                    _userID.value = it
+                    getUser(userID.value)
+                    getTransactionsList(userID.value)
+                    _accountBalance.value = getUserBalance()
+                }
             }
         }
     }
@@ -86,10 +86,10 @@ class MainMenuViewModel @Inject constructor(
     private fun getUser(userId: Long) =
         viewModelScope.launch {
             userUseCases.getUser(userId)
+                .flowOn(ioDispatcher)
                 .onStart { _transactionState.value = Loading }
                 .catch { _transactionState.value = Failure }
                 .onCompletion { _transactionState.value = Idle }
-                .flowOn(ioDispatcher)
                 .collect { _loggedUserDetails.value = it }
         }
 
@@ -99,13 +99,15 @@ class MainMenuViewModel @Inject constructor(
                 userId,
                 getStartMonthDate(),
                 getEndMonthDate()
-            ).onStart { _transactionState.value = Loading }
-                .catch {
+            ).flowOn(ioDispatcher)
+                .onStart {
+                    _transactionState.value = Loading
+                }.catch {
                     _transactionState.value = Failure
                     _transactionList.value = ArrayList()
-                }.onCompletion { _transactionState.value = Idle }
-                .flowOn(ioDispatcher)
-                .collect { list ->
+                }.onCompletion {
+                    _transactionState.value = Idle
+                }.collect { list ->
                     if (list.isNotEmpty()) {
                         _transactionState.value = Success(list as ArrayList<Transaction>)
                         _transactionList.value = list
@@ -140,14 +142,14 @@ class MainMenuViewModel @Inject constructor(
 
     fun addNewTransaction(transaction: Transaction) {
         viewModelScope.launch {
-            flowOf(transactionUseCases.addTransaction(transaction))
+            transactionUseCases.addTransaction(transaction)
+                .flowOn(ioDispatcher)
                 .catch {
                     _addNewTransactionStatus.value = false
                 }
                 .onCompletion {
                     _addNewTransactionStatus.value = null
                 }
-                .flowOn(ioDispatcher)
                 .collect {
                     _addNewTransactionStatus.value = true
                     if (newTransactionInTimeRange(transaction.date)) {
@@ -169,15 +171,13 @@ class MainMenuViewModel @Inject constructor(
         else input.toDouble()
     }
 
-    @VisibleForTesting
-    fun newTransactionInTimeRange(date: Long): Boolean {
+    private fun newTransactionInTimeRange(date: Long): Boolean {
         return (currentStartDate <= date) && (date <= currentEndDate)
     }
 
     fun logoutUser() {
         viewModelScope.launch {
-            sharedPreferencesData.setLoggedUser(0)
-            _userID.value = 0
+            sharedPreferencesData.clearLoggedUser()
         }
     }
 }

@@ -29,7 +29,13 @@ class PreferencesData @Inject constructor(
         }
     }
 
-    fun getLoggedUser(): Flow<Long> {
-        return dataStorePreferences.data.map { it[loggedUserPreferences] ?: 0 }
+    suspend fun clearLoggedUser(){
+        dataStorePreferences.edit {
+            it.remove(loggedUserPreferences)
+        }
+    }
+
+    fun getLoggedUser(): Flow<Long?> {
+        return dataStorePreferences.data.map { it[loggedUserPreferences] }
     }
 }

@@ -6,8 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -19,9 +17,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.lukasz.galinski.core.data.Transaction
-import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.MainMenuFragmentBinding
-import com.lukasz.galinski.fluffy.presentation.account.LoginHostActivity
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -58,9 +54,6 @@ class MainScreen : Fragment() {
         createBottomNavigation()
         handleTransactions()
         createFabAnimationButton()
-        val currentMonth = hostViewModel.getCurrentMonth()
-        createMonthSpinner(currentMonth)
-        setupTopBar()
     }
 
     private fun createFabAnimationButton() {
@@ -85,52 +78,6 @@ class MainScreen : Fragment() {
     private fun createNavigateToNewTransaction(transactionType: String) {
         val action = MainScreenDirections.actionMainScreenToAddTransactionScreen(transactionType)
         findNavController().navigate(action)
-    }
-
-    private fun setupTopBar() {
-        mainMenuBinding.materialTopBar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.notifications -> {
-                    Log.i(MAIN_MENU_TAG, "Notifications")
-                    true
-                }
-                R.id.logout -> {
-                    Log.i(MAIN_MENU_TAG, "Logout")
-                    hostViewModel.logoutUser()
-                    val intent = LoginHostActivity.createIntent(requireContext(), "")
-                    startActivity(intent)
-                    true
-                }
-                else -> false
-            }
-        }
-    }
-
-    private fun createMonthSpinner(currentMonth: Int) {
-        val monthArray = resources.getStringArray(R.array.months_of_year)
-
-        val spinnerAdapter: ArrayAdapter<String?> = object :
-            ArrayAdapter<String?>(requireContext(), R.layout.spinner_adapter_view, monthArray) {
-        }
-
-        val dropdown = mainMenuBinding.monthSpinner
-        dropdown.adapter = spinnerAdapter
-        dropdown.setSelection(currentMonth)
-
-        dropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                Log.i(MAIN_MENU_TAG, (position + 1).toString())
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                return
-            }
-        }
     }
 
     private fun createBottomNavigation() {

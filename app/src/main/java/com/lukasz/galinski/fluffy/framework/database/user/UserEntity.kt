@@ -14,12 +14,12 @@ data class UserEntity(
     @ColumnInfo(name = "userEmail") val userEmail: String?,
     @ColumnInfo(name = "password") val password: String?,
     @ColumnInfo(name = "pin") val pin: String,
-    @PrimaryKey(autoGenerate = true) val userId: Long? = 0L
+    @PrimaryKey (autoGenerate = true) val userId: Long?
 ) {
     companion object {
-        fun fromUser(user: User) = UserEntity(user.name, user.userEmail, user.password, user.pin)
+        fun fromUser(user: User) = UserEntity(user.name, user.userEmail, user.password, user.pin, userId = null)
     }
 
-    fun toUser() = User(name, userEmail, password, pin, userId)
+    fun toUser() = User(name, userEmail, password, pin)
 }
 

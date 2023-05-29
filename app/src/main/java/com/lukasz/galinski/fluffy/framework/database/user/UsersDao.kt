@@ -10,7 +10,7 @@ interface UsersDao {
     fun addNewUser(user: UserEntity): Long
 
     @Query("SELECT userId FROM usersTable WHERE userEmail LIKE:email AND password LIKE:password")
-    fun loginUser(email: String, password: String): Long
+    fun loginUser(email: String, password: String): Long?
 
     @Query("SELECT * FROM usersTable")
     fun getAllUsers(): List<UserEntity>
