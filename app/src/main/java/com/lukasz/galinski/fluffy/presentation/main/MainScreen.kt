@@ -91,8 +91,7 @@ class MainScreen : Fragment() {
                 when (state) {
                     is Success -> {
                         Log.i(MAIN_MENU_TAG, state.toString())
-                        transactionAdapter.transactionsList =
-                            getRecentTransactionsList(state.transactionsList)
+                        transactionAdapter.transactionsList = getRecentTransactionsList(state.transactionsList)
                         configureLineChart(state.transactionsList)
                     }
                     is Failure -> {

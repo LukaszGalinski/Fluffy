@@ -10,7 +10,6 @@ import com.lukasz.galinski.fluffy.framework.di.DispatchersModule
 import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
 import com.lukasz.galinski.fluffy.presentation.main.Failure
 import com.lukasz.galinski.fluffy.presentation.main.Idle
-import com.lukasz.galinski.fluffy.presentation.main.Loading
 import com.lukasz.galinski.fluffy.presentation.main.Success
 import com.lukasz.galinski.fluffy.presentation.main.TransactionStates
 import com.lukasz.galinski.fluffy.presentation.main.TransactionType
@@ -21,7 +20,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.round
@@ -37,22 +35,30 @@ class MainMenuViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val dateTools = DateTools()
-    private val dummyUser = User("User", "", "", "")
-    private val _loggedUserDetails = MutableStateFlow(dummyUser)
-    private val _transactionState: MutableStateFlow<TransactionStates> = MutableStateFlow(Idle)
-    val transactionState: StateFlow<TransactionStates> = _transactionState
+    private val _loggedUserDetails: MutableStateFlow<User?> = MutableStateFlow(null)
+
     private val _addNewTransactionStatus: MutableStateFlow<Boolean?> = MutableStateFlow(null)
     val addNewTransactionStatus: StateFlow<Boolean?> = _addNewTransactionStatus
+
     private val _transactionList = MutableStateFlow(ArrayList<Transaction>())
     val transactionList: StateFlow<ArrayList<Transaction>> = _transactionList
+
+    private val _transactionState: MutableStateFlow<TransactionStates> =
+        MutableStateFlow(Success(transactionList.value))
+    val transactionState: StateFlow<TransactionStates> = _transactionState
+
     private var _userID = MutableStateFlow(0L)
     val userID: StateFlow<Long> = _userID
+
     private var _transactionIncome = MutableStateFlow(0.0)
     val transactionIncome: StateFlow<Double> = _transactionIncome
+
     private var _transactionOutcome = MutableStateFlow(0.0)
     val transactionOutcome: StateFlow<Double> = _transactionOutcome
+
     private var _accountBalance = MutableStateFlow(0.0)
     val accountBalance: StateFlow<Double> = _accountBalance
+
     private var currentStartDate = 0L
     private var currentEndDate = 0L
 
@@ -87,7 +93,6 @@ class MainMenuViewModel @Inject constructor(
         viewModelScope.launch {
             userUseCases.getUser(userId)
                 .flowOn(ioDispatcher)
-                .onStart { _transactionState.value = Loading }
                 .catch { _transactionState.value = Failure }
                 .onCompletion { _transactionState.value = Idle }
                 .collect { _loggedUserDetails.value = it }
@@ -95,18 +100,11 @@ class MainMenuViewModel @Inject constructor(
 
     private fun getTransactionsList(userId: Long) {
         viewModelScope.launch {
-            transactionUseCases.getTransactions(
-                userId,
-                getStartMonthDate(),
-                getEndMonthDate()
-            ).flowOn(ioDispatcher)
-                .onStart {
-                    _transactionState.value = Loading
-                }.catch {
+            transactionUseCases.getTransactions(userId, getStartMonthDate(), getEndMonthDate())
+                .flowOn(ioDispatcher)
+                .catch {
                     _transactionState.value = Failure
                     _transactionList.value = ArrayList()
-                }.onCompletion {
-                    _transactionState.value = Idle
                 }.collect { list ->
                     if (list.isNotEmpty()) {
                         _transactionState.value = Success(list as ArrayList<Transaction>)
@@ -144,12 +142,8 @@ class MainMenuViewModel @Inject constructor(
         viewModelScope.launch {
             transactionUseCases.addTransaction(transaction)
                 .flowOn(ioDispatcher)
-                .catch {
-                    _addNewTransactionStatus.value = false
-                }
-                .onCompletion {
-                    _addNewTransactionStatus.value = null
-                }
+                .catch { _addNewTransactionStatus.value = false }
+                .onCompletion { _addNewTransactionStatus.value = null }
                 .collect {
                     _addNewTransactionStatus.value = true
                     if (newTransactionInTimeRange(transaction.date)) {
