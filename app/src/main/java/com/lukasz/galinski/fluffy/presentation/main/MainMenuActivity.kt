@@ -70,6 +70,14 @@ class MainMenuActivity : AppCompatActivity() {
         }
     }
 
+    fun hideAppBar(){
+        mainMenuHostBinding.materialTopBar.visibility = View.GONE
+    }
+
+    fun showAppBar(){
+        mainMenuHostBinding.materialTopBar.visibility = View.VISIBLE
+    }
+
     private fun setupTopBar() {
         mainMenuHostBinding.materialTopBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {

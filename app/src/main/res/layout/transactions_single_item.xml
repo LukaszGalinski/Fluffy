@@ -20,7 +20,7 @@
         android:layout_marginBottom="@dimen/margin_medium_16">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="85dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/category_icon"

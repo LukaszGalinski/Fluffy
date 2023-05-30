@@ -44,20 +44,44 @@ class AddTransactionScreen : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        requireActivity().actionBar?.hide()
         super.onViewCreated(view, savedInstanceState)
         transactionScreenBinding.lifecycleOwner = viewLifecycleOwner
+
         buildCategoryList()
         buildWalletList()
-        handleTransactions()
+        observeAddNewTransactionResult()
 
         transactionScreenBinding.addNewTransaction.setOnClickListener {
-            addNewTransaction(arguments.transactionTypeArgument)
+            addNewTransaction(getTransactionDetailsFromFields(arguments.transactionTypeArgument))
         }
 
         transactionScreenBinding.iconBackArrow.setOnClickListener {
             findNavController().navigate(R.id.action_addTransactionScreen_to_mainScreen)
         }
     }
+
+    private fun hideAppTopBar(){
+        (activity as MainMenuActivity).hideAppBar()
+    }
+
+    private fun showAppTopBar(){
+        (activity as MainMenuActivity).showAppBar()
+    }
+
+    private fun getTransactionDetailsFromFields(transactionType: String): Transaction =
+        Transaction(
+            name = transactionScreenBinding.transactionName.text.toString(),
+            date = hostViewModel.getCurrentDate(),
+            category = transactionScreenBinding.spinnerCategory.selectedItem.toString(),
+            amount = hostViewModel.getDoubleFromString(
+                transactionScreenBinding.etAmount.text.toString()
+            ),
+            description = transactionScreenBinding.etDescription.text.toString(),
+            type = transactionType,
+            userId = hostViewModel.userID.value,
+            transactionId = 0
+        )
 
     private fun buildCategoryList() {
         val categoryList = resources.getStringArray(R.array.category_array)
@@ -89,23 +113,11 @@ class AddTransactionScreen : Fragment() {
         }
     }
 
-    private fun addNewTransaction(transactionType: String) {
-        val newTransaction = Transaction(
-            name = transactionScreenBinding.transactionName.text.toString(),
-            date = hostViewModel.getCurrentDate(),
-            category = transactionScreenBinding.spinnerCategory.selectedItem.toString(),
-            amount = hostViewModel.getDoubleFromString(
-                transactionScreenBinding.etAmount.text.toString()
-            ),
-            description = transactionScreenBinding.etDescription.text.toString(),
-            type = transactionType,
-            userId = hostViewModel.userID.value,
-            transactionId = 0
-        )
-        hostViewModel.addNewTransaction(newTransaction)
+    private fun addNewTransaction(transaction: Transaction) {
+        hostViewModel.addNewTransaction(transaction)
     }
 
-    private fun handleTransactions() = lifecycleScope.launch {
+    private fun observeAddNewTransactionResult() = lifecycleScope.launch {
         viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
             hostViewModel.addNewTransactionStatus.collect { addTransactionStatus ->
                 when (addTransactionStatus) {
@@ -128,5 +140,15 @@ class AddTransactionScreen : Fragment() {
     override fun onDestroy() {
         _transactionScreenBinding = null
         super.onDestroy()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        showAppTopBar()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideAppTopBar()
     }
 }
