@@ -15,7 +15,6 @@ import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.lukasz.galinski.core.data.Transaction
 import com.lukasz.galinski.fluffy.databinding.MainMenuFragmentBinding
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
@@ -29,11 +28,11 @@ class MainScreen : Fragment() {
     private val mainMenuBinding get() = _mainMenuBinding!!
     private val hostViewModel: MainMenuViewModel by activityViewModels()
     private var transactionAdapter = TransactionsAdapter()
+    private val fabAnimation = FabAnimation()
     private var isRotate = false
 
     companion object {
         private const val MAIN_MENU_TAG = "MainMenu: "
-        private const val RECENT_TRANSACTIONS_LIMIT = 20
     }
 
     override fun onCreateView(
@@ -54,30 +53,19 @@ class MainScreen : Fragment() {
         createBottomNavigation()
         handleTransactions()
         createFabAnimationButton()
+        resetFabButtonsView()
+        observeEvents()
     }
 
-    private fun createFabAnimationButton() {
-        val fabAnimation = FabAnimation()
-        mainMenuBinding.floatingButton.setOnClickListener {
-            setFabAnimation(it, mainMenuBinding.fabOutcome, mainMenuBinding.fabIncome)
+    private fun observeEvents() = lifecycleScope.launch {
+        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            hostViewModel.viewEvent.collect {
+                when (it) {
+                    is MainMenuEvent.ShowFabAnimation -> showInFabButtons()
+                    is MainMenuEvent.HideFabAnimation -> showOutFabButtons()
+                }
+            }
         }
-        fabAnimation.init(mainMenuBinding.fabIncome)
-        fabAnimation.init(mainMenuBinding.fabOutcome)
-
-        mainMenuBinding.fabIncome.setOnClickListener {
-            mainMenuBinding.floatingButton.performClick()
-            createNavigateToNewTransaction(TransactionType.INCOME.label)
-        }
-
-        mainMenuBinding.fabOutcome.setOnClickListener {
-            mainMenuBinding.floatingButton.performClick()
-            createNavigateToNewTransaction(TransactionType.OUTCOME.label)
-        }
-    }
-
-    private fun createNavigateToNewTransaction(transactionType: String) {
-        val action = MainScreenDirections.actionMainScreenToAddTransactionScreen(transactionType)
-        findNavController().navigate(action)
     }
 
     private fun createBottomNavigation() {
@@ -91,29 +79,24 @@ class MainScreen : Fragment() {
                 when (state) {
                     is Success -> {
                         Log.i(MAIN_MENU_TAG, state.toString())
-                        transactionAdapter.transactionsList = getRecentTransactionsList(state.transactionsList)
                         configureLineChart(state.transactionsList)
+                        transactionAdapter.transactionsList = hostViewModel.getRecentTransactionsList()
                     }
+
                     is Failure -> {
                         Log.i(MAIN_MENU_TAG, state.toString())
                     }
+
                     is Loading -> {
                         Log.i(MAIN_MENU_TAG, state.toString())
                     }
+
                     is Idle -> {
                         Log.i(MAIN_MENU_TAG, state.toString())
                     }
                 }
             }
         }
-    }
-
-    private fun getRecentTransactionsList(transactionList: ArrayList<Transaction>): ArrayList<Transaction> {
-        val recentTransactionsList = ArrayList<Transaction>()
-        for (i in transactionList.take(RECENT_TRANSACTIONS_LIMIT).indices) {
-            recentTransactionsList.add(transactionList[i])
-        }
-        return recentTransactionsList
     }
 
     private fun configureLineChart(data: ArrayList<Transaction>) {
@@ -140,19 +123,50 @@ class MainScreen : Fragment() {
         mainMenuBinding.chart.data = lineData
     }
 
-    private fun setFabAnimation(
-        view: View,
-        buttonOutcome: FloatingActionButton,
-        buttonIncome: FloatingActionButton
-    ) {
-        val fabAnimation = FabAnimation()
+    private fun createFabAnimationButton() {
+        mainMenuBinding.floatingButton.setOnClickListener {
+            setFabAnimation(it, fabAnimation)
+        }
+
+        mainMenuBinding.fabIncome.setOnClickListener {
+            mainMenuBinding.floatingButton.performClick()
+            createNavigateToNewTransaction(TransactionType.INCOME.label)
+        }
+
+        mainMenuBinding.fabOutcome.setOnClickListener {
+            mainMenuBinding.floatingButton.performClick()
+            createNavigateToNewTransaction(TransactionType.OUTCOME.label)
+        }
+    }
+
+    private fun createNavigateToNewTransaction(transactionType: String) {
+        val action = MainScreenDirections.actionMainScreenToAddTransactionScreen(transactionType)
+        findNavController().navigate(action)
+    }
+
+    private fun setFabAnimation(view: View, fabAnimation: FabAnimation) {
         isRotate = fabAnimation.rotateFab(view, !isRotate)
-        if (isRotate) {
-            fabAnimation.showIn(buttonIncome)
-            fabAnimation.showIn(buttonOutcome)
-        } else {
-            fabAnimation.showOut(buttonIncome)
-            fabAnimation.showOut(buttonOutcome)
+        hostViewModel.updateFabAnimation(isRotate)
+    }
+
+    private fun showInFabButtons() {
+        with(mainMenuBinding) {
+            fabAnimation.showIn(fabIncome)
+            fabAnimation.showIn(fabOutcome)
+        }
+    }
+
+    private fun showOutFabButtons() {
+        with(mainMenuBinding) {
+            fabAnimation.showOut(fabIncome)
+            fabAnimation.showOut(fabOutcome)
+        }
+    }
+
+    private fun resetFabButtonsView() {
+        with(mainMenuBinding) {
+            fabAnimation.init(fabIncome)
+            fabAnimation.init(fabOutcome)
         }
     }
 

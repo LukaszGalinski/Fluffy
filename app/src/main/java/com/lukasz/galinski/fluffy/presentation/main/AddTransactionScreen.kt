@@ -44,7 +44,6 @@ class AddTransactionScreen : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        requireActivity().actionBar?.hide()
         super.onViewCreated(view, savedInstanceState)
         transactionScreenBinding.lifecycleOwner = viewLifecycleOwner
 

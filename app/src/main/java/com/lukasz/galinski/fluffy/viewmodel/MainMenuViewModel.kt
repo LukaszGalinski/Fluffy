@@ -10,6 +10,7 @@ import com.lukasz.galinski.fluffy.framework.di.DispatchersModule
 import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
 import com.lukasz.galinski.fluffy.presentation.main.Failure
 import com.lukasz.galinski.fluffy.presentation.main.Idle
+import com.lukasz.galinski.fluffy.presentation.main.MainMenuEvent
 import com.lukasz.galinski.fluffy.presentation.main.Success
 import com.lukasz.galinski.fluffy.presentation.main.TransactionStates
 import com.lukasz.galinski.fluffy.presentation.main.TransactionType
@@ -33,6 +34,13 @@ class MainMenuViewModel @Inject constructor(
     private val sharedPreferencesData: PreferencesData,
     @DispatchersModule.IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
+
+    companion object{
+        private const val RECENT_TRANSACTIONS_LIMIT = 20
+    }
+
+    private val _viewEvent = MutableStateFlow<MainMenuEvent?>(null)
+    val viewEvent: StateFlow<MainMenuEvent?> get() = _viewEvent
 
     private val dateTools = DateTools()
     private val _loggedUserDetails: MutableStateFlow<User?> = MutableStateFlow(null)
@@ -107,8 +115,8 @@ class MainMenuViewModel @Inject constructor(
                     _transactionList.value = ArrayList()
                 }.collect { list ->
                     if (list.isNotEmpty()) {
-                        _transactionState.value = Success(list as ArrayList<Transaction>)
-                        _transactionList.value = list
+                        _transactionList.value = list as ArrayList<Transaction>
+                        _transactionState.value = Success(list)
                     }
                     _transactionIncome.value =
                         round(getIncomeSumOfTransaction(_transactionList.value))
@@ -165,14 +173,22 @@ class MainMenuViewModel @Inject constructor(
         else input.toDouble()
     }
 
-    private fun newTransactionInTimeRange(date: Long): Boolean {
-        return (currentStartDate <= date) && (date <= currentEndDate)
-    }
+    private fun newTransactionInTimeRange(date: Long) =
+        (currentStartDate <= date) && (date <= currentEndDate)
 
     fun logoutUser() {
         viewModelScope.launch {
             sharedPreferencesData.clearLoggedUser()
         }
     }
+
+    fun getRecentTransactionsList() = _transactionList.value.take(RECENT_TRANSACTIONS_LIMIT)
+
+    fun updateFabAnimation(status: Boolean) = if (status) {
+        _viewEvent.value = MainMenuEvent.ShowFabAnimation
+    } else {
+        _viewEvent.value = MainMenuEvent.HideFabAnimation
+    }
+
 }
 

@@ -11,7 +11,7 @@ import com.lukasz.galinski.fluffy.databinding.TransactionsSingleItemBinding
 class TransactionsAdapter :
     RecyclerView.Adapter<TransactionsAdapter.TransactionsViewHolder>() {
 
-    var transactionsList: ArrayList<Transaction> = arrayListOf()
+    var transactionsList: List<Transaction> = listOf()
         set(value) {
             field = value
             notifyItemRangeChanged(0, transactionsList.size)

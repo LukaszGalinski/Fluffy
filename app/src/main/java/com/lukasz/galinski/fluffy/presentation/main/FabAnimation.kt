@@ -5,7 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.view.View
 
 private const val ROTATE_DURATION = 200L
-private const val ROTATE_ANGLE = 135f
+private const val ROTATE_ANGLE = 270f
 private const val DEFAULT_ANGLE = 0f
 private const val OFF_VALUE = 0f
 private const val ON_VALUE = 1f
@@ -34,7 +34,6 @@ class FabAnimation {
     }
 
     fun showOut(v: View) {
-        v.visibility = View.VISIBLE
         v.alpha = ON_VALUE
         v.translationY = OFF_VALUE
         v.animate()
