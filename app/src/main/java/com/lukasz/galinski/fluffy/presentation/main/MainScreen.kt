@@ -16,7 +16,9 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.lukasz.galinski.core.data.Transaction
+import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.MainMenuFragmentBinding
+import com.lukasz.galinski.fluffy.presentation.createToast
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -46,9 +48,11 @@ class MainScreen : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mainMenuBinding.lifecycleOwner = viewLifecycleOwner
-        mainMenuBinding.mainViewModel = hostViewModel
-        mainMenuBinding.transactions.adapter = transactionAdapter
+        with(mainMenuBinding) {
+            lifecycleOwner = viewLifecycleOwner
+            mainViewModel = hostViewModel
+            transactions.adapter = transactionAdapter
+        }
 
         createBottomNavigation()
         handleTransactions()
@@ -69,8 +73,10 @@ class MainScreen : Fragment() {
     }
 
     private fun createBottomNavigation() {
-        mainMenuBinding.bottomNavigationView.background = null
-        mainMenuBinding.bottomNavigationView.menu.getItem(2).isEnabled = false
+        with(mainMenuBinding.bottomNavigationView) {
+            background = null
+            menu.getItem(2).isEnabled = false
+        }
     }
 
     private fun handleTransactions() = lifecycleScope.launch {
@@ -80,11 +86,13 @@ class MainScreen : Fragment() {
                     is Success -> {
                         Log.i(MAIN_MENU_TAG, state.toString())
                         configureLineChart(state.transactionsList)
-                        transactionAdapter.transactionsList = hostViewModel.getRecentTransactionsList()
+                        transactionAdapter.transactionsList =
+                            hostViewModel.getRecentTransactionsList()
                     }
 
                     is Failure -> {
                         Log.i(MAIN_MENU_TAG, state.toString())
+                        requireContext().createToast(getString(R.string.transaction_load_failure))
                     }
 
                     is Loading -> {
@@ -99,17 +107,20 @@ class MainScreen : Fragment() {
         }
     }
 
+
     private fun configureLineChart(data: ArrayList<Transaction>) {
-        mainMenuBinding.chart.description.text = ""
-        mainMenuBinding.chart.description.textSize = 0F
-        mainMenuBinding.chart.isActivated = true
-        mainMenuBinding.chart.setDrawGridBackground(false)
-        mainMenuBinding.chart.setGridBackgroundColor(Color.MAGENTA)
-        mainMenuBinding.chart.axisLeft.isEnabled = false
-        mainMenuBinding.chart.axisRight.isEnabled = false
-        mainMenuBinding.chart.axisRight.setDrawGridLines(false)
-        mainMenuBinding.chart.axisLeft.setDrawGridLines(false)
-        mainMenuBinding.chart.legend.isEnabled = false
+        with(mainMenuBinding.chart) {
+            description.text = ""
+            description.textSize = 0F
+            isActivated = true
+            setDrawGridBackground(false)
+            setGridBackgroundColor(Color.MAGENTA)
+            axisLeft.isEnabled = false
+            axisRight.isEnabled = false
+            axisRight.setDrawGridLines(false)
+            axisLeft.setDrawGridLines(false)
+            legend.isEnabled = false
+        }
 
         val entryList = ArrayList<Entry>()
 

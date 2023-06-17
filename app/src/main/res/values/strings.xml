@@ -62,6 +62,7 @@
     <string name="add_new_expense_label">EXPENSE</string>
     <string name="transaction_name">Transaction Name</string>
     <string name="transaction_add_failure">Error while adding new transaction</string>
+    <string name="transaction_load_failure">We were unable to load your transactions. Please try again&#8230;</string>
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
 
