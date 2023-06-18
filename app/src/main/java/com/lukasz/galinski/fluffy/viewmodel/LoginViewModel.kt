@@ -87,11 +87,10 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun getLoggedUser(): Flow<Long?> {
-        return if (currentlyLoggedUserId == null) {
+    fun getLoggedUser(): Flow<Long?> =
+        if (currentlyLoggedUserId == null) {
             preferencesData.getLoggedUser()
         } else {
             flowOf(currentlyLoggedUserId)
         }
-    }
 }

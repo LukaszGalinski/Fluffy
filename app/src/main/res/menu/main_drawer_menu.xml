@@ -3,9 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/notification_simulation_10"
+        android:id="@+id/notification_simulation_99"
         android:icon="@drawable/ic_baseline_notifications_24"
         android:iconTint="@color/purple_primary"
         android:title="@string/simulate_10_notifications"
+        android:visible="@bool/DEBUG_MODE"
+        app:showAsAction="withText" />
+
+    <item
+        android:id="@+id/notification_simulation_1"
+        android:icon="@drawable/ic_baseline_notifications_24"
+        android:iconTint="@color/purple_primary"
+        android:title="@string/simulate_10_notifications"
+        android:visible="@bool/DEBUG_MODE"
         app:showAsAction="withText" />
 </menu>

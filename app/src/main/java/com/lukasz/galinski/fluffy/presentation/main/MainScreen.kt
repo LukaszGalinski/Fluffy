@@ -88,6 +88,7 @@ class MainScreen : Fragment() {
                         configureLineChart(state.transactionsList)
                         transactionAdapter.transactionsList =
                             hostViewModel.getRecentTransactionsList()
+                        requireContext().createToast(getString(R.string.transaction_load_done))
                     }
 
                     is Failure -> {
@@ -96,12 +97,14 @@ class MainScreen : Fragment() {
                     }
 
                     is Loading -> {
+                        requireContext().createToast(getString(R.string.transaction_load_in_progress))
                         Log.i(MAIN_MENU_TAG, state.toString())
                     }
 
                     is Idle -> {
                         Log.i(MAIN_MENU_TAG, state.toString())
                     }
+
                 }
             }
         }

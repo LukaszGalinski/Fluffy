@@ -6,7 +6,11 @@ import com.lukasz.galinski.fluffy.framework.database.user.UserUseCases
 import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
 import com.lukasz.galinski.fluffy.presentation.account.Success
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
-import io.mockk.*
+import io.mockk.coEvery
+import io.mockk.coJustRun
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.spyk
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
@@ -15,6 +19,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -33,6 +38,7 @@ class LoginViewModelUnitTest {
     private lateinit var loginViewModel: LoginViewModel
     private val userNameLogin = "admin"
     private val userNamePassword = "admin"
+    private var reflectedCurrentUser = 0L
 
     @Rule
     @JvmField
@@ -57,23 +63,24 @@ class LoginViewModelUnitTest {
     @Test
     fun checkLoginSuccessReturnedOnCorrectLoginDetails() {
         setLoginOutputFromRepository(10)
+
         runTest {
             loginViewModel.loginUser(userNameLogin, userNamePassword)
+        advanceUntilIdle()
         }
-        runTest {
-            assertEquals(10, loginViewModel.getLoggedUser().first())
-        }
+
+        val loggedUser = getLongPrivateField(loginViewModel, "currentlyLoggedUserId")
+        assertEquals(10L, loggedUser)
     }
 
     @Test
     fun checkLoginFailedReturnedOnUserNotFound() {
         setLoginOutputFromRepository(0)
         every { userPreferences.getLoggedUser() }.returns(flowOf(0))
+
         runTest {
             loginViewModel.loginUser(userNameLogin, userNamePassword)
-        }
-        runTest {
-            assertEquals(0, loginViewModel.getLoggedUser().first())
+            assertEquals(0L, loginViewModel.getLoggedUser().first())
         }
     }
 
@@ -98,11 +105,11 @@ class LoginViewModelUnitTest {
     @Test
     fun checkLoggedUserIdReturned() {
         every { userPreferences.getLoggedUser() }.returns(flowOf(5))
-        var loggedUser = 0L
+
         runTest {
-            loggedUser = loginViewModel.getLoggedUser().first()
+            val returnedValue = loginViewModel.getLoggedUser().first()!!
+            assertEquals(5, returnedValue)
         }
-        assertEquals(5, loggedUser)
     }
 
     private fun setLoginOutputFromRepository(value: Long) {

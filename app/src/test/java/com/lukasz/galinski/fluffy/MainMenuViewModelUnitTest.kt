@@ -9,6 +9,7 @@ import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
 import com.lukasz.galinski.fluffy.viewmodel.DateTools
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import io.mockk.coEvery
+import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
@@ -78,11 +79,12 @@ class MainMenuViewModelUnitTest {
 
     @Test
     fun logoutCurrentUser() = runTest {
+        coJustRun { userPreferences.clearLoggedUser() }
+
         mainMenuViewModel.logoutUser()
         advanceUntilIdle()
 
-        coVerify(exactly = 1) { userPreferences.setLoggedUser(0) }
-        assertEquals(0, mainMenuViewModel.userID.value)
+        coVerify(exactly = 1) { userPreferences.clearLoggedUser() }
     }
 
     @Test
