@@ -9,9 +9,13 @@ fun replacePrivateField(targetObject: Any, targetFieldName: String, toSet: Any):
     return field
 }
 
-fun getLongPrivateField(targetObject: Any, targetFieldName: String): Long? {
+fun getPrivateFieldValue(targetObject: Any, targetFieldName: String, clazz: Class<*>): Any? {
     val field = targetObject.javaClass.getDeclaredField(targetFieldName)
     field.isAccessible = true
-    return field.get(targetObject) as Long?
-}
 
+    return when (clazz){
+        Long::class.java -> field.get(targetObject) as Long?
+        String::class.java -> field.get(targetObject) as String?
+        else -> { throw Exception("Unsupported class type") }
+    }
+}

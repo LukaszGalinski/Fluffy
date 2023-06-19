@@ -38,7 +38,6 @@ class LoginViewModelUnitTest {
     private lateinit var loginViewModel: LoginViewModel
     private val userNameLogin = "admin"
     private val userNamePassword = "admin"
-    private var reflectedCurrentUser = 0L
 
     @Rule
     @JvmField
@@ -66,10 +65,11 @@ class LoginViewModelUnitTest {
 
         runTest {
             loginViewModel.loginUser(userNameLogin, userNamePassword)
-        advanceUntilIdle()
+            advanceUntilIdle()
         }
 
-        val loggedUser = getLongPrivateField(loginViewModel, "currentlyLoggedUserId")
+        val loggedUser =
+            getPrivateFieldValue(loginViewModel, "currentlyLoggedUserId", Long::class.java)
         assertEquals(10L, loggedUser)
     }
 
@@ -89,6 +89,7 @@ class LoginViewModelUnitTest {
         runTest {
             loginViewModel.setSaveButtonState(true)
             assertEquals(true, loginViewModel.saveButtonState.value)
+
             loginViewModel.setSaveButtonState(false)
             assertEquals(false, loginViewModel.saveButtonState.value)
         }
