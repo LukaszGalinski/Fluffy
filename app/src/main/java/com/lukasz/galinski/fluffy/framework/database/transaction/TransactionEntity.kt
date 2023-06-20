@@ -13,7 +13,7 @@ data class TransactionEntity(
     @ColumnInfo(name = "name")
     val name: String?,
     @ColumnInfo(name = "date")
-    val date: Long,
+    var date: Long,
     @ColumnInfo(name = "category")
     val category: String?,
     @ColumnInfo(name = "amount")

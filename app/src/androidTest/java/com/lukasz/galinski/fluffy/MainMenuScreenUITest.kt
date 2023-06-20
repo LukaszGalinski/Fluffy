@@ -1,83 +1,81 @@
 package com.lukasz.galinski.fluffy
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.lukasz.galinski.fluffy.framework.database.transaction.RoomTransactionsDataSource
-import com.lukasz.galinski.fluffy.framework.database.user.RoomUsersDataSource
-import com.lukasz.galinski.fluffy.framework.model.TransactionEntity
-import com.lukasz.galinski.fluffy.framework.model.UserEntity
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import com.lukasz.galinski.fluffy.framework.database.transaction.TransactionUseCases
+import com.lukasz.galinski.fluffy.framework.database.user.UserUseCases
 import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
 import com.lukasz.galinski.fluffy.presentation.main.MainScreen
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
+import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
 @HiltAndroidTest
-@RunWith(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
 class MainMenuScreenUITest {
 
     private val testDispatcher = StandardTestDispatcher()
-    private val transactionRepository = mockk<RoomTransactionsDataSource>()
-    private val userRepository = mockk<RoomUsersDataSource>()
-    private val mockedUser = mockk<UserEntity>()
+    private val mockedUserUseCases = mockk<UserUseCases>()
+    private val mockedTransactionUseCases = mockk<TransactionUseCases>()
     private val userPreferences = mockk<PreferencesData>(relaxed = true)
-    private lateinit var mainMenuViewModel: MainMenuViewModel
-    private val mockedTransaction = mockk<TransactionEntity>(relaxed = true)
 
-    @get:Rule(order = 0)
+    @BindValue
+    val mainMenuViewModel: MainMenuViewModel = spyk(
+        MainMenuViewModel(
+            mockedUserUseCases,
+            mockedTransactionUseCases,
+            userPreferences,
+            testDispatcher
+        )
+    )
+
+    @get:Rule
     var hiltRule = HiltAndroidRule(this)
-
-    @get:Rule(order = 1)
-    var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Before
     fun prepareView() {
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
         hiltRule.inject()
-
-        mainMenuViewModel = spyk(
-            MainMenuViewModel(
-                userRepository,
-                transactionRepository,
-                userPreferences,
-                testDispatcher
-            ), recordPrivateCalls = true
-        )
     }
 
     @Test
-    @Ignore("Will be turned on when reflection function will be added")
-    fun checkIncomeAndOutcomePriceDisplayed() {
-        every { mainMenuViewModel.transactionIncome.value } returns 12.0
-        every { mainMenuViewModel.transactionOutcome.value } returns 25.0
-        launchFragmentInHiltContainer<MainScreen> {
-            coEvery { mainMenuViewModel.transactionIncome.value } returns 222.0
-        }
-//        coEvery { mainMenuViewModel.transactionIncome.value } returns 222.0
-        every { mainMenuViewModel.userID.value } returns 4
+    fun checkIncomeValueDisplayedOnHomeScreen() {
+        val mockedAmount = 882.2
+        every { mainMenuViewModel.transactionIncome } returns MutableStateFlow(mockedAmount)
 
-        onView(ViewMatchers.withId(R.id.income_amount)).check(
-            ViewAssertions.matches(
-                ViewMatchers.withText("12.0")
-            )
-        )
+        launchFragmentInHiltContainer<MainScreen>()
 
+        onView(withId(R.id.income_amount)).check(matches(withText("$$mockedAmount")))
+    }
+
+    @Test
+    fun checkOutcomeValueDisplayedOnHomeScreen() {
+        val mockedAmount = 999.55
+        every { mainMenuViewModel.transactionOutcome } returns MutableStateFlow(mockedAmount)
+
+        launchFragmentInHiltContainer<MainScreen>()
+
+        onView(withId(R.id.outcome_amount)).check(matches(withText("$$mockedAmount")))
+    }
+
+    @Test
+    fun checkBalanceValueDisplayedOnHomeScreen() {
+        val mockedAmount = 7878.73
+        every { mainMenuViewModel.accountBalance } returns MutableStateFlow(mockedAmount)
+
+        launchFragmentInHiltContainer<MainScreen>()
+
+        onView(withId(R.id.account_balance)).check(matches(withText("$$mockedAmount")))
     }
 }

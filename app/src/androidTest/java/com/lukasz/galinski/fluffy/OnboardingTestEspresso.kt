@@ -21,7 +21,7 @@ private const val SWIPE_DURATION = 1000L
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
-class OnboardingInstrumentationTest {
+class OnboardingTestEspresso {
 
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)

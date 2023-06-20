@@ -1,7 +1,7 @@
 package com.lukasz.galinski.fluffy
 
-import com.lukasz.galinski.fluffy.framework.model.TransactionEntity
-import com.lukasz.galinski.fluffy.framework.model.UserEntity
+import com.lukasz.galinski.fluffy.framework.database.transaction.TransactionEntity
+import com.lukasz.galinski.fluffy.framework.database.user.UserEntity
 
 object TestUtilities {
     fun createTestUsers(testUsersLastIndex: Int): ArrayList<UserEntity> {
@@ -12,7 +12,8 @@ object TestUtilities {
                     "George",
                     "emailExample$i@test.com",
                     "test",
-                    "0000"
+                    "0000",
+                    1
                 )
             )
         }

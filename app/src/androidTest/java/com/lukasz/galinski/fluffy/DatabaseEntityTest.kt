@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import com.lukasz.galinski.fluffy.framework.database.AppDatabase
 import com.lukasz.galinski.fluffy.framework.database.transaction.TransactionsDao
+import com.lukasz.galinski.fluffy.framework.database.user.UserEntity
 import com.lukasz.galinski.fluffy.framework.database.user.UsersDao
 import com.lukasz.galinski.fluffy.viewmodel.DateTools
 import org.junit.After
@@ -21,16 +21,9 @@ class DatabaseEntityTest {
     private lateinit var usersDao: UsersDao
     private lateinit var transactionsDao: TransactionsDao
     private lateinit var appDatabase: AppDatabase
-    private lateinit var testUser: AppDatabase
+    private lateinit var testUser: UserEntity
     private val dummyUserLogin = "test@test.com"
     private val dummyUserPassword = "test"
-    private var testUser
-
-    @Test
-    fun useAppContext() {
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.lukasz.galinski.fluffy", appContext.packageName)
-    }
 
     @Before
     fun createDb() {
@@ -61,13 +54,16 @@ class DatabaseEntityTest {
     fun entityWriteAndReadDatabaseElementTest() {
         val testUsers = TestUtilities.createTestUsers(1).apply {
             get(0).name = "Mark"
+            get(0).userId = 0L
             get(1).name = "John"
         }
-        usersDao.addNewUser(testUsers[0])
-        usersDao.addNewUser(testUsers[1])
 
-        val readUserFirst = usersDao.getUser(1)
-        val readUserSecond = usersDao.getUser(2)
+        for (i in testUsers.indices){
+            usersDao.addNewUser(testUsers[i])
+        }
+
+        val readUserFirst = usersDao.getUser(0)
+        val readUserSecond = usersDao.getUser(1)
         assertEquals(testUsers, arrayListOf(readUserFirst, readUserSecond))
     }
 
@@ -99,13 +95,13 @@ class DatabaseEntityTest {
         usersDao.addNewUser(testUser[0])
 
         val userLoginSuccessValue = usersDao.loginUser(dummyUserLogin, dummyUserPassword)
-        assertEquals(1, userLoginSuccessValue)
+        assertEquals(1L, userLoginSuccessValue)
     }
 
     @Test
-    fun loginUserWithFailure() {
+    fun loginUserReturnedFailure() {
         val userLoggedOutValue = usersDao.loginUser(dummyUserLogin, dummyUserPassword)
-        assertEquals(0, userLoggedOutValue)
+        assertEquals(null, userLoggedOutValue)
     }
 
     @Test

@@ -189,6 +189,4 @@ class MainMenuViewModel @Inject constructor(
     } else {
         _viewEvent.value = MainMenuEvent.HideFabAnimation
     }
-
 }
-

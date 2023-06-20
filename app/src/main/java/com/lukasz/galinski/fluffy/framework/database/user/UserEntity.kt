@@ -10,11 +10,11 @@ private const val USERS_TABLE = "usersTable"
 
 @Entity(indices = [Index(value = ["userEmail"], unique = true)], tableName = USERS_TABLE)
 data class UserEntity(
-    @ColumnInfo(name = "name") val name: String?,
-    @ColumnInfo(name = "userEmail") val userEmail: String?,
-    @ColumnInfo(name = "password") val password: String?,
+    @ColumnInfo(name = "name") var name: String?,
+    @ColumnInfo(name = "userEmail") var userEmail: String?,
+    @ColumnInfo(name = "password") var password: String?,
     @ColumnInfo(name = "pin") val pin: String,
-    @PrimaryKey (autoGenerate = true) val userId: Long?
+    @PrimaryKey (autoGenerate = true) var userId: Long?
 ) {
     companion object {
         fun fromUser(user: User) = UserEntity(user.name, user.userEmail, user.password, user.pin, userId = null)
