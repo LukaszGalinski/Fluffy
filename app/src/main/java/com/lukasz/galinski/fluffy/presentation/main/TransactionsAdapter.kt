@@ -30,8 +30,17 @@ class TransactionsAdapter :
             with(transactionsList[position]) {
                 binding.transactionName.text = name
                 binding.transactionDescription.text = description
-                binding.amount.text = holder.binding.root.resources.getString(getAmountStringPattern(type!!), amount)
-                binding.amount.setTextColor(ContextCompat.getColor(itemView.context, getAmountTextColor(type!!)))
+                binding.amount.text =
+                    holder.binding.root.resources.getString(getAmountStringPattern(type), amount)
+                binding.amount.setTextColor(
+                    ContextCompat.getColor(
+                        itemView.context,
+                        getAmountTextColor(type)
+                    )
+                )
+                binding.categoryIcon.setImageResource(
+                    getCategoryImageResource(TransactionCategories.valueOf(category))
+                )
             }
         }
     }
@@ -40,14 +49,22 @@ class TransactionsAdapter :
         RecyclerView.ViewHolder(binding.root)
 
     private fun getAmountTextColor(type: String): Int {
-        return if (type == TransactionType.INCOME.label){
+        return if (type == TransactionType.INCOME.label) {
             R.color.dark_green
         } else R.color.dark_red
     }
 
     private fun getAmountStringPattern(type: String): Int {
-        return if (type == TransactionType.INCOME.label){
+        return if (type == TransactionType.INCOME.label) {
             R.string.amount_income_pattern
         } else R.string.amount_outcome_pattern
+    }
+
+    private fun getCategoryImageResource(category: TransactionCategories): Int {
+        return when (category) {
+            TransactionCategories.Car -> R.drawable.icon_income
+            TransactionCategories.Food -> R.drawable.icon_outcome
+            TransactionCategories.Other -> R.drawable.icon_shop
+        }
     }
 }

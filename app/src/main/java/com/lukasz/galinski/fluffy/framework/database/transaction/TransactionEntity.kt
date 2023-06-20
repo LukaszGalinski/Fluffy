@@ -11,17 +11,17 @@ private const val TRANSACTIONS_TABLE = "TransactionsTable"
 @Entity(indices = [Index(value = ["transactionId"], unique = true)], tableName = TRANSACTIONS_TABLE)
 data class TransactionEntity(
     @ColumnInfo(name = "name")
-    val name: String?,
+    val name: String,
     @ColumnInfo(name = "date")
     var date: Long,
     @ColumnInfo(name = "category")
-    val category: String?,
+    val category: String,
     @ColumnInfo(name = "amount")
     val amount: Double?,
     @ColumnInfo(name = "description")
     val description: String?,
     @ColumnInfo(name = "type")
-    val type: String?,
+    val type: String,
     @ColumnInfo(name = "userId")
     val userId: Long,
     @PrimaryKey(autoGenerate = true)

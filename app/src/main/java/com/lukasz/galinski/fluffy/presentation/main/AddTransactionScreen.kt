@@ -83,15 +83,13 @@ class AddTransactionScreen : Fragment() {
         )
 
     private fun buildCategoryList() {
-        val categoryList = resources.getStringArray(R.array.category_array)
-        val categoryAdapter = SpinnerWithHintAdapter(requireContext(), categoryList)
+        val categoryAdapter = SpinnerWithHintAdapter(requireContext(), TransactionCategories.values())
         transactionScreenBinding.spinnerCategory.adapter = categoryAdapter
     }
 
     private fun buildWalletList() {
-        val walletList = resources.getStringArray(R.array.wallet_array)
-        val wallerAdapter = SpinnerWithHintAdapter(requireContext(), walletList)
-        transactionScreenBinding.spinnerPaymentMethod.adapter = wallerAdapter
+        val paymentMethodAdapter = SpinnerWithHintAdapter(requireContext(), TransactionPaymentMethod.values())
+        transactionScreenBinding.spinnerPaymentMethod.adapter = paymentMethodAdapter
     }
 
     private fun createTransactionTypeView(transactionType: String) {
