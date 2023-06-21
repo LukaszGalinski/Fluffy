@@ -1,7 +1,7 @@
 package com.lukasz.galinski.fluffy.framework.database.transaction
 
 import com.lukasz.galinski.core.data.Transaction
-import com.lukasz.galinski.core.repository.TransactionsDataSource
+import com.lukasz.galinski.core.domain.repository.TransactionsDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

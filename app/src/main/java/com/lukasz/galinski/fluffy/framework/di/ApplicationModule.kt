@@ -4,11 +4,11 @@ import android.app.Application
 import android.content.Context
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.lukasz.galinski.core.domain.DateTimeOperations
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.HiltAndroidApp
-import dagger.hilt.android.components.FragmentComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -27,9 +27,12 @@ class ApplicationModule : Application() {
     }
 
     @Module
-    @InstallIn(FragmentComponent::class)
-    class HiltModule {
+    @InstallIn(SingletonComponent::class)
+    class ProvideTools {
         @Provides
         fun provideGlide(@ApplicationContext context: Context): RequestManager = Glide.with(context)
+
+        @Provides
+        fun provideDateTimeTool() = DateTimeOperations()
     }
 }

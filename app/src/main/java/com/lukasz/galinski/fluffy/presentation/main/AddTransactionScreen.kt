@@ -14,6 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lukasz.galinski.core.data.Transaction
+import com.lukasz.galinski.core.domain.SingleTimeOperationResult
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.TransactionAddLayoutBinding
 import com.lukasz.galinski.fluffy.presentation.createToast
@@ -25,7 +26,7 @@ import kotlinx.coroutines.launch
 class AddTransactionScreen : Fragment() {
 
     companion object {
-        private const val ADD_TRANSACTION_TAG = "AddNewTransaction: "
+        private const val ADD_TRANSACTION_TAG = "AddNewTransaction"
     }
 
     private var _transactionScreenBinding: TransactionAddLayoutBinding? = null
@@ -118,21 +119,22 @@ class AddTransactionScreen : Fragment() {
 
     private fun observeAddNewTransactionResult() = lifecycleScope.launch {
         viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            hostViewModel.addNewTransactionStatus.collect { addTransactionStatus ->
-                when (addTransactionStatus) {
-                    true -> {
-                        Log.i(ADD_TRANSACTION_TAG, "Success")
+            hostViewModel.singleTimeOperationResult.collect { status ->
+                when (status) {
+                    SingleTimeOperationResult.Success -> {
+                        Log.i(ADD_TRANSACTION_TAG, status.toString())
+                        requireContext().createToast(resources.getString(R.string.transaction_add_success))
                         findNavController().popBackStack()
                     }
 
-                    false -> {
-                        Log.i(ADD_TRANSACTION_TAG, "Failure")
-                        context?.createToast(resources.getString(R.string.transaction_add_failure))
+                    is SingleTimeOperationResult.Failure -> {
+                        Log.i(ADD_TRANSACTION_TAG, status.message)
+                        requireContext().createToast(resources.getString(R.string.transaction_add_failure))
                     }
 
-                    else -> {
-                        Log.i(ADD_TRANSACTION_TAG, "IDLE")
-                    }
+                    SingleTimeOperationResult.Neutral ->
+                        Log.i(ADD_TRANSACTION_TAG, status.toString())
+
                 }
             }
         }

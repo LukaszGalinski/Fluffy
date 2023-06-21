@@ -1,4 +1,4 @@
-package com.lukasz.galinski.core.repository
+package com.lukasz.galinski.core.domain.repository
 
 import com.lukasz.galinski.core.data.User
 

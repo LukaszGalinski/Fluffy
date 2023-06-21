@@ -1,6 +1,6 @@
-package com.lukasz.galinski.core.usecase
+package com.lukasz.galinski.core.domain.usecase
 
-import com.lukasz.galinski.core.repository.TransactionsRepository
+import com.lukasz.galinski.core.domain.repository.TransactionsRepository
 
 class GetTransactions(private val transactionsRepository: TransactionsRepository) {
     operator fun invoke(userId: Long, startDate: Long, endDate: Long) =

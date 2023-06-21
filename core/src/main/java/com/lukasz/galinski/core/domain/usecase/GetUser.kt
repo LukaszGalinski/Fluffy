@@ -1,6 +1,6 @@
-package com.lukasz.galinski.core.usecase
+package com.lukasz.galinski.core.domain.usecase
 
-import com.lukasz.galinski.core.repository.UsersRepository
+import com.lukasz.galinski.core.domain.repository.UsersRepository
 
 class GetUser(private val usersRepository: UsersRepository) {
     operator fun invoke(userId: Long) = usersRepository.getUser(userId)

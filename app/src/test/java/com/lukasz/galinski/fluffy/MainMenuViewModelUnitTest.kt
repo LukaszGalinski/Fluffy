@@ -3,10 +3,10 @@ package com.lukasz.galinski.fluffy
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.lukasz.galinski.core.data.Transaction
 import com.lukasz.galinski.core.data.User
+import com.lukasz.galinski.core.domain.DateTimeOperations
 import com.lukasz.galinski.fluffy.framework.database.transaction.TransactionUseCases
 import com.lukasz.galinski.fluffy.framework.database.user.UserUseCases
 import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
-import com.lukasz.galinski.fluffy.viewmodel.DateTools
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import io.mockk.coEvery
 import io.mockk.coJustRun
@@ -39,7 +39,7 @@ class MainMenuViewModelUnitTest {
     private val mockedUser = mockk<User>()
     private val userPreferences = mockk<PreferencesData>()
     private val mockedTransaction = mockk<Transaction>(relaxed = true)
-    private val mockedDateTools = mockk<DateTools>()
+    private val mockedDateTimeOperations = mockk<DateTimeOperations>()
     private lateinit var mainMenuViewModel: MainMenuViewModel
 
     @Rule
@@ -55,18 +55,18 @@ class MainMenuViewModelUnitTest {
                 userRepository,
                 transactionRepository,
                 userPreferences,
+                mockedDateTimeOperations,
                 testDispatcher
             ),
             recordPrivateCalls = true
         )
 
-        replacePrivateField(mainMenuViewModel, "dateTools", mockedDateTools)
         val transactionList = arrayListOf(mockedTransaction, mockedTransaction)
 
         coEvery { transactionRepository.getTransactions(any(), any(), any()) }.returns(
             flowOf(transactionList)
         )
-        coEvery { transactionRepository.addTransaction(any()) }.returns(flowOf(1))
+//        coEvery { transactionRepository.addTransaction(any()) }.returns(flowOf(1))
         coEvery { userRepository.getUser(any()) }.returns(flowOf(mockedUser))
         coEvery { userPreferences.getLoggedUser() }.returns(flowOf(5))
     }
@@ -127,14 +127,14 @@ class MainMenuViewModelUnitTest {
 
     @Test
     fun checkCurrentMonthNumberLoaded() = runTest {
-        every { mockedDateTools.getCurrentMonthNumber() } returns 3
+        every { mockedDateTimeOperations.getCurrentMonthNumber() } returns 3
         val loadedMonth = mainMenuViewModel.getCurrentMonth()
         assertEquals(3, loadedMonth)
     }
 
     @Test
     fun checkCurrentDateValueLoaded() = runTest {
-        every { mockedDateTools.getCurrentDateInLong() } returns 987
+        every { mockedDateTimeOperations.getCurrentDateInLong() } returns 987
         assertEquals(987, mainMenuViewModel.getCurrentDate())
     }
 }

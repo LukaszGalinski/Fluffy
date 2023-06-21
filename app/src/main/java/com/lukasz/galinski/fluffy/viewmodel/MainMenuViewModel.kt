@@ -4,15 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lukasz.galinski.core.data.Transaction
 import com.lukasz.galinski.core.data.User
+import com.lukasz.galinski.core.domain.AddTransactionResult
+import com.lukasz.galinski.core.domain.DateTimeOperations
+import com.lukasz.galinski.core.domain.SingleTimeOperationResult
 import com.lukasz.galinski.fluffy.framework.database.transaction.TransactionUseCases
 import com.lukasz.galinski.fluffy.framework.database.user.UserUseCases
 import com.lukasz.galinski.fluffy.framework.di.DispatchersModule
 import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
-import com.lukasz.galinski.fluffy.presentation.main.Failure
-import com.lukasz.galinski.fluffy.presentation.main.Idle
 import com.lukasz.galinski.fluffy.presentation.main.MainMenuEvent
-import com.lukasz.galinski.fluffy.presentation.main.Success
-import com.lukasz.galinski.fluffy.presentation.main.TransactionStates
 import com.lukasz.galinski.fluffy.presentation.main.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -21,6 +20,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.round
@@ -32,6 +32,7 @@ class MainMenuViewModel @Inject constructor(
     private val userUseCases: UserUseCases,
     private val transactionUseCases: TransactionUseCases,
     private val sharedPreferencesData: PreferencesData,
+    private val dateTimeOperations: DateTimeOperations,
     @DispatchersModule.IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -39,23 +40,8 @@ class MainMenuViewModel @Inject constructor(
         private const val RECENT_TRANSACTIONS_LIMIT = 20
     }
 
-    private val _viewEvent = MutableStateFlow<MainMenuEvent?>(null)
-    val viewEvent: StateFlow<MainMenuEvent?> get() = _viewEvent
-
-    private val dateTools = DateTools()
-    private val _loggedUserDetails: MutableStateFlow<User?> = MutableStateFlow(null)
-
-    private val _addNewTransactionStatus: MutableStateFlow<Boolean?> = MutableStateFlow(null)
-    val addNewTransactionStatus: StateFlow<Boolean?> = _addNewTransactionStatus
-
-    private val _transactionList = MutableStateFlow(ArrayList<Transaction>())
-    val transactionList: StateFlow<ArrayList<Transaction>> = _transactionList
-
-    private val _transactionState: MutableStateFlow<TransactionStates> = MutableStateFlow(Idle)
-    val transactionState: StateFlow<TransactionStates> = _transactionState
-
-    private var _userID = MutableStateFlow(0L)
-    val userID: StateFlow<Long> = _userID
+    private val _viewEvent = MutableStateFlow<MainMenuEvent>(MainMenuEvent.Idle)
+    val viewEvent: StateFlow<MainMenuEvent> = _viewEvent
 
     private var _transactionIncome = MutableStateFlow(0.0)
     val transactionIncome: StateFlow<Double> = _transactionIncome
@@ -66,15 +52,24 @@ class MainMenuViewModel @Inject constructor(
     private var _accountBalance = MutableStateFlow(0.0)
     val accountBalance: StateFlow<Double> = _accountBalance
 
-    private var currentStartDate = 0L
-    private var currentEndDate = 0L
+    private val _loggedUserDetails: MutableStateFlow<User?> = MutableStateFlow(null)
+
+    private val _singleTimeOperationResult: MutableStateFlow<SingleTimeOperationResult> =
+        MutableStateFlow(SingleTimeOperationResult.Neutral)
+    val singleTimeOperationResult: StateFlow<SingleTimeOperationResult> get() = _singleTimeOperationResult
+
+    private val _transactionList = MutableStateFlow<MutableList<Transaction>>(mutableListOf())
+    val transactionList: StateFlow<MutableList<Transaction>> get() = _transactionList
+
+    private var _userID = MutableStateFlow(0L)
+    val userID: StateFlow<Long> = _userID
 
     init {
         viewModelScope.launch {
             sharedPreferencesData.getLoggedUser().collect {
                 if (it != null) {
                     _userID.value = it
-                    getUser(userID.value)
+                    getUserDetails(userID.value)
                     getTransactionsList(userID.value)
                     _accountBalance.value = getUserBalance()
                 }
@@ -82,41 +77,60 @@ class MainMenuViewModel @Inject constructor(
         }
     }
 
-    private fun getEndMonthDate(): Long {
-        currentEndDate = dateTools.getEndMonthDate()
-        return currentEndDate
-    }
+    fun getCurrentDate(): Long = dateTimeOperations.getCurrentDateInLong()
 
-    private fun getStartMonthDate(): Long {
-        currentStartDate = dateTools.getStartMonthDate()
-        return currentStartDate
-    }
+    fun getCurrentMonth(): Int = dateTimeOperations.getCurrentMonthNumber()
 
-    fun getCurrentDate(): Long = dateTools.getCurrentDateInLong()
-
-    fun getCurrentMonth(): Int = dateTools.getCurrentMonthNumber()
-
-    private fun getUser(userId: Long) =
+    private fun getUserDetails(userId: Long) =
         viewModelScope.launch {
             userUseCases.getUser(userId)
                 .flowOn(ioDispatcher)
-                .catch { _transactionState.value = Failure }
-                .onCompletion { _transactionState.value = Idle }
                 .collect { _loggedUserDetails.value = it }
         }
 
     private fun getTransactionsList(userId: Long) {
         viewModelScope.launch {
-            transactionUseCases.getTransactions(userId, getStartMonthDate(), getEndMonthDate())
+            transactionUseCases.getTransactions(
+                userId,
+                dateTimeOperations.getStartMonthDate(),
+                dateTimeOperations.getEndMonthDate()
+            )
                 .flowOn(ioDispatcher)
+                .onStart { setLoading() }
                 .catch {
-                    _transactionState.value = Failure
-                    _transactionList.value = ArrayList()
+                    hideLoading()
+                    showToast(it.message.toString())
+                }.collect { list ->
+                    hideLoading()
+                    _transactionList.value = list as MutableList<Transaction>
+                    _transactionIncome.value =
+                        round(getIncomeSumOfTransaction(_transactionList.value))
+                    _transactionOutcome.value =
+                        round(getOutcomeSumOfTransaction(_transactionList.value))
                 }
-                .collect { list ->
-                    if (list.isNotEmpty()) {
-                        _transactionList.value = list as ArrayList<Transaction>
-                        _transactionState.value = Success(list)
+        }
+    }
+
+    fun addNewTransaction(transaction: Transaction) {
+        viewModelScope.launch {
+            transactionUseCases.addTransaction(transaction)
+                .flowOn(ioDispatcher)
+                .catch { setSingleTimeOperationResultFailure(it.message.toString()) }
+                .onCompletion { setSingleTimeOperationNeutral() }
+                .collect {
+                    when (it) {
+                        AddTransactionResult.SuccessInTimeRange -> {
+                            _transactionList.value.add(0, transaction)
+                            setSingleTimeOperationResultSuccess()
+                        }
+
+                        AddTransactionResult.Success -> {
+                            setSingleTimeOperationResultSuccess()
+                        }
+
+                        is AddTransactionResult.Error -> {
+                            setSingleTimeOperationResultFailure(it.message.toString())
+                        }
                     }
                     _transactionIncome.value =
                         round(getIncomeSumOfTransaction(_transactionList.value))
@@ -125,6 +139,7 @@ class MainMenuViewModel @Inject constructor(
                 }
         }
     }
+
 
     private fun getOutcomeSumOfTransaction(outcomeList: List<Transaction>): Double {
         return outcomeList.filter { item ->
@@ -146,37 +161,11 @@ class MainMenuViewModel @Inject constructor(
         return ACCOUNT_BALANCE
     }
 
-    fun addNewTransaction(transaction: Transaction) {
-        viewModelScope.launch {
-            transactionUseCases.addTransaction(transaction)
-                .flowOn(ioDispatcher)
-                .catch { _addNewTransactionStatus.value = false }
-                .onCompletion {
-                    _addNewTransactionStatus.value = null
-                }
-                .collect {
-                    _addNewTransactionStatus.value = true
-                    if (newTransactionInTimeRange(transaction.date)) {
-                        _transactionList.value.add(0, transaction)
-                        _transactionState.value = Success(_transactionList.value)
-                        _transactionIncome.value =
-                            round(getIncomeSumOfTransaction(_transactionList.value))
-                        _transactionOutcome.value =
-                            round(getOutcomeSumOfTransaction(_transactionList.value))
-                    }
-                    _addNewTransactionStatus.value = null
-                }
-        }
-    }
-
     fun getDoubleFromString(input: String): Double {
         return if (input.isBlank())
             0.toDouble()
         else input.toDouble()
     }
-
-    private fun newTransactionInTimeRange(date: Long) =
-        (currentStartDate <= date) && (date <= currentEndDate)
 
     fun logoutUser() {
         viewModelScope.launch {
@@ -190,5 +179,29 @@ class MainMenuViewModel @Inject constructor(
         _viewEvent.value = MainMenuEvent.ShowFabAnimation
     } else {
         _viewEvent.value = MainMenuEvent.HideFabAnimation
+    }
+
+    private fun showToast(message: String) {
+        _viewEvent.value = MainMenuEvent.DisplayToast(message)
+    }
+
+    private fun setLoading() {
+        _viewEvent.value = MainMenuEvent.IsLoading(true)
+    }
+
+    private fun hideLoading() {
+        _viewEvent.value = MainMenuEvent.IsLoading(false)
+    }
+
+    private fun setSingleTimeOperationResultSuccess() {
+        _singleTimeOperationResult.value = SingleTimeOperationResult.Success
+    }
+
+    private fun setSingleTimeOperationResultFailure(message: String) {
+        _singleTimeOperationResult.value = SingleTimeOperationResult.Failure(message)
+    }
+
+    private fun setSingleTimeOperationNeutral() {
+        _singleTimeOperationResult.value = SingleTimeOperationResult.Neutral
     }
 }

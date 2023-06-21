@@ -1,7 +1,7 @@
 package com.lukasz.galinski.fluffy.framework.database.user
 
 import com.lukasz.galinski.core.data.User
-import com.lukasz.galinski.core.repository.UsersDataSource
+import com.lukasz.galinski.core.domain.repository.UsersDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

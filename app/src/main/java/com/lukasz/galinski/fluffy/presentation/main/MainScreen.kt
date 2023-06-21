@@ -16,7 +16,6 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.lukasz.galinski.core.data.Transaction
-import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.MainMenuFragmentBinding
 import com.lukasz.galinski.fluffy.presentation.createToast
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
@@ -34,7 +33,7 @@ class MainScreen : Fragment() {
     private var isRotate = false
 
     companion object {
-        private const val MAIN_MENU_TAG = "MainMenu: "
+        private const val MAIN_MENU_TAG = "MainMenuFragment"
     }
 
     override fun onCreateView(
@@ -55,18 +54,38 @@ class MainScreen : Fragment() {
         }
 
         createBottomNavigation()
-        handleTransactions()
         createFabAnimationButton()
         resetFabButtonsView()
-        observeEvents()
+        observeUiEvents()
+        observeDataStream()
     }
 
-    private fun observeEvents() = lifecycleScope.launch {
+    private fun observeUiEvents() = lifecycleScope.launch {
         viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
             hostViewModel.viewEvent.collect {
                 when (it) {
                     is MainMenuEvent.ShowFabAnimation -> showInFabButtons()
                     is MainMenuEvent.HideFabAnimation -> showOutFabButtons()
+                    is MainMenuEvent.DisplayToast -> {
+                        activity?.createToast(it.message)
+                        println("Toasted")
+                    }
+                    is MainMenuEvent.Idle -> Log.i(MAIN_MENU_TAG, it.toString())
+                    is MainMenuEvent.IsLoading -> when (it.isLoading){
+                        true -> Log.i(MAIN_MENU_TAG, "showLoading")
+                        false -> Log.i(MAIN_MENU_TAG, "hideLoading")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeDataStream() {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                hostViewModel.transactionList.collect {
+                    configureLineChart(it)
+                    transactionAdapter.transactionsList = hostViewModel.getRecentTransactionsList()
                 }
             }
         }
@@ -79,37 +98,8 @@ class MainScreen : Fragment() {
         }
     }
 
-    private fun handleTransactions() = lifecycleScope.launch {
-        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            hostViewModel.transactionState.collect { state ->
-                when (state) {
-                    is Success -> {
-                        Log.i(MAIN_MENU_TAG, state.toString())
-                        configureLineChart(state.transactionsList)
-                        transactionAdapter.transactionsList =
-                            hostViewModel.getRecentTransactionsList()
-                    }
 
-                    is Failure -> {
-                        Log.i(MAIN_MENU_TAG, state.toString())
-                        requireContext().createToast(getString(R.string.transaction_load_failure))
-                    }
-
-                    is Loading -> {
-                        requireContext().createToast(getString(R.string.transaction_load_in_progress))
-                        Log.i(MAIN_MENU_TAG, state.toString())
-                    }
-
-                    is Idle -> {
-                        Log.i(MAIN_MENU_TAG, state.toString())
-                    }
-                }
-            }
-        }
-    }
-
-
-    private fun configureLineChart(data: ArrayList<Transaction>) {
+    private fun configureLineChart(data: MutableList<Transaction>) {
         with(mainMenuBinding.chart) {
             description.text = ""
             description.textSize = 0F

@@ -4,6 +4,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import com.lukasz.galinski.core.domain.DateTimeOperations
 import com.lukasz.galinski.fluffy.framework.database.transaction.TransactionUseCases
 import com.lukasz.galinski.fluffy.framework.database.user.UserUseCases
 import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
@@ -28,6 +29,7 @@ class MainMenuScreenUITest {
 
     private val testDispatcher = StandardTestDispatcher()
     private val mockedUserUseCases = mockk<UserUseCases>()
+    private val mockedDateTimeOperations = mockk<DateTimeOperations>()
     private val mockedTransactionUseCases = mockk<TransactionUseCases>()
     private val userPreferences = mockk<PreferencesData>(relaxed = true)
 
@@ -37,6 +39,7 @@ class MainMenuScreenUITest {
             mockedUserUseCases,
             mockedTransactionUseCases,
             userPreferences,
+            mockedDateTimeOperations,
             testDispatcher
         )
     )

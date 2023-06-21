@@ -1,7 +1,7 @@
 package com.lukasz.galinski.fluffy.framework.database.transaction
 
-import com.lukasz.galinski.core.usecase.AddTransaction
-import com.lukasz.galinski.core.usecase.GetTransactions
+import com.lukasz.galinski.core.domain.usecase.AddTransaction
+import com.lukasz.galinski.core.domain.usecase.GetTransactions
 
 data class TransactionUseCases(
     val addTransaction: AddTransaction,

@@ -8,7 +8,7 @@ import com.lukasz.galinski.fluffy.framework.database.AppDatabase
 import com.lukasz.galinski.fluffy.framework.database.transaction.TransactionsDao
 import com.lukasz.galinski.fluffy.framework.database.user.UserEntity
 import com.lukasz.galinski.fluffy.framework.database.user.UsersDao
-import com.lukasz.galinski.fluffy.viewmodel.DateTools
+import com.lukasz.galinski.core.domain.DateTimeOperations
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -106,7 +106,7 @@ class DatabaseEntityTest {
 
     @Test
     fun loadTransactionsInDateRange(){
-        val date = DateTools()
+        val date = DateTimeOperations()
         val currentDate = date.getCurrentDateInLong()
         val startMonthDate = date.getStartMonthDate()
         val endMonthDate = date.getEndMonthDate()
