@@ -56,15 +56,15 @@ class AddTransactionScreen : Fragment() {
         }
 
         transactionScreenBinding.iconBackArrow.setOnClickListener {
-            findNavController().navigate(R.id.action_addTransactionScreen_to_mainScreen)
+            findNavController().popBackStack()
         }
     }
 
-    private fun hideAppTopBar(){
+    private fun hideAppTopBar() {
         (activity as MainMenuActivity).hideAppBar()
     }
 
-    private fun showAppTopBar(){
+    private fun showAppTopBar() {
         (activity as MainMenuActivity).showAppBar()
     }
 
@@ -83,12 +83,14 @@ class AddTransactionScreen : Fragment() {
         )
 
     private fun buildCategoryList() {
-        val categoryAdapter = SpinnerWithHintAdapter(requireContext(), TransactionCategories.values())
+        val categoryAdapter =
+            SpinnerWithHintAdapter(requireContext(), TransactionCategories.values())
         transactionScreenBinding.spinnerCategory.adapter = categoryAdapter
     }
 
     private fun buildWalletList() {
-        val paymentMethodAdapter = SpinnerWithHintAdapter(requireContext(), TransactionPaymentMethod.values())
+        val paymentMethodAdapter =
+            SpinnerWithHintAdapter(requireContext(), TransactionPaymentMethod.values())
         transactionScreenBinding.spinnerPaymentMethod.adapter = paymentMethodAdapter
     }
 
@@ -122,10 +124,12 @@ class AddTransactionScreen : Fragment() {
                         Log.i(ADD_TRANSACTION_TAG, "Success")
                         findNavController().popBackStack()
                     }
+
                     false -> {
                         Log.i(ADD_TRANSACTION_TAG, "Failure")
                         context?.createToast(resources.getString(R.string.transaction_add_failure))
                     }
+
                     else -> {
                         Log.i(ADD_TRANSACTION_TAG, "IDLE")
                     }

@@ -16,10 +16,9 @@ import com.lukasz.galinski.fluffy.databinding.RegisterScreenFragmentBinding
 import com.lukasz.galinski.fluffy.presentation.account.Failure
 import com.lukasz.galinski.fluffy.presentation.account.Idle
 import com.lukasz.galinski.fluffy.presentation.account.Loading
-import com.lukasz.galinski.fluffy.presentation.account.Success
+import com.lukasz.galinski.fluffy.presentation.account.RegisterSuccess
 import com.lukasz.galinski.fluffy.presentation.account.highlightSelectedTextRange
 import com.lukasz.galinski.fluffy.presentation.createToast
-import com.lukasz.galinski.fluffy.presentation.main.MainMenuActivity
 import com.lukasz.galinski.fluffy.presentation.markAs
 import com.lukasz.galinski.fluffy.presentation.setInvisible
 import com.lukasz.galinski.fluffy.presentation.setStateAppearance
@@ -34,7 +33,7 @@ class RegisterScreen : Fragment() {
         private const val HIGHLIGHTED_TERMS_SPANS_COUNT = 35
         private const val HIGHLIGHTED_LOGIN_SPANS_COUNT = 5
         private const val HIGHLIGHTED_COLOR = "#7F3DFF"
-        private const val STATE_TAG = "State: "
+        private const val STATE_TAG = "RegisterScreen"
     }
 
     private var _registerBinding: RegisterScreenFragmentBinding? = null
@@ -76,17 +75,15 @@ class RegisterScreen : Fragment() {
     }
 
     private fun handleRegisterStates() = lifecycleScope.launchWhenStarted {
-        viewModel.userAccountState.collect { state ->
+        viewModel.userRegisterStates.collect { state ->
             when (state) {
-                is Success -> {
+                is RegisterSuccess -> {
                     Log.i(STATE_TAG, state.toString())
                     context?.createToast(resources.getString(R.string.user_created))
                     registerBinding.registerProgressBar.setInvisible()
-                    context?.let {
-                        startActivity(MainMenuActivity.createIntent(it))
-                    }
+                    findNavController().popBackStack()
                 }
-                is Failure -> {
+                is Failure-> {
                     Log.i(STATE_TAG, state.toString())
                     context?.createToast(resources.getString(R.string.email_occupied))
                     registerBinding.registerProgressBar.setInvisible()
@@ -98,9 +95,6 @@ class RegisterScreen : Fragment() {
                 is Idle -> {
                     Log.i(STATE_TAG, state.toString())
                     registerBinding.registerProgressBar.setInvisible()
-                }
-                else -> {
-                    Log.i(STATE_TAG, state.toString())
                 }
             }
         }

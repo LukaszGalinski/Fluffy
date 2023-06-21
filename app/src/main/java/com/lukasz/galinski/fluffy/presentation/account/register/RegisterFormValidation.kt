@@ -6,7 +6,6 @@ import android.widget.CheckBox
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.lukasz.galinski.fluffy.R
-import com.lukasz.galinski.fluffy.presentation.account.FormValidationRules
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 
 private const val NAME = "NAME"
@@ -42,7 +41,7 @@ class FieldsValidation(
             }
 
             R.id.et_login -> {
-                if (FormValidationRules.validationEmail(s)) {
+                if (RegisterFormValidationRules.validationEmail(s)) {
                     setInputPositive(EMAIL)
                 } else {
                     setInputNegative(EMAIL)
@@ -52,7 +51,7 @@ class FieldsValidation(
                 }
             }
             R.id.et_password -> {
-                if (FormValidationRules.passwordValidation(s.toString())) {
+                if (RegisterFormValidationRules.passwordValidation(s.toString())) {
                     setInputPositive(PASSWORD)
                 } else {
                     setInputNegative(PASSWORD)

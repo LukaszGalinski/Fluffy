@@ -1,8 +1,8 @@
-package com.lukasz.galinski.fluffy.presentation.account
+package com.lukasz.galinski.fluffy.presentation.account.register
 
 import java.util.regex.Pattern
 
-object FormValidationRules {
+object RegisterFormValidationRules {
     private const val PASSWORD_LENGTH = 6
     private const val SPECIAL_CHARACTER_REGEX = "[^[a-z0-9A-Z]]"
     private const val DIGIT_REGEX = "\\d+"

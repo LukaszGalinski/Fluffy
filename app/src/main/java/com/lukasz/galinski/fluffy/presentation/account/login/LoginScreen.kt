@@ -14,7 +14,7 @@ import com.lukasz.galinski.fluffy.databinding.LoginScreenFragmentBinding
 import com.lukasz.galinski.fluffy.presentation.account.Failure
 import com.lukasz.galinski.fluffy.presentation.account.Idle
 import com.lukasz.galinski.fluffy.presentation.account.Loading
-import com.lukasz.galinski.fluffy.presentation.account.Success
+import com.lukasz.galinski.fluffy.presentation.account.LoginSuccess
 import com.lukasz.galinski.fluffy.presentation.account.UserNotFound
 import com.lukasz.galinski.fluffy.presentation.account.highlightSelectedTextRange
 import com.lukasz.galinski.fluffy.presentation.createToast
@@ -26,7 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 private const val MARKED_SPANS_COUNT = 7
 private const val HIGHLIGHTED_COLOR = "#7F3DFF"
-private const val STATE_TAG = "State: "
+private const val STATE_TAG = "LoginScreen"
 
 @AndroidEntryPoint
 class LoginScreen : Fragment() {
@@ -65,10 +65,11 @@ class LoginScreen : Fragment() {
     }
 
     private fun handleLoginStates() = lifecycleScope.launchWhenStarted {
-        hostViewModel.userAccountState.collect { state ->
+        hostViewModel.userLoginStates.collect { state ->
             when (state) {
-                is Success -> {
+                is LoginSuccess -> {
                     Log.i(STATE_TAG, state.toString())
+                    activity?.finish()
                     context?.let {
                         startActivity(MainMenuActivity.createIntent(it))
                     }

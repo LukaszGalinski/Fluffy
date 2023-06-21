@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.lukasz.galinski.core.data.User
 import com.lukasz.galinski.fluffy.framework.database.user.UserUseCases
 import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
-import com.lukasz.galinski.fluffy.presentation.account.Success
+import com.lukasz.galinski.fluffy.presentation.account.RegisterSuccess
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 import io.mockk.coEvery
 import io.mockk.coJustRun
@@ -100,7 +100,7 @@ class LoginViewModelUnitTest {
         runTest {
             loginViewModel.saveUserIntoDatabase(mockedUser)
         }
-        assertEquals(Success(5), loginViewModel.userAccountState.value)
+        assertEquals(RegisterSuccess(5), loginViewModel.userRegisterStates.value)
     }
 
     @Test

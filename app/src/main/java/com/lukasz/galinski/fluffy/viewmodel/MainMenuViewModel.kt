@@ -35,7 +35,7 @@ class MainMenuViewModel @Inject constructor(
     @DispatchersModule.IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-    companion object{
+    companion object {
         private const val RECENT_TRANSACTIONS_LIMIT = 20
     }
 
@@ -51,8 +51,7 @@ class MainMenuViewModel @Inject constructor(
     private val _transactionList = MutableStateFlow(ArrayList<Transaction>())
     val transactionList: StateFlow<ArrayList<Transaction>> = _transactionList
 
-    private val _transactionState: MutableStateFlow<TransactionStates> =
-        MutableStateFlow(Success(transactionList.value))
+    private val _transactionState: MutableStateFlow<TransactionStates> = MutableStateFlow(Idle)
     val transactionState: StateFlow<TransactionStates> = _transactionState
 
     private var _userID = MutableStateFlow(0L)
@@ -113,7 +112,8 @@ class MainMenuViewModel @Inject constructor(
                 .catch {
                     _transactionState.value = Failure
                     _transactionList.value = ArrayList()
-                }.collect { list ->
+                }
+                .collect { list ->
                     if (list.isNotEmpty()) {
                         _transactionList.value = list as ArrayList<Transaction>
                         _transactionState.value = Success(list)
@@ -151,7 +151,9 @@ class MainMenuViewModel @Inject constructor(
             transactionUseCases.addTransaction(transaction)
                 .flowOn(ioDispatcher)
                 .catch { _addNewTransactionStatus.value = false }
-                .onCompletion { _addNewTransactionStatus.value = null }
+                .onCompletion {
+                    _addNewTransactionStatus.value = null
+                }
                 .collect {
                     _addNewTransactionStatus.value = true
                     if (newTransactionInTimeRange(transaction.date)) {

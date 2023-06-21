@@ -88,7 +88,6 @@ class MainScreen : Fragment() {
                         configureLineChart(state.transactionsList)
                         transactionAdapter.transactionsList =
                             hostViewModel.getRecentTransactionsList()
-                        requireContext().createToast(getString(R.string.transaction_load_done))
                     }
 
                     is Failure -> {
@@ -104,7 +103,6 @@ class MainScreen : Fragment() {
                     is Idle -> {
                         Log.i(MAIN_MENU_TAG, state.toString())
                     }
-
                 }
             }
         }
