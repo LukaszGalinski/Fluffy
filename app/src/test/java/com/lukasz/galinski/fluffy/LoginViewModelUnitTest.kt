@@ -4,6 +4,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.lukasz.galinski.core.data.User
 import com.lukasz.galinski.fluffy.framework.database.user.UserUseCases
 import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
+import com.lukasz.galinski.fluffy.presentation.account.Idle
+import com.lukasz.galinski.fluffy.presentation.account.Loading
+import com.lukasz.galinski.fluffy.presentation.account.RegisterStates
 import com.lukasz.galinski.fluffy.presentation.account.RegisterSuccess
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 import io.mockk.coEvery
@@ -11,14 +14,16 @@ import io.mockk.coJustRun
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -45,18 +50,14 @@ class LoginViewModelUnitTest {
 
     @Before
     fun setup() {
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
         Dispatchers.setMain(testDispatcher)
-
         coJustRun { userPreferences.setLoggedUser(any()) }
-        coEvery { mockedUserCases.addUser(mockedUser) }.returns(flow { emit(5) })
         loginViewModel = spyk(LoginViewModel(mockedUserCases, userPreferences, testDispatcher))
     }
 
     @After
     fun clean() {
         Dispatchers.resetMain()
-        RxAndroidPlugins.reset()
     }
 
     @Test
@@ -96,12 +97,27 @@ class LoginViewModelUnitTest {
     }
 
     @Test
-    fun checkRegisterSuccessReturnedOnUserAdded() {
-        runTest {
-            loginViewModel.saveUserIntoDatabase(mockedUser)
-        }
-        assertEquals(RegisterSuccess(5), loginViewModel.userRegisterStates.value)
+    fun checkRegisterSuccessFlowReturnedOnUserAdded() = runTest {
+        coEvery { mockedUserCases.addUser(any()) }.returns(flowOf(5))
+
+        val statesList = mutableListOf<RegisterStates>()
+
+        val job = loginViewModel.userRegisterStates
+            .onEach { statesList.add(it) }
+            .launchIn(CoroutineScope(UnconfinedTestDispatcher(testScheduler)))
+
+        loginViewModel.saveUserIntoDatabase(mockedUser)
+        advanceUntilIdle()
+
+        assertEquals(statesList[0], Idle)
+        assertEquals(statesList[1], Loading)
+        assertEquals(statesList[2], RegisterSuccess(5))
+        assertEquals(statesList[3], Idle)
+
+        job.cancel()
     }
+
+
 
     @Test
     fun checkLoggedUserIdReturned() {

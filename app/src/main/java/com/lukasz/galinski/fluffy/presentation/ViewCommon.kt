@@ -3,7 +3,6 @@ package com.lukasz.galinski.fluffy.presentation
 import android.content.Context
 import android.view.View
 import android.widget.Button
-import android.widget.ProgressBar
 import android.widget.Toast
 
 private const val INACTIVE_BUTTON_ALPHA = .6F
@@ -30,10 +29,10 @@ private fun Button.setInactiveStateAppearance(){
     this.alpha = INACTIVE_BUTTON_ALPHA
 }
 
-fun ProgressBar.setVisible(){
+fun View.setVisible(){
     this.visibility = View.VISIBLE
 }
 
-fun ProgressBar.setInvisible(){
+fun View.setGone(){
     this.visibility = View.GONE
 }

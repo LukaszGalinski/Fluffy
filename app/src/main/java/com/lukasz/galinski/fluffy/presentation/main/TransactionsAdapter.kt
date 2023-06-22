@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.lukasz.galinski.core.data.Transaction
+import com.lukasz.galinski.core.domain.TransactionCategories
+import com.lukasz.galinski.core.domain.TransactionType
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.TransactionsSingleItemBinding
 

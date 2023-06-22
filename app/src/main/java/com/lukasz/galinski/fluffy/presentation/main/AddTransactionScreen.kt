@@ -14,7 +14,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.lukasz.galinski.core.data.Transaction
-import com.lukasz.galinski.core.domain.SingleTimeOperationResult
+import com.lukasz.galinski.core.domain.SingleTimeEvent
+import com.lukasz.galinski.core.domain.TransactionCategories
+import com.lukasz.galinski.core.domain.TransactionType
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.TransactionAddLayoutBinding
 import com.lukasz.galinski.fluffy.presentation.createToast
@@ -119,25 +121,29 @@ class AddTransactionScreen : Fragment() {
 
     private fun observeAddNewTransactionResult() = lifecycleScope.launch {
         viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            hostViewModel.singleTimeOperationResult.collect { status ->
+            hostViewModel.singleTimeEvent.collect { status ->
                 when (status) {
-                    SingleTimeOperationResult.Success -> {
+                    SingleTimeEvent.Success -> {
                         Log.i(ADD_TRANSACTION_TAG, status.toString())
-                        requireContext().createToast(resources.getString(R.string.transaction_add_success))
+                        showToast(R.string.transaction_add_success)
                         findNavController().popBackStack()
                     }
 
-                    is SingleTimeOperationResult.Failure -> {
+                    is SingleTimeEvent.Failure -> {
                         Log.i(ADD_TRANSACTION_TAG, status.message)
-                        requireContext().createToast(resources.getString(R.string.transaction_add_failure))
+                        showToast(R.string.transaction_add_failure)
                     }
 
-                    SingleTimeOperationResult.Neutral ->
+                    SingleTimeEvent.Neutral ->
                         Log.i(ADD_TRANSACTION_TAG, status.toString())
 
                 }
             }
         }
+    }
+
+    private fun showToast(message: Int) {
+        requireContext().createToast(resources.getString(message))
     }
 
     override fun onDestroy() {

@@ -6,13 +6,13 @@ import com.lukasz.galinski.core.data.Transaction
 import com.lukasz.galinski.core.data.User
 import com.lukasz.galinski.core.domain.AddTransactionResult
 import com.lukasz.galinski.core.domain.DateTimeOperations
-import com.lukasz.galinski.core.domain.SingleTimeOperationResult
+import com.lukasz.galinski.core.domain.SingleTimeEvent
+import com.lukasz.galinski.core.domain.TransactionType
 import com.lukasz.galinski.fluffy.framework.database.transaction.TransactionUseCases
 import com.lukasz.galinski.fluffy.framework.database.user.UserUseCases
 import com.lukasz.galinski.fluffy.framework.di.DispatchersModule
 import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
 import com.lukasz.galinski.fluffy.presentation.main.MainMenuEvent
-import com.lukasz.galinski.fluffy.presentation.main.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.round
 
 private const val ACCOUNT_BALANCE = 8600.00 // Until setup bank connection
 
@@ -54,9 +53,9 @@ class MainMenuViewModel @Inject constructor(
 
     private val _loggedUserDetails: MutableStateFlow<User?> = MutableStateFlow(null)
 
-    private val _singleTimeOperationResult: MutableStateFlow<SingleTimeOperationResult> =
-        MutableStateFlow(SingleTimeOperationResult.Neutral)
-    val singleTimeOperationResult: StateFlow<SingleTimeOperationResult> get() = _singleTimeOperationResult
+    private val _singleTimeEvent: MutableStateFlow<SingleTimeEvent> =
+        MutableStateFlow(SingleTimeEvent.Neutral)
+    val singleTimeEvent: StateFlow<SingleTimeEvent> get() = _singleTimeEvent
 
     private val _transactionList = MutableStateFlow<MutableList<Transaction>>(mutableListOf())
     val transactionList: StateFlow<MutableList<Transaction>> get() = _transactionList
@@ -69,8 +68,8 @@ class MainMenuViewModel @Inject constructor(
             sharedPreferencesData.getLoggedUser().collect {
                 if (it != null) {
                     _userID.value = it
-                    getUserDetails(userID.value)
-                    getTransactionsList(userID.value)
+                    getUserDetails(it)
+                    getTransactionsList(it)
                     _accountBalance.value = getUserBalance()
                 }
             }
@@ -100,13 +99,12 @@ class MainMenuViewModel @Inject constructor(
                 .catch {
                     hideLoading()
                     showToast(it.message.toString())
-                }.collect { list ->
+                }
+                .collect { list ->
                     hideLoading()
                     _transactionList.value = list as MutableList<Transaction>
-                    _transactionIncome.value =
-                        round(getIncomeSumOfTransaction(_transactionList.value))
-                    _transactionOutcome.value =
-                        round(getOutcomeSumOfTransaction(_transactionList.value))
+                    setIncomeValue()
+                    setOutcomeValue()
                 }
         }
     }
@@ -132,29 +130,24 @@ class MainMenuViewModel @Inject constructor(
                             setSingleTimeOperationResultFailure(it.message.toString())
                         }
                     }
-                    _transactionIncome.value =
-                        round(getIncomeSumOfTransaction(_transactionList.value))
-                    _transactionOutcome.value =
-                        round(getOutcomeSumOfTransaction(_transactionList.value))
+                    setIncomeValue()
+                    setOutcomeValue()
                 }
         }
     }
 
-
-    private fun getOutcomeSumOfTransaction(outcomeList: List<Transaction>): Double {
-        return outcomeList.filter { item ->
-            item.type == TransactionType.OUTCOME.label
-        }.sumOf {
-            it.amount!!
-        }
+    private fun setIncomeValue() {
+        _transactionIncome.value = transactionUseCases.getTransactionTotalAmount(
+            TransactionType.INCOME,
+            _transactionList.value
+        )
     }
 
-    private fun getIncomeSumOfTransaction(incomeList: List<Transaction>): Double {
-        return incomeList.filter { item ->
-            item.type == TransactionType.INCOME.label
-        }.sumOf {
-            it.amount!!
-        }
+    private fun setOutcomeValue() {
+        _transactionOutcome.value = transactionUseCases.getTransactionTotalAmount(
+            TransactionType.OUTCOME,
+            _transactionList.value
+        )
     }
 
     private fun getUserBalance(): Double {
@@ -194,14 +187,14 @@ class MainMenuViewModel @Inject constructor(
     }
 
     private fun setSingleTimeOperationResultSuccess() {
-        _singleTimeOperationResult.value = SingleTimeOperationResult.Success
+        _singleTimeEvent.value = SingleTimeEvent.Success
     }
 
     private fun setSingleTimeOperationResultFailure(message: String) {
-        _singleTimeOperationResult.value = SingleTimeOperationResult.Failure(message)
+        _singleTimeEvent.value = SingleTimeEvent.Failure(message)
     }
 
     private fun setSingleTimeOperationNeutral() {
-        _singleTimeOperationResult.value = SingleTimeOperationResult.Neutral
+        _singleTimeEvent.value = SingleTimeEvent.Neutral
     }
 }

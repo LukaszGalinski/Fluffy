@@ -3,6 +3,7 @@ package com.lukasz.galinski.fluffy
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.lukasz.galinski.core.data.Transaction
 import com.lukasz.galinski.core.data.User
+import com.lukasz.galinski.core.domain.AddTransactionResult
 import com.lukasz.galinski.core.domain.DateTimeOperations
 import com.lukasz.galinski.fluffy.framework.database.transaction.TransactionUseCases
 import com.lukasz.galinski.fluffy.framework.database.user.UserUseCases
@@ -20,6 +21,7 @@ import io.reactivex.schedulers.Schedulers
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -39,7 +41,7 @@ class MainMenuViewModelUnitTest {
     private val mockedUser = mockk<User>()
     private val userPreferences = mockk<PreferencesData>()
     private val mockedTransaction = mockk<Transaction>(relaxed = true)
-    private val mockedDateTimeOperations = mockk<DateTimeOperations>()
+    private val mockedDateTimeOperations = spyk<DateTimeOperations>()
     private lateinit var mainMenuViewModel: MainMenuViewModel
 
     @Rule
@@ -66,7 +68,8 @@ class MainMenuViewModelUnitTest {
         coEvery { transactionRepository.getTransactions(any(), any(), any()) }.returns(
             flowOf(transactionList)
         )
-//        coEvery { transactionRepository.addTransaction(any()) }.returns(flowOf(1))
+        coEvery { transactionRepository.addTransaction(any()) }.returns(
+            flow { AddTransactionResult.SuccessInTimeRange })
         coEvery { userRepository.getUser(any()) }.returns(flowOf(mockedUser))
         coEvery { userPreferences.getLoggedUser() }.returns(flowOf(5))
     }

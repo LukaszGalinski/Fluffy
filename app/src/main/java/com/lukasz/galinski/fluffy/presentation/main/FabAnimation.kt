@@ -3,6 +3,8 @@ package com.lukasz.galinski.fluffy.presentation.main
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.view.View
+import com.lukasz.galinski.fluffy.presentation.setGone
+import com.lukasz.galinski.fluffy.presentation.setVisible
 
 private const val ROTATE_DURATION = 200L
 private const val ROTATE_ANGLE = 270f
@@ -18,7 +20,7 @@ class FabAnimation {
     }
 
     fun showIn(v: View) {
-        v.visibility = View.VISIBLE
+        v.setVisible()
         v.alpha = OFF_VALUE
         v.translationY = v.height.toFloat()
         v.animate()
@@ -41,7 +43,7 @@ class FabAnimation {
             .translationY(v.height.toFloat())
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
-                    v.visibility = View.GONE
+                    v.setGone()
                     super.onAnimationEnd(animation)
                 }
             }).alpha(OFF_VALUE)
@@ -49,7 +51,7 @@ class FabAnimation {
     }
 
     fun init(v: View) {
-        v.visibility = View.GONE
+        v.setGone()
         v.translationY = v.height.toFloat()
         v.alpha = OFF_VALUE
     }

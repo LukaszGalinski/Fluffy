@@ -5,6 +5,7 @@ import com.lukasz.galinski.core.domain.repository.TransactionsRepository
 import com.lukasz.galinski.core.domain.repository.UsersRepository
 import com.lukasz.galinski.core.domain.usecase.AddTransaction
 import com.lukasz.galinski.core.domain.usecase.AddUser
+import com.lukasz.galinski.core.domain.usecase.GetTransactionTotalAmount
 import com.lukasz.galinski.core.domain.usecase.GetTransactions
 import com.lukasz.galinski.core.domain.usecase.GetUser
 import com.lukasz.galinski.core.domain.usecase.LoginUser
@@ -22,7 +23,8 @@ class UseCasesModule {
     fun getTransactionUseCases(repository: TransactionsRepository, dateTimeOperations: DateTimeOperations) =
         TransactionUseCases(
             AddTransaction(repository, dateTimeOperations),
-            GetTransactions(repository)
+            GetTransactions(repository),
+            GetTransactionTotalAmount()
         )
 
     @Provides

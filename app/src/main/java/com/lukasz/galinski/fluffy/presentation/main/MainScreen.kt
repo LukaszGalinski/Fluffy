@@ -16,8 +16,11 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.lukasz.galinski.core.data.Transaction
+import com.lukasz.galinski.core.domain.TransactionType
 import com.lukasz.galinski.fluffy.databinding.MainMenuFragmentBinding
 import com.lukasz.galinski.fluffy.presentation.createToast
+import com.lukasz.galinski.fluffy.presentation.setGone
+import com.lukasz.galinski.fluffy.presentation.setVisible
 import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -55,7 +58,7 @@ class MainScreen : Fragment() {
 
         createBottomNavigation()
         createFabAnimationButton()
-        resetFabButtonsView()
+        initFabButtonsView()
         observeUiEvents()
         observeDataStream()
     }
@@ -66,14 +69,11 @@ class MainScreen : Fragment() {
                 when (it) {
                     is MainMenuEvent.ShowFabAnimation -> showInFabButtons()
                     is MainMenuEvent.HideFabAnimation -> showOutFabButtons()
-                    is MainMenuEvent.DisplayToast -> {
-                        activity?.createToast(it.message)
-                        println("Toasted")
-                    }
+                    is MainMenuEvent.DisplayToast -> { requireContext().createToast(it.message) }
                     is MainMenuEvent.Idle -> Log.i(MAIN_MENU_TAG, it.toString())
                     is MainMenuEvent.IsLoading -> when (it.isLoading){
-                        true -> Log.i(MAIN_MENU_TAG, "showLoading")
-                        false -> Log.i(MAIN_MENU_TAG, "hideLoading")
+                        true -> mainMenuBinding.mainScreenProgressBar.setVisible()
+                        false -> mainMenuBinding.mainScreenProgressBar.setGone()
                     }
                 }
             }
@@ -165,7 +165,7 @@ class MainScreen : Fragment() {
         }
     }
 
-    private fun resetFabButtonsView() {
+    private fun initFabButtonsView() {
         with(mainMenuBinding) {
             fabAnimation.init(fabIncome)
             fabAnimation.init(fabOutcome)

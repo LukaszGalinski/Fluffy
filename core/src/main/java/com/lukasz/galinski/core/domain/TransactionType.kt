@@ -1,4 +1,4 @@
-package com.lukasz.galinski.fluffy.presentation.main
+package com.lukasz.galinski.core.domain
 
 enum class TransactionType(val label: String) {
     INCOME("income"),

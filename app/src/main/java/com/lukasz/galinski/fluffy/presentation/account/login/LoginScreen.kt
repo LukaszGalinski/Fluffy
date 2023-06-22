@@ -19,7 +19,7 @@ import com.lukasz.galinski.fluffy.presentation.account.UserNotFound
 import com.lukasz.galinski.fluffy.presentation.account.highlightSelectedTextRange
 import com.lukasz.galinski.fluffy.presentation.createToast
 import com.lukasz.galinski.fluffy.presentation.main.MainMenuActivity
-import com.lukasz.galinski.fluffy.presentation.setInvisible
+import com.lukasz.galinski.fluffy.presentation.setGone
 import com.lukasz.galinski.fluffy.presentation.setVisible
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -83,7 +83,7 @@ class LoginScreen : Fragment() {
                 }
                 is Idle -> {
                     Log.i(STATE_TAG, state.toString())
-                    loginBinding.loginProgressBar.setInvisible()
+                    loginBinding.loginProgressBar.setGone()
                 }
                 is UserNotFound -> {
                     Log.i(STATE_TAG, state.toString())

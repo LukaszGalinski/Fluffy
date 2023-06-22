@@ -20,7 +20,7 @@ import com.lukasz.galinski.fluffy.presentation.account.RegisterSuccess
 import com.lukasz.galinski.fluffy.presentation.account.highlightSelectedTextRange
 import com.lukasz.galinski.fluffy.presentation.createToast
 import com.lukasz.galinski.fluffy.presentation.markAs
-import com.lukasz.galinski.fluffy.presentation.setInvisible
+import com.lukasz.galinski.fluffy.presentation.setGone
 import com.lukasz.galinski.fluffy.presentation.setStateAppearance
 import com.lukasz.galinski.fluffy.presentation.setVisible
 import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
@@ -80,13 +80,13 @@ class RegisterScreen : Fragment() {
                 is RegisterSuccess -> {
                     Log.i(STATE_TAG, state.toString())
                     context?.createToast(resources.getString(R.string.user_created))
-                    registerBinding.registerProgressBar.setInvisible()
+                    registerBinding.registerProgressBar.setGone()
                     findNavController().popBackStack()
                 }
                 is Failure-> {
                     Log.i(STATE_TAG, state.toString())
                     context?.createToast(resources.getString(R.string.email_occupied))
-                    registerBinding.registerProgressBar.setInvisible()
+                    registerBinding.registerProgressBar.setGone()
                 }
                 is Loading -> {
                     Log.i(STATE_TAG, state.toString())
@@ -94,7 +94,7 @@ class RegisterScreen : Fragment() {
                 }
                 is Idle -> {
                     Log.i(STATE_TAG, state.toString())
-                    registerBinding.registerProgressBar.setInvisible()
+                    registerBinding.registerProgressBar.setGone()
                 }
             }
         }
