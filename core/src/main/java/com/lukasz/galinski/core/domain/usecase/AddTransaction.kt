@@ -16,15 +16,16 @@ class AddTransaction(
 ) {
     operator fun invoke(transaction: Transaction): Flow<AddTransactionResult<Any>> {
         return flow {
-            transactionsRepository.addTransaction(transaction).catch {
-                emit(AddTransactionResult.Error(it.message.toString()))
-            }.onEach {
-                if (newTransactionInTimeRange(transaction.date)) {
-                    emit(AddTransactionResult.SuccessInTimeRange)
-                } else {
-                    emit(AddTransactionResult.Success)
+            transactionsRepository.addTransaction(transaction)
+                .catch { emit(AddTransactionResult.Error(it.message.toString())) }
+                .onEach {
+                    if (newTransactionInTimeRange(transaction.date)) {
+                        emit(AddTransactionResult.SuccessInTimeRange)
+                    } else {
+                        emit(AddTransactionResult.Success)
+                    }
                 }
-            }.collect()
+                .collect()
         }
     }
 

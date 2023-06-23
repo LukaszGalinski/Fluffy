@@ -8,7 +8,7 @@ import com.lukasz.galinski.core.domain.DateTimeOperations
 import com.lukasz.galinski.fluffy.framework.database.transaction.TransactionUseCases
 import com.lukasz.galinski.fluffy.framework.database.user.UserUseCases
 import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
-import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
+import com.lukasz.galinski.fluffy.presentation.main.MainMenuViewModel
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify

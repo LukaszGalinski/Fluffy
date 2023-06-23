@@ -9,7 +9,7 @@ import com.lukasz.galinski.fluffy.framework.database.transaction.TransactionUseC
 import com.lukasz.galinski.fluffy.framework.database.user.UserUseCases
 import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
 import com.lukasz.galinski.fluffy.presentation.main.MainScreen
-import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
+import com.lukasz.galinski.fluffy.presentation.main.MainMenuViewModel
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest

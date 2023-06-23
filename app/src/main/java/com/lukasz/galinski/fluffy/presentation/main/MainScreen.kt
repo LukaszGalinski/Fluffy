@@ -21,7 +21,6 @@ import com.lukasz.galinski.fluffy.databinding.MainMenuFragmentBinding
 import com.lukasz.galinski.fluffy.presentation.createToast
 import com.lukasz.galinski.fluffy.presentation.setGone
 import com.lukasz.galinski.fluffy.presentation.setVisible
-import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -69,9 +68,12 @@ class MainScreen : Fragment() {
                 when (it) {
                     is MainMenuEvent.ShowFabAnimation -> showInFabButtons()
                     is MainMenuEvent.HideFabAnimation -> showOutFabButtons()
-                    is MainMenuEvent.DisplayToast -> { requireContext().createToast(it.message) }
+                    is MainMenuEvent.DisplayToast -> {
+                        requireContext().createToast(it.message)
+                    }
+
                     is MainMenuEvent.Idle -> Log.i(MAIN_MENU_TAG, it.toString())
-                    is MainMenuEvent.IsLoading -> when (it.isLoading){
+                    is MainMenuEvent.IsLoading -> when (it.isLoading) {
                         true -> mainMenuBinding.mainScreenProgressBar.setVisible()
                         false -> mainMenuBinding.mainScreenProgressBar.setGone()
                     }
@@ -100,6 +102,16 @@ class MainScreen : Fragment() {
 
 
     private fun configureLineChart(data: MutableList<Transaction>) {
+        val entryList = ArrayList<Entry>()
+
+        for (i in data.indices) {
+            entryList.add(Entry((10 + i).toFloat(), data[i].amount?.toFloat()!!, data[i].date))
+        }
+
+        val lineDataSet = LineDataSet(entryList, "Expenses")
+        lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
+        val lineData = LineData(lineDataSet)
+
         with(mainMenuBinding.chart) {
             description.text = ""
             description.textSize = 0F
@@ -111,18 +123,10 @@ class MainScreen : Fragment() {
             axisRight.setDrawGridLines(false)
             axisLeft.setDrawGridLines(false)
             legend.isEnabled = false
+            performClick()
         }
-
-        val entryList = ArrayList<Entry>()
-
-        for (i in data.indices) {
-            entryList.add(Entry((10 + i).toFloat(), data[i].amount?.toFloat()!!, data[i].date))
-        }
-
-        val lineDataSet = LineDataSet(entryList, "Expenses")
-        lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
-        val lineData = LineData(lineDataSet)
         mainMenuBinding.chart.data = lineData
+
     }
 
     private fun createFabAnimationButton() {

@@ -7,7 +7,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.lukasz.galinski.fluffy.presentation.main.MainMenuActivity
 import com.lukasz.galinski.fluffy.presentation.onboarding.OnBoardingScreenActivity
-import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
+import com.lukasz.galinski.fluffy.presentation.account.login.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 

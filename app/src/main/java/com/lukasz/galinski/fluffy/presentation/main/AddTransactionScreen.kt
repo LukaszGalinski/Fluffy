@@ -20,7 +20,6 @@ import com.lukasz.galinski.core.domain.TransactionType
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.TransactionAddLayoutBinding
 import com.lukasz.galinski.fluffy.presentation.createToast
-import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

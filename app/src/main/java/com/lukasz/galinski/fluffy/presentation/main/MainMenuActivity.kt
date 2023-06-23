@@ -18,7 +18,6 @@ import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.MainHostLayoutBinding
 import com.lukasz.galinski.fluffy.presentation.account.LoginHostActivity
 import com.lukasz.galinski.fluffy.presentation.createToast
-import com.lukasz.galinski.fluffy.viewmodel.MainMenuViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

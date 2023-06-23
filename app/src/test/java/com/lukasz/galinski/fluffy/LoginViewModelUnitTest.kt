@@ -8,7 +8,7 @@ import com.lukasz.galinski.fluffy.presentation.account.Idle
 import com.lukasz.galinski.fluffy.presentation.account.Loading
 import com.lukasz.galinski.fluffy.presentation.account.RegisterStates
 import com.lukasz.galinski.fluffy.presentation.account.RegisterSuccess
-import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
+import com.lukasz.galinski.fluffy.presentation.account.login.LoginViewModel
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.every

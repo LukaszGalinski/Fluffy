@@ -13,17 +13,12 @@ import com.google.android.material.textfield.TextInputLayout
 import com.lukasz.galinski.core.data.User
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.RegisterScreenFragmentBinding
-import com.lukasz.galinski.fluffy.presentation.account.Failure
-import com.lukasz.galinski.fluffy.presentation.account.Idle
-import com.lukasz.galinski.fluffy.presentation.account.Loading
-import com.lukasz.galinski.fluffy.presentation.account.RegisterSuccess
 import com.lukasz.galinski.fluffy.presentation.account.highlightSelectedTextRange
 import com.lukasz.galinski.fluffy.presentation.createToast
 import com.lukasz.galinski.fluffy.presentation.markAs
 import com.lukasz.galinski.fluffy.presentation.setGone
 import com.lukasz.galinski.fluffy.presentation.setStateAppearance
 import com.lukasz.galinski.fluffy.presentation.setVisible
-import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,7 +33,7 @@ class RegisterScreen : Fragment() {
 
     private var _registerBinding: RegisterScreenFragmentBinding? = null
     private val registerBinding get() = _registerBinding!!
-    private val viewModel by activityViewModels<LoginViewModel>()
+    private val viewModel by activityViewModels<RegisterViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,17 +48,14 @@ class RegisterScreen : Fragment() {
         highlightTextParts()
         assignValidation()
         handleRegisterStates()
-        viewModel.saveButtonState.observe(viewLifecycleOwner) {
-            registerBinding.registerButton.markAs(it)
-            registerBinding.registerButton.setStateAppearance()
-        }
+        observeRegisterButton()
 
         registerBinding.termsCheckbox.setOnClickListener {
             registerBinding.etName.text = registerBinding.etName.text
         }
 
         registerBinding.existingAccountInfo.setOnClickListener {
-            findNavController().navigate(R.id.action_registerScreen_to_loginScreen)
+            navigateToLogin()
         }
 
         registerBinding.registerButton.setOnClickListener {
@@ -74,30 +66,44 @@ class RegisterScreen : Fragment() {
         }
     }
 
-    private fun handleRegisterStates() = lifecycleScope.launchWhenStarted {
-        viewModel.userRegisterStates.collect { state ->
-            when (state) {
-                is RegisterSuccess -> {
-                    Log.i(STATE_TAG, state.toString())
-                    context?.createToast(resources.getString(R.string.user_created))
-                    registerBinding.registerProgressBar.setGone()
-                    findNavController().popBackStack()
-                }
-                is Failure-> {
-                    Log.i(STATE_TAG, state.toString())
-                    context?.createToast(resources.getString(R.string.email_occupied))
-                    registerBinding.registerProgressBar.setGone()
-                }
-                is Loading -> {
-                    Log.i(STATE_TAG, state.toString())
-                    registerBinding.registerProgressBar.setVisible()
-                }
-                is Idle -> {
-                    Log.i(STATE_TAG, state.toString())
-                    registerBinding.registerProgressBar.setGone()
-                }
-            }
+    private fun observeRegisterButton() = lifecycleScope.launchWhenStarted {
+        viewModel.saveButtonState.collect {
+            registerBinding.registerButton.markAs(it)
+            registerBinding.registerButton.setStateAppearance()
         }
+    }
+
+    private fun handleRegisterStates() = lifecycleScope.launchWhenStarted {
+        viewModel.registerUiEvent.collect { state ->
+            when (state) {
+                is RegisterUiEvent.RegisterSuccess -> {
+                    showToast(getString(R.string.user_created))
+                    navigateToLogin()
+                }
+
+                is RegisterUiEvent.DisplayToast -> {
+                    Log.i(STATE_TAG, state.exception.message.toString())
+                    showToast(getString(R.string.email_occupied))
+                }
+
+                is RegisterUiEvent.IsLoading -> when (state.isLoading) {
+                    true -> registerBinding.registerProgressBar.setVisible()
+                    false -> registerBinding.registerProgressBar.setGone()
+                }
+
+                is RegisterUiEvent.Idle -> Unit
+
+            }
+            Log.i(STATE_TAG, state.toString())
+        }
+    }
+
+    private fun showToast(message: String) {
+        requireContext().createToast(message)
+    }
+
+    private fun navigateToLogin(){
+        findNavController().navigate(R.id.action_registerScreen_to_loginScreen)
     }
 
     private fun highlightTextParts() {

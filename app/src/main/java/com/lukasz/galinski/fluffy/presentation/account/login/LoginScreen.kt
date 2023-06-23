@@ -11,17 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.LoginScreenFragmentBinding
-import com.lukasz.galinski.fluffy.presentation.account.Failure
-import com.lukasz.galinski.fluffy.presentation.account.Idle
-import com.lukasz.galinski.fluffy.presentation.account.Loading
-import com.lukasz.galinski.fluffy.presentation.account.LoginSuccess
-import com.lukasz.galinski.fluffy.presentation.account.UserNotFound
 import com.lukasz.galinski.fluffy.presentation.account.highlightSelectedTextRange
 import com.lukasz.galinski.fluffy.presentation.createToast
 import com.lukasz.galinski.fluffy.presentation.main.MainMenuActivity
 import com.lukasz.galinski.fluffy.presentation.setGone
 import com.lukasz.galinski.fluffy.presentation.setVisible
-import com.lukasz.galinski.fluffy.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val MARKED_SPANS_COUNT = 7
@@ -65,32 +59,34 @@ class LoginScreen : Fragment() {
     }
 
     private fun handleLoginStates() = lifecycleScope.launchWhenStarted {
-        hostViewModel.userLoginStates.collect { state ->
-            when (state) {
-                is LoginSuccess -> {
-                    Log.i(STATE_TAG, state.toString())
+        hostViewModel.loginUiEvent.collect {
+            when (it) {
+                LoginUiState.LoginSuccess -> {
                     activity?.finish()
-                    context?.let {
-                        startActivity(MainMenuActivity.createIntent(it))
-                    }
+                    startActivity(MainMenuActivity.createIntent(requireContext()))
                 }
-                is Failure -> {
-                    Log.i(STATE_TAG, state.toString())
+
+                is LoginUiState.DisplayToast -> {
+                    showToast(getString(R.string.unexpected_error_message))
                 }
-                is Loading -> {
-                    Log.i(STATE_TAG, state.toString())
-                    loginBinding.loginProgressBar.setVisible()
+
+                is LoginUiState.IsLoading -> when (it.isLoading) {
+                    true -> loginBinding.loginProgressBar.setVisible()
+                    false -> loginBinding.loginProgressBar.setGone()
                 }
-                is Idle -> {
-                    Log.i(STATE_TAG, state.toString())
-                    loginBinding.loginProgressBar.setGone()
+
+                LoginUiState.UserNotFound -> {
+                    showToast(getString(R.string.user_not_found))
                 }
-                is UserNotFound -> {
-                    Log.i(STATE_TAG, state.toString())
-                    context?.createToast(resources.getString(R.string.user_not_found))
-                }
+
+                LoginUiState.Idle -> Unit
             }
+            Log.i(STATE_TAG, it.toString())
         }
+    }
+
+    private fun showToast(message: String) {
+        requireContext().createToast(message)
     }
 
     override fun onDestroy() {
