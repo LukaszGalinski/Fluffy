@@ -1,14 +1,18 @@
 package com.lukasz.galinski.fluffy.presentation.account.login
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.LoginScreenFragmentBinding
 import com.lukasz.galinski.fluffy.presentation.account.highlightSelectedTextRange
@@ -21,12 +25,17 @@ import dagger.hilt.android.AndroidEntryPoint
 private const val MARKED_SPANS_COUNT = 7
 private const val HIGHLIGHTED_COLOR = "#7F3DFF"
 private const val STATE_TAG = "LoginScreen"
+private const val BACK_BUTTON_DELAY = 1000L
 
 @AndroidEntryPoint
 class LoginScreen : Fragment() {
     private var _loginBinding: LoginScreenFragmentBinding? = null
     private val loginBinding get() = _loginBinding!!
     private val hostViewModel: LoginViewModel by activityViewModels()
+
+    private var doubleCheckButton = false
+    private var handler = Handler(Looper.getMainLooper())
+    private lateinit var runnable: Runnable
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,14 +47,19 @@ class LoginScreen : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         handleLoginStates()
-        val registerLabel = loginBinding.createAccountInfo
-        registerLabel.text = highlightSelectedTextRange(
-            registerLabel.text,
-            registerLabel.text.length - MARKED_SPANS_COUNT,
-            registerLabel.text.length,
-            HIGHLIGHTED_COLOR
-        )
+        handleBackPress()
+        runnable = Runnable { doubleCheckButton = false }
+
+        with(loginBinding.createAccountInfo) {
+            text = highlightSelectedTextRange(
+                text,
+                text.length - MARKED_SPANS_COUNT,
+                text.length,
+                HIGHLIGHTED_COLOR
+            )
+        }
 
         loginBinding.createAccountInfo.setOnClickListener {
             findNavController(it).navigate(R.id.action_loginScreen_to_registerScreen)
@@ -56,6 +70,26 @@ class LoginScreen : Fragment() {
             val userPassword = loginBinding.etPassword.text.toString()
             hostViewModel.loginUser(userEmail, userPassword)
         }
+    }
+
+    private fun handleBackPress() {
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            when (findNavController().currentDestination?.id) {
+                R.id.loginScreen -> createBackButtonDelay()
+                R.id.registerScreen -> findNavController().navigate(R.id.action_registerScreen_to_loginScreen)
+                else -> findNavController().popBackStack()
+            }
+        }
+    }
+
+    private fun createBackButtonDelay() {
+        if (doubleCheckButton) {
+            activity?.finishAndRemoveTask()
+            return
+        }
+        doubleCheckButton = true
+        requireContext().createToast(resources.getString(R.string.double_press_to_exit))
+        handler.postDelayed(runnable, BACK_BUTTON_DELAY)
     }
 
     private fun handleLoginStates() = lifecycleScope.launchWhenStarted {
@@ -90,7 +124,8 @@ class LoginScreen : Fragment() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
+        handler.removeCallbacks(runnable)
         _loginBinding = null
+        super.onDestroy()
     }
 }

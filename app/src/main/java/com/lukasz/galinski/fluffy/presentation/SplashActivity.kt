@@ -5,9 +5,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import com.lukasz.galinski.fluffy.presentation.main.MainMenuActivity
-import com.lukasz.galinski.fluffy.presentation.onboarding.OnBoardingScreenActivity
+import com.lukasz.galinski.fluffy.presentation.account.AppEntryPoint
+import com.lukasz.galinski.fluffy.presentation.account.LoginEntryPoint
+import com.lukasz.galinski.fluffy.presentation.account.AccountHostActivity
 import com.lukasz.galinski.fluffy.presentation.account.login.LoginViewModel
+import com.lukasz.galinski.fluffy.presentation.main.MainMenuActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 
@@ -19,21 +21,23 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
-        checkLoginStatus()
+        presentViewBasedOnEntryPoint()
     }
 
-    private fun checkLoginStatus() {
+    private fun presentViewBasedOnEntryPoint() {
         lifecycleScope.launchWhenStarted {
-            val loginStatus = viewModel.getLoggedUser()
-
-            if (loginStatus.first() != null) {
-                startActivity(
-                    MainMenuActivity.createIntent(
-                        applicationContext
-                    )
+            when (viewModel.getEntryPoint().first()) {
+                AppEntryPoint.LOGIN -> startActivity(
+                    AccountHostActivity.createIntent(applicationContext, LoginEntryPoint.LOGIN)
                 )
-            } else {
-                startActivity(OnBoardingScreenActivity.createIntent(applicationContext))
+
+                AppEntryPoint.ONBOARDING -> startActivity(
+                    AccountHostActivity.createIntent(applicationContext, LoginEntryPoint.ONBOARDING)
+                )
+
+                AppEntryPoint.MAIN_MENU -> startActivity(
+                    MainMenuActivity.createIntent(applicationContext)
+                )
             }
             finishAfterTransition()
         }

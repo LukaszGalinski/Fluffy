@@ -22,7 +22,7 @@
             android:name=".presentation.onboarding.OnBoardingScreenActivity"
             android:theme="@style/Theme.Fluffy.OnBoarding" />
         <activity
-            android:name=".presentation.account.LoginHostActivity"
+            android:name=".presentation.account.AccountHostActivity"
             android:theme="@style/Theme.Fluffy.OnBoarding"
             android:windowSoftInputMode="adjustPan" />
         <activity

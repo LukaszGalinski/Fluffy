@@ -16,7 +16,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.MainHostLayoutBinding
-import com.lukasz.galinski.fluffy.presentation.account.LoginHostActivity
+import com.lukasz.galinski.fluffy.presentation.account.AccountHostActivity
+import com.lukasz.galinski.fluffy.presentation.account.LoginEntryPoint
 import com.lukasz.galinski.fluffy.presentation.createToast
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -46,14 +47,14 @@ class MainMenuActivity : AppCompatActivity() {
         setContentView(mainMenuHostBinding.root)
 
         runnable = Runnable { doubleCheckButton = false }
-        val currentMonth = hostViewModel.getCurrentMonth()
-        createMonthSpinner(currentMonth)
+
+        createMonthSpinner()
         createDrawerMenu()
         showSpinnerItemsOnImagePressed()
         setupTopBar()
     }
 
-    private fun createDrawerMenu(){
+    private fun createDrawerMenu() {
         val drawerLayout = mainMenuHostBinding.mainMenuDrawerRoot
         actionBarDrawerToggle = ActionBarDrawerToggle(
             this,
@@ -69,41 +70,43 @@ class MainMenuActivity : AppCompatActivity() {
         }
     }
 
-    fun hideAppBar(){
+    fun hideAppBar() {
         mainMenuHostBinding.materialTopBar.visibility = View.GONE
     }
 
-    fun showAppBar(){
+    fun showAppBar() {
         mainMenuHostBinding.materialTopBar.visibility = View.VISIBLE
     }
 
     private fun setupTopBar() {
         mainMenuHostBinding.materialTopBar.setOnMenuItemClickListener { menuItem ->
+            Log.i(MAIN_MENU_TAG, menuItem.itemId.toString())
+
             when (menuItem.itemId) {
                 R.id.notifications -> {
-                    Log.i(MAIN_MENU_TAG, "Notifications")
                     true
                 }
+
                 R.id.logout -> {
-                    Log.i(MAIN_MENU_TAG, "Logout")
                     hostViewModel.logoutUser()
-                    val intent = LoginHostActivity.createIntent(this, "")
-                    finish()
-                    startActivity(intent)
+                    finishAfterTransition()
+                    startActivity(AccountHostActivity.createIntent(this, LoginEntryPoint.LOGIN))
                     true
                 }
+
                 else -> false
             }
         }
     }
 
-    private fun showSpinnerItemsOnImagePressed(){
+    private fun showSpinnerItemsOnImagePressed() {
         mainMenuHostBinding.spinnerIcon.setOnClickListener {
             mainMenuHostBinding.monthSpinner.performClick()
         }
     }
 
-    private fun createMonthSpinner(currentMonth: Int) {
+    private fun createMonthSpinner() {
+        val currentMonth = hostViewModel.getCurrentMonth()
         val monthArray = resources.getStringArray(R.array.months_of_year)
 
         val spinnerAdapter: ArrayAdapter<String?> = object :

@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_loginScreen_to_registerScreen"
             app:destination="@id/registerScreen" />
+        <action
+            android:id="@+id/action_loginScreen_to_onboardingParentFragment"
+            app:destination="@id/onboardingParentFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerScreen"
@@ -19,6 +22,17 @@
         android:label="RegisterScreen">
         <action
             android:id="@+id/action_registerScreen_to_loginScreen"
+            app:destination="@id/loginScreen" />
+    </fragment>
+    <fragment
+        android:id="@+id/onboardingParentFragment"
+        android:name="com.lukasz.galinski.fluffy.presentation.onboarding.OnboardingParentFragment"
+        android:label="OnboardingParentFragment" >
+        <action
+            android:id="@+id/action_onboardingParentFragment_to_registerScreen"
+            app:destination="@id/registerScreen" />
+        <action
+            android:id="@+id/action_onboardingParentFragment_to_loginScreen"
             app:destination="@id/loginScreen" />
     </fragment>
 </navigation>

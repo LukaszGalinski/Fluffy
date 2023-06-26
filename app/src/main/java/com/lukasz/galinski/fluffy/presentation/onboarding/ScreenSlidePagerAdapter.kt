@@ -1,14 +1,13 @@
 package com.lukasz.galinski.fluffy.presentation.onboarding
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.core.data.OnboardingDetailsModel
+import com.lukasz.galinski.fluffy.R
 
 private const val ONBOARDING_PAGES = 3
 
-class ScreenSlidePagerAdapter(private val fragment: FragmentActivity) :
+class ScreenSlidePagerAdapter(private val fragment: Fragment) :
     FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int = ONBOARDING_PAGES
     override fun createFragment(position: Int): Fragment =

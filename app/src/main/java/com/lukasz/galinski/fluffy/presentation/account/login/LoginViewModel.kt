@@ -6,6 +6,7 @@ import com.lukasz.galinski.core.domain.BaseResult
 import com.lukasz.galinski.fluffy.framework.database.user.UserUseCases
 import com.lukasz.galinski.fluffy.framework.di.DispatchersModule
 import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
+import com.lukasz.galinski.fluffy.presentation.account.AppEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -55,6 +57,22 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    fun setEntryPoint(entryPoint: AppEntryPoint) {
+        viewModelScope.launch {
+            withContext(ioDispatcher) {
+                preferencesData.setEntryPoint(entryPoint)
+            }
+        }
+    }
+
+    fun getEntryPoint(): Flow<AppEntryPoint> =
+        preferencesData.getEntryPoint().map {
+            when (it) {
+                null -> AppEntryPoint.ONBOARDING
+                else -> AppEntryPoint.valueOf(it)
+            }
+        }
+
     private fun setLoggedUser(userId: Long) {
         viewModelScope.launch {
             withContext(ioDispatcher) {
@@ -85,6 +103,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun setLoginSuccess() {
+        setEntryPoint(AppEntryPoint.MAIN_MENU)
         _loginUiEvent.value = LoginUiState.LoginSuccess
     }
 
