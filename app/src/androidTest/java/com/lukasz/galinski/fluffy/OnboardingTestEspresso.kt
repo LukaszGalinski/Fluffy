@@ -1,12 +1,14 @@
 package com.lukasz.galinski.fluffy
 
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.lukasz.galinski.fluffy.presentation.onboarding.OnBoardingScreenActivity
+import com.lukasz.galinski.fluffy.presentation.account.AccountHostActivity
+import com.lukasz.galinski.fluffy.presentation.common.LoginEntryPoint
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers.allOf
@@ -23,12 +25,15 @@ private const val SWIPE_DURATION = 1000L
 @HiltAndroidTest
 class OnboardingTestEspresso {
 
+    private val activity = AccountHostActivity.createIntent(
+        ApplicationProvider.getApplicationContext(), LoginEntryPoint.ONBOARDING
+    )
+
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
     @get:Rule(order = 1)
-    var activityRule: ActivityScenarioRule<OnBoardingScreenActivity> =
-        ActivityScenarioRule(OnBoardingScreenActivity::class.java)
+    var activityRule: ActivityScenarioRule<AccountHostActivity> = ActivityScenarioRule(activity)
 
     @Before
     fun prepareView() {
