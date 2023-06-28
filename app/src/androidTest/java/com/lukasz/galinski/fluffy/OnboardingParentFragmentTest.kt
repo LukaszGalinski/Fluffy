@@ -1,14 +1,18 @@
 package com.lukasz.galinski.fluffy
 
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.lukasz.galinski.fluffy.presentation.onboarding.OnboardingParentFragment
-import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import io.mockk.mockk
+import io.mockk.verify
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.Before
 import org.junit.Rule
@@ -17,8 +21,8 @@ import org.junit.Test
 @HiltAndroidTest
 class OnboardingParentFragmentTest {
 
-    @BindValue
-    val onboardingParentFragment: OnboardingParentFragment = OnboardingParentFragment()
+    private val onboardingParentFragment: OnboardingParentFragment = OnboardingParentFragment()
+    private val navController = mockk<NavController>(relaxed = true)
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
@@ -27,19 +31,34 @@ class OnboardingParentFragmentTest {
     fun prepareView() {
         hiltRule.inject()
 
-        launchFragmentInHiltContainer<OnboardingParentFragment> { onboardingParentFragment }
+        launchFragmentInHiltContainer<OnboardingParentFragment> {
+            onboardingParentFragment
+            Navigation.setViewNavController(this.requireView(), navController)
+        }
     }
 
     @Test
-    fun checkRegisterButtonDisplayed() {
-        onView(withId(R.id.onboarding_register_button))
-            .check(matches(withText(R.string.register)))
+    fun checkRegisterButtonText() {
+        onView(withId(R.id.onboarding_register_button)).check(matches(withText(R.string.register)))
+    }
+
+    @Test
+    fun checkRegisterButtonNavigatesToRegisterScreen() {
+        onView(withText(R.string.register)).perform(click())
+
+        verify(exactly = 1) { navController.navigate(R.id.action_onboardingParentFragment_to_registerScreen) }
     }
 
     @Test
     fun checkLoginButtonDisplayed() {
-        onView(withId(R.id.onboarding_login_button))
-            .check(matches(withText(R.string.login)))
+        onView(withId(R.id.onboarding_login_button)).check(matches(withText(R.string.login)))
+    }
+
+    @Test
+    fun checkLoginButtonNavigatesToLoginScreen() {
+        onView(withText(R.string.login)).perform(click())
+
+        verify(exactly = 1) { navController.navigate(R.id.action_onboardingParentFragment_to_loginScreen) }
     }
 
     @Test
