@@ -1,4 +1,4 @@
-package com.lukasz.galinski.fluffy.presentation.account
+package com.lukasz.galinski.fluffy.presentation.common
 
 import android.graphics.Color
 import android.text.Spannable

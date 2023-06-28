@@ -15,8 +15,8 @@ import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.OnboardingScreenLayoutBinding
-import com.lukasz.galinski.fluffy.presentation.account.AppEntryPoint
 import com.lukasz.galinski.fluffy.presentation.account.login.LoginViewModel
+import com.lukasz.galinski.fluffy.presentation.common.AppEntryPoint
 import dagger.hilt.android.AndroidEntryPoint
 
 

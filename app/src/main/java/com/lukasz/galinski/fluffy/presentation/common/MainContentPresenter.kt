@@ -1,4 +1,4 @@
-package com.lukasz.galinski.fluffy.presentation.account
+package com.lukasz.galinski.fluffy.presentation.common
 
 enum class AppEntryPoint {
     ONBOARDING,

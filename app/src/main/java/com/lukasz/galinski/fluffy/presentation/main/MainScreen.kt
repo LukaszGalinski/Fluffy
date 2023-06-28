@@ -18,9 +18,9 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.lukasz.galinski.core.data.Transaction
 import com.lukasz.galinski.core.domain.TransactionType
 import com.lukasz.galinski.fluffy.databinding.MainMenuFragmentBinding
-import com.lukasz.galinski.fluffy.presentation.createToast
-import com.lukasz.galinski.fluffy.presentation.setGone
-import com.lukasz.galinski.fluffy.presentation.setVisible
+import com.lukasz.galinski.fluffy.presentation.common.createToast
+import com.lukasz.galinski.fluffy.presentation.common.setGone
+import com.lukasz.galinski.fluffy.presentation.common.setVisible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

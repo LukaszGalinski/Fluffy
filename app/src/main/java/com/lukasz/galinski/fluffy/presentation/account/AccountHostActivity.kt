@@ -7,7 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.LoginHostLayoutBinding
-import com.lukasz.galinski.fluffy.presentation.account.AppEntryPoint.LOGIN
+import com.lukasz.galinski.fluffy.presentation.common.AppEntryPoint.LOGIN
+import com.lukasz.galinski.fluffy.presentation.common.LoginEntryPoint
 import dagger.hilt.android.AndroidEntryPoint
 
 

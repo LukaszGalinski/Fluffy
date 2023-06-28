@@ -1,4 +1,4 @@
-package com.lukasz.galinski.fluffy.presentation
+package com.lukasz.galinski.fluffy.presentation.common
 
 import android.content.Context
 import android.view.View

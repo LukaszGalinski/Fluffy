@@ -17,8 +17,8 @@ import androidx.navigation.findNavController
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.MainHostLayoutBinding
 import com.lukasz.galinski.fluffy.presentation.account.AccountHostActivity
-import com.lukasz.galinski.fluffy.presentation.account.LoginEntryPoint
-import com.lukasz.galinski.fluffy.presentation.createToast
+import com.lukasz.galinski.fluffy.presentation.common.LoginEntryPoint
+import com.lukasz.galinski.fluffy.presentation.common.createToast
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -143,9 +143,7 @@ class MainMenuActivity : AppCompatActivity() {
 
     override fun onBackPressed() =
         when (findNavController(R.id.fragmentContainerView).graph.startDestinationId) {
-            findNavController(R.id.fragmentContainerView).currentDestination?.id -> {
-                createBackButtonDelay()
-            }
+            R.id.mainScreen -> createBackButtonDelay()
             else -> onBackPressedDispatcher.onBackPressed()
         }
 

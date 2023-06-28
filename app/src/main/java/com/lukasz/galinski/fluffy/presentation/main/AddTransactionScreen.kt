@@ -19,7 +19,7 @@ import com.lukasz.galinski.core.domain.TransactionCategories
 import com.lukasz.galinski.core.domain.TransactionType
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.TransactionAddLayoutBinding
-import com.lukasz.galinski.fluffy.presentation.createToast
+import com.lukasz.galinski.fluffy.presentation.common.createToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -97,20 +97,24 @@ class AddTransactionScreen : Fragment() {
     }
 
     private fun createTransactionTypeView(transactionType: String) {
-        if (transactionType == TransactionType.INCOME.label) {
-            transactionScreenBinding.onboardingTitle.text = resources.getString(
-                R.string.add_new_income_label
-            )
-            transactionScreenBinding.transactionAddMain.setBackgroundColor(
-                ResourcesCompat.getColor(resources, R.color.dark_green, null)
-            )
-        } else {
-            transactionScreenBinding.onboardingTitle.text = resources.getString(
-                R.string.add_new_expense_label
-            )
-            transactionScreenBinding.transactionAddMain.setBackgroundColor(
-                ResourcesCompat.getColor(resources, R.color.dark_red, null)
-            )
+        when (transactionType) {
+            TransactionType.INCOME.label -> {
+                transactionScreenBinding.onboardingTitle.text = resources.getString(
+                    R.string.add_new_income_label
+                )
+                transactionScreenBinding.transactionAddMain.setBackgroundColor(
+                    ResourcesCompat.getColor(resources, R.color.dark_green, null)
+                )
+            }
+
+            TransactionType.OUTCOME.label -> {
+                transactionScreenBinding.onboardingTitle.text = resources.getString(
+                    R.string.add_new_expense_label
+                )
+                transactionScreenBinding.transactionAddMain.setBackgroundColor(
+                    ResourcesCompat.getColor(resources, R.color.dark_red, null)
+                )
+            }
         }
     }
 

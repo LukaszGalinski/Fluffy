@@ -5,10 +5,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import com.lukasz.galinski.fluffy.presentation.account.AppEntryPoint
-import com.lukasz.galinski.fluffy.presentation.account.LoginEntryPoint
 import com.lukasz.galinski.fluffy.presentation.account.AccountHostActivity
 import com.lukasz.galinski.fluffy.presentation.account.login.LoginViewModel
+import com.lukasz.galinski.fluffy.presentation.common.AppEntryPoint
+import com.lukasz.galinski.fluffy.presentation.common.LoginEntryPoint
 import com.lukasz.galinski.fluffy.presentation.main.MainMenuActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first

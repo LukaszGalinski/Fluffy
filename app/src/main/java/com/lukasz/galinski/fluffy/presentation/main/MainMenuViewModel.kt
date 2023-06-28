@@ -12,7 +12,7 @@ import com.lukasz.galinski.fluffy.framework.database.transaction.TransactionUseC
 import com.lukasz.galinski.fluffy.framework.database.user.UserUseCases
 import com.lukasz.galinski.fluffy.framework.di.DispatchersModule
 import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
-import com.lukasz.galinski.fluffy.presentation.account.AppEntryPoint
+import com.lukasz.galinski.fluffy.presentation.common.AppEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow

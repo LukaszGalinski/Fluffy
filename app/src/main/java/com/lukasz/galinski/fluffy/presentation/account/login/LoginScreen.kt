@@ -15,11 +15,11 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.LoginScreenFragmentBinding
-import com.lukasz.galinski.fluffy.presentation.account.highlightSelectedTextRange
-import com.lukasz.galinski.fluffy.presentation.createToast
+import com.lukasz.galinski.fluffy.presentation.common.highlightSelectedTextRange
+import com.lukasz.galinski.fluffy.presentation.common.createToast
 import com.lukasz.galinski.fluffy.presentation.main.MainMenuActivity
-import com.lukasz.galinski.fluffy.presentation.setGone
-import com.lukasz.galinski.fluffy.presentation.setVisible
+import com.lukasz.galinski.fluffy.presentation.common.setGone
+import com.lukasz.galinski.fluffy.presentation.common.setVisible
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val MARKED_SPANS_COUNT = 7

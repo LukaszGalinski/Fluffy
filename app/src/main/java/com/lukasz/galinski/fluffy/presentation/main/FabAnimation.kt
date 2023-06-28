@@ -3,8 +3,8 @@ package com.lukasz.galinski.fluffy.presentation.main
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.view.View
-import com.lukasz.galinski.fluffy.presentation.setGone
-import com.lukasz.galinski.fluffy.presentation.setVisible
+import com.lukasz.galinski.fluffy.presentation.common.setGone
+import com.lukasz.galinski.fluffy.presentation.common.setVisible
 
 private const val ROTATE_DURATION = 200L
 private const val ROTATE_ANGLE = 270f
