@@ -1,13 +1,10 @@
 package com.lukasz.galinski.fluffy
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.lukasz.galinski.core.data.User
+import com.lukasz.galinski.core.domain.BaseResult
 import com.lukasz.galinski.fluffy.framework.database.user.UserUseCases
 import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
-import com.lukasz.galinski.fluffy.presentation.account.Idle
-import com.lukasz.galinski.fluffy.presentation.account.Loading
-import com.lukasz.galinski.fluffy.presentation.account.RegisterStates
-import com.lukasz.galinski.fluffy.presentation.account.RegisterSuccess
+import com.lukasz.galinski.fluffy.presentation.account.login.LoginUiState
 import com.lukasz.galinski.fluffy.presentation.account.login.LoginViewModel
 import io.mockk.coEvery
 import io.mockk.coJustRun
@@ -38,8 +35,7 @@ import org.junit.Test
 class LoginViewModelUnitTest {
     private val testDispatcher = StandardTestDispatcher()
     private val mockedUserCases = mockk<UserUseCases>()
-    private val mockedUser = mockk<User>()
-    private val userPreferences = mockk<PreferencesData>()
+    private val userPreferences = mockk<PreferencesData>(relaxed = true)
     private lateinit var loginViewModel: LoginViewModel
     private val userNameLogin = "admin"
     private val userNamePassword = "admin"
@@ -61,17 +57,27 @@ class LoginViewModelUnitTest {
     }
 
     @Test
-    fun checkLoginSuccessReturnedOnCorrectLoginDetails() {
+    fun checkLoginSuccessReturnedOnCorrectLoginDetails() = runTest {
         setLoginOutputFromRepository(10)
 
-        runTest {
-            loginViewModel.loginUser(userNameLogin, userNamePassword)
-            advanceUntilIdle()
-        }
+        coEvery { mockedUserCases.addUser(any()) }.returns(flowOf(5))
 
-        val loggedUser =
-            getPrivateFieldValue(loginViewModel, "currentlyLoggedUserId", Long::class.java)
-        assertEquals(10L, loggedUser)
+        val statesList = mutableListOf<LoginUiState>()
+
+        val job = loginViewModel.loginUiEvent
+            .onEach { statesList.add(it) }
+            .launchIn(CoroutineScope(UnconfinedTestDispatcher(testScheduler)))
+
+        loginViewModel.loginUser(userNameLogin, userNamePassword)
+        advanceUntilIdle()
+
+        assertEquals(statesList[0], LoginUiState.Idle)
+        assertEquals(statesList[1], LoginUiState.IsLoading(true))
+        assertEquals(statesList[2], LoginUiState.IsLoading(false))
+        assertEquals(statesList[3], LoginUiState.LoginSuccess)
+        assertEquals(statesList[4], LoginUiState.Idle)
+
+        job.cancel()
     }
 
     @Test
@@ -86,40 +92,6 @@ class LoginViewModelUnitTest {
     }
 
     @Test
-    fun checkButtonStateChange() {
-        runTest {
-            loginViewModel.setSaveButtonState(true)
-            assertEquals(true, loginViewModel.saveButtonState.value)
-
-            loginViewModel.setSaveButtonState(false)
-            assertEquals(false, loginViewModel.saveButtonState.value)
-        }
-    }
-
-    @Test
-    fun checkRegisterSuccessFlowReturnedOnUserAdded() = runTest {
-        coEvery { mockedUserCases.addUser(any()) }.returns(flowOf(5))
-
-        val statesList = mutableListOf<RegisterStates>()
-
-        val job = loginViewModel.userRegisterStates
-            .onEach { statesList.add(it) }
-            .launchIn(CoroutineScope(UnconfinedTestDispatcher(testScheduler)))
-
-        loginViewModel.saveUserIntoDatabase(mockedUser)
-        advanceUntilIdle()
-
-        assertEquals(statesList[0], Idle)
-        assertEquals(statesList[1], Loading)
-        assertEquals(statesList[2], RegisterSuccess(5))
-        assertEquals(statesList[3], Idle)
-
-        job.cancel()
-    }
-
-
-
-    @Test
     fun checkLoggedUserIdReturned() {
         every { userPreferences.getLoggedUser() }.returns(flowOf(5))
 
@@ -132,7 +104,7 @@ class LoginViewModelUnitTest {
     private fun setLoginOutputFromRepository(value: Long) {
         every { mockedUserCases.loginUser(any(), any()) }
             .returns(flow {
-                emit(value)
+                emit(BaseResult.Success(value))
             })
     }
 }

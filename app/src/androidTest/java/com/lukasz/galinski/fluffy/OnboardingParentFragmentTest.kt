@@ -21,7 +21,6 @@ import org.junit.Test
 @HiltAndroidTest
 class OnboardingParentFragmentTest {
 
-    private val onboardingParentFragment: OnboardingParentFragment = OnboardingParentFragment()
     private val navController = mockk<NavController>(relaxed = true)
 
     @get:Rule
@@ -32,14 +31,13 @@ class OnboardingParentFragmentTest {
         hiltRule.inject()
 
         launchFragmentInHiltContainer<OnboardingParentFragment> {
-            onboardingParentFragment
             Navigation.setViewNavController(this.requireView(), navController)
         }
     }
 
     @Test
     fun checkRegisterButtonText() {
-        onView(withId(R.id.onboarding_register_button)).check(matches(withText(R.string.register)))
+        onView(withId(R.id.onboarding_register_button)).check(matches(withText("Sign Up")))
     }
 
     @Test
@@ -51,7 +49,7 @@ class OnboardingParentFragmentTest {
 
     @Test
     fun checkLoginButtonDisplayed() {
-        onView(withId(R.id.onboarding_login_button)).check(matches(withText(R.string.login)))
+        onView(withId(R.id.onboarding_login_button)).check(matches(withText("Login")))
     }
 
     @Test
@@ -63,19 +61,16 @@ class OnboardingParentFragmentTest {
 
     @Test
     fun checkTitleTextOnInitialScreen() {
-        onView(withId(R.id.onboarding_title))
-            .check(matches(withText(R.string.onBoarding_one_title)))
+        onView(withId(R.id.onboarding_title)).check(matches(withText("Gain total control of your money")))
     }
 
     @Test
     fun checkSubTitleTextOnInitialScreen() {
-        onView(withId(R.id.onboarding_subTitle))
-            .check(matches(withText(R.string.onBoarding_one_subtitle)))
+        onView(withId(R.id.onboarding_subTitle)).check(matches(withText("Become your own money manager and make every cent count")))
     }
 
     @Test
     fun checkImageTagOnSeparateScreens() {
-        onView(withId(R.id.onboarding_logo))
-            .check(matches(withTagValue(equalTo(R.drawable.onboarding_one_logo))))
+        onView(withId(R.id.onboarding_logo)).check(matches(withTagValue(equalTo(R.drawable.onboarding_one_logo))))
     }
 }

@@ -36,10 +36,10 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class MainMenuViewModelUnitTest {
     private val testDispatcher = StandardTestDispatcher()
-    private val transactionRepository = mockk<TransactionUseCases>()
+    private val transactionRepository = mockk<TransactionUseCases>(relaxed = true)
     private val userRepository = mockk<UserUseCases>()
     private val mockedUser = mockk<User>()
-    private val userPreferences = mockk<PreferencesData>()
+    private val userPreferences = mockk<PreferencesData>(relaxed = true)
     private val mockedTransaction = mockk<Transaction>(relaxed = true)
     private val mockedDateTimeOperations = spyk<DateTimeOperations>()
     private lateinit var mainMenuViewModel: MainMenuViewModel
