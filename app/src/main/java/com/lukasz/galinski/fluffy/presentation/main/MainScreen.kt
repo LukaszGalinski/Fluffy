@@ -2,6 +2,8 @@ package com.lukasz.galinski.fluffy.presentation.main
 
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,8 +19,10 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.lukasz.galinski.core.data.Transaction
 import com.lukasz.galinski.core.domain.TransactionType
+import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.MainMenuFragmentBinding
 import com.lukasz.galinski.fluffy.presentation.common.createToast
+import com.lukasz.galinski.fluffy.presentation.common.handleBackPress
 import com.lukasz.galinski.fluffy.presentation.common.setGone
 import com.lukasz.galinski.fluffy.presentation.common.setVisible
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,10 +35,13 @@ class MainScreen : Fragment() {
     private val mainMenuBinding get() = _mainMenuBinding!!
     private val hostViewModel: MainMenuViewModel by activityViewModels()
     private var transactionAdapter = TransactionsAdapter()
-    private val fabAnimation = FabAnimation()
-    private var isRotate = false
+    private lateinit var fabAnimation: FabAnimation
+    private var doubleCheckButton = false
+    private var handler = Handler(Looper.getMainLooper())
+    private lateinit var runnable: Runnable
 
     companion object {
+        private const val BACK_BUTTON_DELAY = 1000L
         private const val MAIN_MENU_TAG = "MainMenuFragment"
     }
 
@@ -53,11 +60,14 @@ class MainScreen : Fragment() {
             lifecycleOwner = viewLifecycleOwner
             mainViewModel = hostViewModel
             transactions.adapter = transactionAdapter
+            fabAnimation = FabAnimation(listOf(fabIncome, fabOutcome))
         }
+
+        runnable = Runnable { doubleCheckButton = false }
+        handleBackPress { createBackButtonDelay() }
 
         createBottomNavigation()
         createFabAnimationButton()
-        initFabButtonsView()
         observeUiEvents()
         observeDataStream()
     }
@@ -66,8 +76,8 @@ class MainScreen : Fragment() {
         viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
             hostViewModel.viewEvent.collect {
                 when (it) {
-                    is MainMenuEvent.ShowFabAnimation -> showInFabButtons()
-                    is MainMenuEvent.HideFabAnimation -> showOutFabButtons()
+                    is MainMenuEvent.ShowFabAnimation -> fabAnimation.showInFabButtons()
+                    is MainMenuEvent.HideFabAnimation -> fabAnimation.showOutFabButtons()
                     is MainMenuEvent.DisplayToast -> {
                         requireContext().createToast(it.message)
                     }
@@ -100,7 +110,6 @@ class MainScreen : Fragment() {
         }
     }
 
-
     private fun configureLineChart(data: MutableList<Transaction>) {
         val entryList = ArrayList<Entry>()
 
@@ -131,7 +140,8 @@ class MainScreen : Fragment() {
 
     private fun createFabAnimationButton() {
         mainMenuBinding.floatingButton.setOnClickListener {
-            setFabAnimation(it, fabAnimation)
+            fabAnimation.setFabAnimation(it, !hostViewModel.isRotate.value)
+            hostViewModel.updateFabAnimation()
         }
 
         mainMenuBinding.fabIncome.setOnClickListener {
@@ -146,37 +156,22 @@ class MainScreen : Fragment() {
     }
 
     private fun createNavigateToNewTransaction(transactionType: String) {
-        val action = MainScreenDirections.actionMainScreenToAddTransactionScreen(transactionType)
-        findNavController().navigate(action)
+        findNavController().navigate(MainScreenDirections.actionMainScreenToAddTransactionScreen(transactionType))
     }
 
-    private fun setFabAnimation(view: View, fabAnimation: FabAnimation) {
-        isRotate = fabAnimation.rotateFab(view, !isRotate)
-        hostViewModel.updateFabAnimation(isRotate)
-    }
-
-    private fun showInFabButtons() {
-        with(mainMenuBinding) {
-            fabAnimation.showIn(fabIncome)
-            fabAnimation.showIn(fabOutcome)
+    private fun createBackButtonDelay() {
+        if (doubleCheckButton) {
+            activity?.finishAndRemoveTask()
+            activity?.finishAffinity()
+            return
         }
-    }
-
-    private fun showOutFabButtons() {
-        with(mainMenuBinding) {
-            fabAnimation.showOut(fabIncome)
-            fabAnimation.showOut(fabOutcome)
-        }
-    }
-
-    private fun initFabButtonsView() {
-        with(mainMenuBinding) {
-            fabAnimation.init(fabIncome)
-            fabAnimation.init(fabOutcome)
-        }
+        doubleCheckButton = true
+        requireContext().createToast(resources.getString(R.string.double_press_to_exit))
+        handler.postDelayed(runnable, BACK_BUTTON_DELAY)
     }
 
     override fun onDestroy() {
+        handler.removeCallbacksAndMessages(runnable)
         _mainMenuBinding = null
         super.onDestroy()
     }

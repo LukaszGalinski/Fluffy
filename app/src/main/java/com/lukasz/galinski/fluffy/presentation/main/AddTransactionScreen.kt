@@ -20,6 +20,7 @@ import com.lukasz.galinski.core.domain.TransactionType
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.TransactionAddLayoutBinding
 import com.lukasz.galinski.fluffy.presentation.common.createToast
+import com.lukasz.galinski.fluffy.presentation.common.handleBackPress
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -52,6 +53,7 @@ class AddTransactionScreen : Fragment() {
         buildCategoryList()
         buildWalletList()
         observeAddNewTransactionResult()
+        handleBackPress { findNavController().popBackStack()}
 
         transactionScreenBinding.addNewTransaction.setOnClickListener {
             addNewTransaction(getTransactionDetailsFromFields(arguments.transactionTypeArgument))

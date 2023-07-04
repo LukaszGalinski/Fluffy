@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -15,11 +14,12 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.LoginScreenFragmentBinding
-import com.lukasz.galinski.fluffy.presentation.common.highlightSelectedTextRange
 import com.lukasz.galinski.fluffy.presentation.common.createToast
-import com.lukasz.galinski.fluffy.presentation.main.MainMenuActivity
+import com.lukasz.galinski.fluffy.presentation.common.handleBackPress
+import com.lukasz.galinski.fluffy.presentation.common.highlightSelectedTextRange
 import com.lukasz.galinski.fluffy.presentation.common.setGone
 import com.lukasz.galinski.fluffy.presentation.common.setVisible
+import com.lukasz.galinski.fluffy.presentation.main.MainMenuActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val MARKED_SPANS_COUNT = 7
@@ -49,7 +49,7 @@ class LoginScreen : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         handleLoginStates()
-        handleBackPress()
+        handleBackPress { handleBackPress() }
         runnable = Runnable { doubleCheckButton = false }
 
         with(loginBinding.createAccountInfo) {
@@ -73,12 +73,10 @@ class LoginScreen : Fragment() {
     }
 
     private fun handleBackPress() {
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            when (findNavController().currentDestination?.id) {
-                R.id.loginScreen -> createBackButtonDelay()
-                R.id.registerScreen -> findNavController().navigate(R.id.action_registerScreen_to_loginScreen)
-                else -> findNavController().popBackStack()
-            }
+        when (findNavController().currentDestination?.id) {
+            R.id.loginScreen -> createBackButtonDelay()
+            R.id.registerScreen -> findNavController().navigate(R.id.action_registerScreen_to_loginScreen)
+            else -> findNavController().popBackStack()
         }
     }
 

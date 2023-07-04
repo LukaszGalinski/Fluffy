@@ -63,10 +63,13 @@ class MainMenuViewModel @Inject constructor(
     private var _userID = MutableStateFlow(0L)
     val userID: StateFlow<Long> = _userID
 
+    private var _isRotate = MutableStateFlow(false)
+    val isRotate: StateFlow<Boolean> = _isRotate
+
     init {
         viewModelScope.launch {
             sharedPreferencesData.getLoggedUser().collect {
-                if (it != null) {
+                it?.let {
                     _userID.value = it
                     getUserDetails(it)
                     getTransactionsList(it)
@@ -169,10 +172,13 @@ class MainMenuViewModel @Inject constructor(
 
     fun getRecentTransactionsList() = _transactionList.value.take(RECENT_TRANSACTIONS_LIMIT)
 
-    fun updateFabAnimation(status: Boolean) = if (status) {
-        _viewEvent.value = MainMenuEvent.ShowFabAnimation
-    } else {
-        _viewEvent.value = MainMenuEvent.HideFabAnimation
+    fun updateFabAnimation() {
+        _isRotate.value = !_isRotate.value
+        if (_isRotate.value) {
+            _viewEvent.value = MainMenuEvent.ShowFabAnimation
+        } else {
+            _viewEvent.value = MainMenuEvent.HideFabAnimation
+        }
     }
 
     private fun showToast(message: String) {

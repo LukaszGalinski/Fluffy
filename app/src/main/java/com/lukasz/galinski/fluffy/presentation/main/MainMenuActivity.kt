@@ -3,29 +3,24 @@ package com.lukasz.galinski.fluffy.presentation.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.MainHostLayoutBinding
 import com.lukasz.galinski.fluffy.presentation.account.AccountHostActivity
 import com.lukasz.galinski.fluffy.presentation.common.LoginEntryPoint
-import com.lukasz.galinski.fluffy.presentation.common.createToast
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainMenuActivity : AppCompatActivity() {
 
     companion object {
-        private const val BACK_BUTTON_DELAY = 1000L
+
         private const val MAIN_MENU_TAG = "MainMenuActivity"
 
         fun createIntent(context: Context): Intent {
@@ -36,17 +31,13 @@ class MainMenuActivity : AppCompatActivity() {
     private var _mainMenuHostBinding: MainHostLayoutBinding? = null
     private val hostViewModel: MainMenuViewModel by viewModels()
     private val mainMenuHostBinding get() = _mainMenuHostBinding!!
-    private var doubleCheckButton = false
-    private var handler = Handler(Looper.getMainLooper())
-    private lateinit var runnable: Runnable
-    lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
+
+    private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _mainMenuHostBinding = MainHostLayoutBinding.inflate(layoutInflater)
         setContentView(mainMenuHostBinding.root)
-
-        runnable = Runnable { doubleCheckButton = false }
 
         createMonthSpinner()
         createDrawerMenu()
@@ -133,34 +124,7 @@ class MainMenuActivity : AppCompatActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            true
-        } else {
-            super.onOptionsItemSelected(item)
-        }
-    }
-
-    override fun onBackPressed() =
-        when (findNavController(R.id.fragmentContainerView).graph.startDestinationId) {
-            R.id.mainScreen -> createBackButtonDelay()
-            else -> onBackPressedDispatcher.onBackPressed()
-        }
-
-    private fun createBackButtonDelay() {
-        if (doubleCheckButton) {
-            finishAndRemoveTask()
-            finishAffinity()
-            return
-        }
-        doubleCheckButton = true
-        this.createToast(resources.getString(R.string.double_press_to_exit))
-        handler.postDelayed(runnable, BACK_BUTTON_DELAY)
-    }
-
     override fun onDestroy() {
-        handler.removeCallbacks(runnable)
-        handler.removeCallbacksAndMessages(Unit)
         _mainMenuHostBinding = null
         super.onDestroy()
     }

@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -17,6 +16,7 @@ import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.OnboardingScreenLayoutBinding
 import com.lukasz.galinski.fluffy.presentation.account.login.LoginViewModel
 import com.lukasz.galinski.fluffy.presentation.common.AppEntryPoint
+import com.lukasz.galinski.fluffy.presentation.common.handleBackPress
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -45,17 +45,11 @@ class OnboardingParentFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        handleBackPress()
+        handleBackPress { onboardingViewModel.swipeBackIfPossible() }
         observeUiEvent()
         buildViewPager()
         buildStepsIndication()
         setButtons()
-    }
-
-    private fun handleBackPress() {
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            onboardingViewModel.swipeBackIfPossible()
-        }
     }
 
     private fun observeUiEvent() {
