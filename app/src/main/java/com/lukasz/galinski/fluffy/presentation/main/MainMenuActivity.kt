@@ -7,12 +7,12 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.MainHostLayoutBinding
 import com.lukasz.galinski.fluffy.presentation.account.AccountHostActivity
 import com.lukasz.galinski.fluffy.presentation.common.LoginEntryPoint
+import com.lukasz.galinski.fluffy.presentation.common.logDebug
 import com.lukasz.galinski.fluffy.presentation.common.logInfo
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,8 +29,6 @@ class MainMenuActivity : AppCompatActivity() {
     private val hostViewModel: MainMenuViewModel by viewModels()
     private val mainMenuHostBinding get() = _mainMenuHostBinding!!
 
-    private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _mainMenuHostBinding = MainHostLayoutBinding.inflate(layoutInflater)
@@ -38,23 +36,22 @@ class MainMenuActivity : AppCompatActivity() {
 
         createMonthSpinner()
         createDrawerMenu()
-        showSpinnerItemsOnImagePressed()
         setupTopBar()
     }
 
     private fun createDrawerMenu() {
         val drawerLayout = mainMenuHostBinding.mainMenuDrawerRoot
-        actionBarDrawerToggle = ActionBarDrawerToggle(
-            this,
-            mainMenuHostBinding.mainMenuDrawerRoot,
-            R.string.nav_open,
-            R.string.nav_close
-        )
-        drawerLayout.addDrawerListener(actionBarDrawerToggle)
-        actionBarDrawerToggle.syncState()
 
         mainMenuHostBinding.materialTopBar.setNavigationOnClickListener {
             drawerLayout.open()
+        }
+
+        mainMenuHostBinding.drawerNavigation.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.notification_simulation_1 -> logDebug("Simulate single notification")
+                R.id.notification_simulation_99 -> logDebug("Simulate 99 notifications")
+            }
+            true
         }
     }
 
@@ -68,55 +65,37 @@ class MainMenuActivity : AppCompatActivity() {
 
     private fun setupTopBar() {
         mainMenuHostBinding.materialTopBar.setOnMenuItemClickListener { menuItem ->
-            logInfo(menuItem.itemId.toString())
-
             when (menuItem.itemId) {
-                R.id.notifications -> {
-                    true
-                }
-
+                R.id.notifications -> Unit
                 R.id.logout -> {
                     hostViewModel.logoutUser()
                     finishAfterTransition()
                     startActivity(AccountHostActivity.createIntent(this, LoginEntryPoint.LOGIN))
-                    true
                 }
-
-                else -> false
             }
-        }
-    }
-
-    private fun showSpinnerItemsOnImagePressed() {
-        mainMenuHostBinding.spinnerIcon.setOnClickListener {
-            mainMenuHostBinding.monthSpinner.performClick()
+            logInfo(menuItem.itemId.toString())
+            true
         }
     }
 
     private fun createMonthSpinner() {
-        val currentMonth = hostViewModel.getCurrentMonth()
-        val monthArray = resources.getStringArray(R.array.months_of_year)
-
-        val spinnerAdapter: ArrayAdapter<String?> = object :
-            ArrayAdapter<String?>(this, R.layout.spinner_adapter_view, monthArray) {
+        mainMenuHostBinding.spinnerIcon.setOnClickListener {
+            mainMenuHostBinding.monthSpinner.performClick()
         }
 
-        val dropdown = mainMenuHostBinding.monthSpinner
-        dropdown.adapter = spinnerAdapter
-        dropdown.setSelection(currentMonth)
+        val spinnerAdapter =
+            ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, resources.getStringArray(R.array.months_of_year))
 
-        dropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                logInfo("positionSelected: ${(position + 1)}")
-            }
+        mainMenuHostBinding.monthSpinner.apply {
+            adapter = spinnerAdapter
+            setSelection(hostViewModel.getCurrentMonth())
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                return
+            onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    logInfo("positionSelected: ${(position + 1)}")
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) = Unit
             }
         }
     }

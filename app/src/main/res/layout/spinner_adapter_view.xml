@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:paddingHorizontal="@dimen/margin_default_8"
-    android:paddingVertical="@dimen/margin_default_8"
-    android:textSize="@dimen/onboarding_subtitle_text_size" />
