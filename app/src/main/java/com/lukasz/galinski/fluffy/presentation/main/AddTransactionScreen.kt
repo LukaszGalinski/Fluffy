@@ -1,7 +1,6 @@
 package com.lukasz.galinski.fluffy.presentation.main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +20,8 @@ import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.TransactionAddLayoutBinding
 import com.lukasz.galinski.fluffy.presentation.common.createToast
 import com.lukasz.galinski.fluffy.presentation.common.handleBackPress
+import com.lukasz.galinski.fluffy.presentation.common.logError
+import com.lukasz.galinski.fluffy.presentation.common.logInfo
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -129,18 +130,18 @@ class AddTransactionScreen : Fragment() {
             hostViewModel.singleTimeEvent.collect { status ->
                 when (status) {
                     SingleTimeEvent.Success -> {
-                        Log.i(ADD_TRANSACTION_TAG, status.toString())
+                        logInfo(status.toString())
                         showToast(R.string.transaction_add_success)
                         findNavController().popBackStack()
                     }
 
                     is SingleTimeEvent.Failure -> {
-                        Log.i(ADD_TRANSACTION_TAG, status.message)
+                        logError(status.message)
                         showToast(R.string.transaction_add_failure)
                     }
 
                     SingleTimeEvent.Neutral ->
-                        Log.i(ADD_TRANSACTION_TAG, status.toString())
+                        logInfo(status.toString())
 
                 }
             }

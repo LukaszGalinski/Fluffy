@@ -1,7 +1,6 @@
 package com.lukasz.galinski.fluffy.presentation.account.register
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +12,10 @@ import com.google.android.material.textfield.TextInputLayout
 import com.lukasz.galinski.core.data.User
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.RegisterScreenFragmentBinding
-import com.lukasz.galinski.fluffy.presentation.common.highlightSelectedTextRange
 import com.lukasz.galinski.fluffy.presentation.common.createToast
+import com.lukasz.galinski.fluffy.presentation.common.highlightSelectedTextRange
+import com.lukasz.galinski.fluffy.presentation.common.logError
+import com.lukasz.galinski.fluffy.presentation.common.logInfo
 import com.lukasz.galinski.fluffy.presentation.common.markAs
 import com.lukasz.galinski.fluffy.presentation.common.setGone
 import com.lukasz.galinski.fluffy.presentation.common.setStateAppearance
@@ -82,7 +83,7 @@ class RegisterScreen : Fragment() {
                 }
 
                 is RegisterUiEvent.DisplayToast -> {
-                    Log.i(STATE_TAG, state.exception.message.toString())
+                    logError(state.exception.message.toString())
                     showToast(getString(R.string.email_occupied))
                 }
 
@@ -94,7 +95,7 @@ class RegisterScreen : Fragment() {
                 is RegisterUiEvent.Idle -> Unit
 
             }
-            Log.i(STATE_TAG, state.toString())
+            logInfo(state.toString())
         }
     }
 

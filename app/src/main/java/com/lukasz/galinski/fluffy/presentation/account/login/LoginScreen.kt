@@ -3,7 +3,6 @@ package com.lukasz.galinski.fluffy.presentation.account.login
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +16,7 @@ import com.lukasz.galinski.fluffy.databinding.LoginScreenFragmentBinding
 import com.lukasz.galinski.fluffy.presentation.common.createToast
 import com.lukasz.galinski.fluffy.presentation.common.handleBackPress
 import com.lukasz.galinski.fluffy.presentation.common.highlightSelectedTextRange
+import com.lukasz.galinski.fluffy.presentation.common.logInfo
 import com.lukasz.galinski.fluffy.presentation.common.setGone
 import com.lukasz.galinski.fluffy.presentation.common.setVisible
 import com.lukasz.galinski.fluffy.presentation.main.MainMenuActivity
@@ -113,7 +113,7 @@ class LoginScreen : Fragment() {
 
                 LoginUiState.Idle -> Unit
             }
-            Log.i(STATE_TAG, it.toString())
+            logInfo(it.toString())
         }
     }
 

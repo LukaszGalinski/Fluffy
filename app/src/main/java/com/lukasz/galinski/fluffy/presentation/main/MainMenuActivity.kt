@@ -3,7 +3,6 @@ package com.lukasz.galinski.fluffy.presentation.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -14,6 +13,7 @@ import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.MainHostLayoutBinding
 import com.lukasz.galinski.fluffy.presentation.account.AccountHostActivity
 import com.lukasz.galinski.fluffy.presentation.common.LoginEntryPoint
+import com.lukasz.galinski.fluffy.presentation.common.logInfo
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -71,7 +71,7 @@ class MainMenuActivity : AppCompatActivity() {
 
     private fun setupTopBar() {
         mainMenuHostBinding.materialTopBar.setOnMenuItemClickListener { menuItem ->
-            Log.i(MAIN_MENU_TAG, menuItem.itemId.toString())
+            logInfo(menuItem.itemId.toString())
 
             when (menuItem.itemId) {
                 R.id.notifications -> {
@@ -115,7 +115,7 @@ class MainMenuActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                Log.i(MAIN_MENU_TAG, (position + 1).toString())
+                logInfo("positionSelected: ${(position + 1)}")
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {

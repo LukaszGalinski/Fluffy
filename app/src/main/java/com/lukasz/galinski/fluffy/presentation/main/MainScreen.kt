@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +22,7 @@ import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.MainMenuFragmentBinding
 import com.lukasz.galinski.fluffy.presentation.common.createToast
 import com.lukasz.galinski.fluffy.presentation.common.handleBackPress
+import com.lukasz.galinski.fluffy.presentation.common.logInfo
 import com.lukasz.galinski.fluffy.presentation.common.setGone
 import com.lukasz.galinski.fluffy.presentation.common.setVisible
 import dagger.hilt.android.AndroidEntryPoint
@@ -82,7 +82,7 @@ class MainScreen : Fragment() {
                         requireContext().createToast(it.message)
                     }
 
-                    is MainMenuEvent.Idle -> Log.i(MAIN_MENU_TAG, it.toString())
+                    is MainMenuEvent.Idle -> logInfo(it.toString())
                     is MainMenuEvent.IsLoading -> when (it.isLoading) {
                         true -> mainMenuBinding.mainScreenProgressBar.setVisible()
                         false -> mainMenuBinding.mainScreenProgressBar.setGone()

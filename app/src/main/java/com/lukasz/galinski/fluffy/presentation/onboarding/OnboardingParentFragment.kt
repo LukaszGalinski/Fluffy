@@ -1,7 +1,6 @@
 package com.lukasz.galinski.fluffy.presentation.onboarding
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +16,7 @@ import com.lukasz.galinski.fluffy.databinding.OnboardingScreenLayoutBinding
 import com.lukasz.galinski.fluffy.presentation.account.login.LoginViewModel
 import com.lukasz.galinski.fluffy.presentation.common.AppEntryPoint
 import com.lukasz.galinski.fluffy.presentation.common.handleBackPress
+import com.lukasz.galinski.fluffy.presentation.common.logInfo
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -60,7 +60,7 @@ class OnboardingParentFragment : Fragment() {
                         viewPager.currentItem += -1
                     }
 
-                    is OnboardingUiState.Idle -> Log.i(ONBOARDING_PAGE_TAG, it.toString())
+                    is OnboardingUiState.Idle -> logInfo(it.toString())
                 }
             }
         }
