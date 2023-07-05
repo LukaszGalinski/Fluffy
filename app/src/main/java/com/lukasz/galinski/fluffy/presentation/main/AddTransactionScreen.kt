@@ -28,10 +28,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class AddTransactionScreen : Fragment() {
 
-    companion object {
-        private const val ADD_TRANSACTION_TAG = "AddNewTransaction"
-    }
-
     private var _transactionScreenBinding: TransactionAddLayoutBinding? = null
     private val transactionScreenBinding get() = _transactionScreenBinding!!
     private val hostViewModel: MainMenuViewModel by activityViewModels()

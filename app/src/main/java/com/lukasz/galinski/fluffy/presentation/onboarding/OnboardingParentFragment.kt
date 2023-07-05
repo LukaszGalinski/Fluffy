@@ -23,10 +23,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class OnboardingParentFragment : Fragment() {
 
-    companion object {
-        private const val ONBOARDING_PAGE_TAG = "OnboardingPageFragment"
-    }
-
     private lateinit var viewPager: ViewPager2
     private var _onboardingViewBinding: OnboardingScreenLayoutBinding? = null
     private val onboardingViewBinding get() = _onboardingViewBinding!!

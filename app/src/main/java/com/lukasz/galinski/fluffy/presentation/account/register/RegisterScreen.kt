@@ -29,7 +29,6 @@ class RegisterScreen : Fragment() {
         private const val HIGHLIGHTED_TERMS_SPANS_COUNT = 35
         private const val HIGHLIGHTED_LOGIN_SPANS_COUNT = 5
         private const val HIGHLIGHTED_COLOR = "#7F3DFF"
-        private const val STATE_TAG = "RegisterScreen"
     }
 
     private var _registerBinding: RegisterScreenFragmentBinding? = null

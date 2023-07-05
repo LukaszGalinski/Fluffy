@@ -24,7 +24,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 private const val MARKED_SPANS_COUNT = 7
 private const val HIGHLIGHTED_COLOR = "#7F3DFF"
-private const val STATE_TAG = "LoginScreen"
 private const val BACK_BUTTON_DELAY = 1000L
 
 @AndroidEntryPoint

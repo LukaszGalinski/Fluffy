@@ -42,7 +42,6 @@ class MainScreen : Fragment() {
 
     companion object {
         private const val BACK_BUTTON_DELAY = 1000L
-        private const val MAIN_MENU_TAG = "MainMenuFragment"
     }
 
     override fun onCreateView(

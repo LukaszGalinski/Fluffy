@@ -20,9 +20,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainMenuActivity : AppCompatActivity() {
 
     companion object {
-
-        private const val MAIN_MENU_TAG = "MainMenuActivity"
-
         fun createIntent(context: Context): Intent {
             return Intent(context, MainMenuActivity::class.java)
         }

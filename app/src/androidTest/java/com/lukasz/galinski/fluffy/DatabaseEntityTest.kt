@@ -4,11 +4,10 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.lukasz.galinski.core.domain.DateTimeOperations
 import com.lukasz.galinski.fluffy.framework.database.AppDatabase
 import com.lukasz.galinski.fluffy.framework.database.transaction.TransactionsDao
-import com.lukasz.galinski.fluffy.framework.database.user.UserEntity
 import com.lukasz.galinski.fluffy.framework.database.user.UsersDao
-import com.lukasz.galinski.core.domain.DateTimeOperations
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -21,7 +20,6 @@ class DatabaseEntityTest {
     private lateinit var usersDao: UsersDao
     private lateinit var transactionsDao: TransactionsDao
     private lateinit var appDatabase: AppDatabase
-    private lateinit var testUser: UserEntity
     private val dummyUserLogin = "test@test.com"
     private val dummyUserPassword = "test"
 

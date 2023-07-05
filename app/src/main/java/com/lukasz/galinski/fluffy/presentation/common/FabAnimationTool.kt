@@ -26,6 +26,7 @@ class FabAnimationTool {
             .translationY(OFF_VALUE)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
+                    v.setVisible()
                     super.onAnimationEnd(animation)
                 }
             })
