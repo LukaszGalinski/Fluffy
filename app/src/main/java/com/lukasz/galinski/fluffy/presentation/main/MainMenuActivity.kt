@@ -21,6 +21,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainMenuActivity : AppCompatActivity() {
 
+    private lateinit var notification: SubscriptionNotification
+
     companion object {
         fun createIntent(context: Context): Intent {
             return Intent(context, MainMenuActivity::class.java)
@@ -36,9 +38,10 @@ class MainMenuActivity : AppCompatActivity() {
         _mainMenuHostBinding = MainHostLayoutBinding.inflate(layoutInflater)
         setContentView(mainMenuHostBinding.root)
 
+        notification = SubscriptionNotification(this)
+        setupTopBar()
         createMonthSpinner()
         createDrawerMenu()
-        setupTopBar()
     }
 
     private fun createDrawerMenu() {
@@ -50,26 +53,24 @@ class MainMenuActivity : AppCompatActivity() {
 
         mainMenuHostBinding.drawerNavigation.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.notification_simulation_1 -> {
+                R.id.notification_simulation_single -> {
                     logDebug("Simulate single notification")
-                    SubscriptionNotification(this)
-                        .setNotificationTypeId(0)
-                        .setSubscriptionType("Netflix")
-                        .build()
-                }
-
-                R.id.notification_simulation_99 -> {
                     SubscriptionNotification(this)
                         .setNotificationTypeId(1)
                         .setSubscriptionType("Netflix")
                         .build()
-//                    SubscriptionNotification(this)
-//                        .setNotificationTypeId(0)
-//                        .setSubscriptionType("Player")
-//                        .build()
+                }
+
+                R.id.notification_simulation_10 -> {
+                    repeat(10) { times ->
+                        notification.setNotificationTypeId(times + 1)
+                            .setSubscriptionType("TestSubscription")
+                            .build()
+                    }
                     logDebug("Simulate 10 notifications")
                 }
             }
+            drawerLayout.close()
             true
         }
     }

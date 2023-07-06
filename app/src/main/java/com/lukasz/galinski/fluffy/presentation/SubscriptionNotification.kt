@@ -7,10 +7,8 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.pm.PackageManager
-import android.service.notification.StatusBarNotification
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import com.lukasz.galinski.fluffy.R
 
 private const val SUMMARY_ID = 0
@@ -22,10 +20,9 @@ class SubscriptionNotification(private val context: Context) {
     private val notificationName = "Subscription"
     private var subscriptionNotificationTypeId = 0
     private var subscriptionType = "UNKNOWN"
-    private val subscriptionTitle = "Subscription Expiring"
+    private val subscriptionTitle = " subscription expire soon!"
 
     private lateinit var notificationManager: NotificationManager
-    private val notificationBuilder = NotificationCompat.Builder(context, notificationChanel)
 
     init {
         createChanel()
@@ -60,42 +57,30 @@ class SubscriptionNotification(private val context: Context) {
 
     private fun createSingleNotification(): Notification {
         return createBaseNotification()
-            .setContentTitle(subscriptionTitle)
-            .setContentText("Your $subscriptionType Subscription Expiring in 24h")
+            .setSubText(subscriptionType + subscriptionTitle)
+            .setContentTitle("$subscriptionType subscription expire in less than 24h.")
+            .setContentText("Remember to renew or cancel your membership!")
             .build()
     }
 
     private fun createGroupedNotification(subscriptionsNumber: Int): Notification {
         return createBaseNotification()
-
             .setStyle(
                 NotificationCompat.InboxStyle()
-                    .setSummaryText("$subscriptionsNumber Subscriptions Expiring!")
+                    .setSummaryText("$subscriptionsNumber Subscriptions expire soon!")
                     .setBigContentTitle("Your subscriptions will end soon. Please renew or cancel")
             )
+            .setSmallIcon(R.drawable.ic_baseline_dollar_24)
             .setGroupSummary(true)
             .build()
     }
 
     fun build() {
-        if (ActivityCompat.checkSelfPermission(
-                context, Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
             notificationManager.apply {
-                val activeNotifications = activeNotifications.size
-                println("Active: " + activeNotifications)
-                println("Active ID: " + subscriptionNotificationTypeId)
-
-//                if (activeNotifications == 0) {
-//                    notify(subscriptionNotificationTypeId, createSingleNotification())
-//                    return
-//                }
-                notify(1, createSingleNotification())
-//                notify(2, createSingleNotification())
-
-                notify(SUMMARY_ID, createGroupedNotification(activeNotifications))
+                val notificationCount = activeNotifications.size
+                notify(subscriptionNotificationTypeId, createSingleNotification())
+                if (notificationCount > 0) notify(SUMMARY_ID, createGroupedNotification(notificationCount))
             }
         }
     }

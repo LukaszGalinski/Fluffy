@@ -69,6 +69,7 @@
 
     <!--> DEBUG Strings <-->
     <string name="simulate_10_notifications">Simulate 10 notifications</string>
+    <string name="simulate_single_notifications">Simulate single notifications</string>
 
     <string-array name="months_of_year">
         <item>January</item>
