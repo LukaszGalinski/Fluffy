@@ -1,5 +1,6 @@
 package com.lukasz.galinski.fluffy.presentation.main
 
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +11,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.MainHostLayoutBinding
-import com.lukasz.galinski.fluffy.presentation.NotificationBuilder
+import com.lukasz.galinski.fluffy.presentation.SubscriptionNotification
 import com.lukasz.galinski.fluffy.presentation.account.AccountHostActivity
 import com.lukasz.galinski.fluffy.presentation.common.LoginEntryPoint
 import com.lukasz.galinski.fluffy.presentation.common.logDebug
@@ -40,7 +41,6 @@ class MainMenuActivity : AppCompatActivity() {
         setupTopBar()
     }
 
-    private var i = 0
     private fun createDrawerMenu() {
         val drawerLayout = mainMenuHostBinding.mainMenuDrawerRoot
 
@@ -51,15 +51,23 @@ class MainMenuActivity : AppCompatActivity() {
         mainMenuHostBinding.drawerNavigation.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.notification_simulation_1 -> {
-                    NotificationBuilder(this).create()
                     logDebug("Simulate single notification")
+                    SubscriptionNotification(this)
+                        .setNotificationTypeId(0)
+                        .setSubscriptionType("Netflix")
+                        .build()
                 }
 
                 R.id.notification_simulation_99 -> {
-                    for (i in 0..99) {
-                        NotificationBuilder(this).create()
-                    }
-                    logDebug("Simulate 99 notifications")
+                    SubscriptionNotification(this)
+                        .setNotificationTypeId(1)
+                        .setSubscriptionType("Netflix")
+                        .build()
+//                    SubscriptionNotification(this)
+//                        .setNotificationTypeId(0)
+//                        .setSubscriptionType("Player")
+//                        .build()
+                    logDebug("Simulate 10 notifications")
                 }
             }
             true
