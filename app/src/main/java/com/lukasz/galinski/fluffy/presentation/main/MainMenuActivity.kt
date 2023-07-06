@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.MainHostLayoutBinding
+import com.lukasz.galinski.fluffy.presentation.NotificationBuilder
 import com.lukasz.galinski.fluffy.presentation.account.AccountHostActivity
 import com.lukasz.galinski.fluffy.presentation.common.LoginEntryPoint
 import com.lukasz.galinski.fluffy.presentation.common.logDebug
@@ -39,6 +40,7 @@ class MainMenuActivity : AppCompatActivity() {
         setupTopBar()
     }
 
+    private var i = 0
     private fun createDrawerMenu() {
         val drawerLayout = mainMenuHostBinding.mainMenuDrawerRoot
 
@@ -48,8 +50,17 @@ class MainMenuActivity : AppCompatActivity() {
 
         mainMenuHostBinding.drawerNavigation.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.notification_simulation_1 -> logDebug("Simulate single notification")
-                R.id.notification_simulation_99 -> logDebug("Simulate 99 notifications")
+                R.id.notification_simulation_1 -> {
+                    NotificationBuilder(this).create()
+                    logDebug("Simulate single notification")
+                }
+
+                R.id.notification_simulation_99 -> {
+                    for (i in 0..99) {
+                        NotificationBuilder(this).create()
+                    }
+                    logDebug("Simulate 99 notifications")
+                }
             }
             true
         }
