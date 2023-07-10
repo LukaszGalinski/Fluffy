@@ -1,10 +1,11 @@
-package com.lukasz.galinski.fluffy
+package com.lukasz.galinski.fluffy.database
 
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.lukasz.galinski.core.domain.DateTimeOperations
+import com.lukasz.galinski.fluffy.TestUtilities
 import com.lukasz.galinski.fluffy.framework.database.AppDatabase
 import com.lukasz.galinski.fluffy.framework.database.transaction.TransactionsDao
 import com.lukasz.galinski.fluffy.framework.database.user.UsersDao

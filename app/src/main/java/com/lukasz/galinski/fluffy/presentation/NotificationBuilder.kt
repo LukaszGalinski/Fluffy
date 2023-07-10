@@ -13,28 +13,25 @@ import com.lukasz.galinski.fluffy.R
 
 private const val SUMMARY_ID = 0
 
-class SubscriptionNotification(private val context: Context) {
-    private val notificationGroup = "SUBSCRIPTIONS"
-    private val notificationChanel = "subscriptionChanel"
-    private val notificationDescription = "Chanel for subscription notification"
-    private val notificationName = "Subscription"
-    private var subscriptionNotificationTypeId = 0
-    private var subscriptionType = "UNKNOWN"
-    private val subscriptionTitle = " subscription expire soon!"
+class NotificationBuilder(private val context: Context) {
+    private var notificationGroup = "GROUP_KEY_SUBSCRIPTION"
+    private var notificationChanel = "CHANEL_KEY_SUBSCRIPTION"
+    private var notificationName = "NOTIFICATION_NAME_SUBSCRIPTION"
+    private var notificationDescription = "Chanel for subscription notification"
+    private var notificationTypeId = 0
+    private var notificationServiceName = "UNKNOWN"
+    private var notificationTitle = "subscription"
 
     private lateinit var notificationManager: NotificationManager
 
-    init {
-        createChanel()
-    }
-
-    private fun createChanel() {
+    fun createChanel(): NotificationBuilder {
         notificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         NotificationChannel(notificationChanel, notificationName, NotificationManager.IMPORTANCE_DEFAULT).apply {
             description = notificationDescription
             notificationManager.createNotificationChannel(this)
         }
+        return this
     }
 
     private fun createBaseNotification(): NotificationCompat.Builder {
@@ -42,23 +39,47 @@ class SubscriptionNotification(private val context: Context) {
             .setSmallIcon(R.drawable.ic_baseline_dollar_24)
             .setChannelId(notificationChanel)
             .setGroup(notificationGroup)
-
     }
 
-    fun setSubscriptionType(subscriptionType: String): SubscriptionNotification {
-        this.subscriptionType = subscriptionType
+    fun setSubscriptionType(subscriptionType: String): NotificationBuilder {
+        this.notificationServiceName = subscriptionType
         return this
     }
 
-    fun setNotificationTypeId(notificationTypeId: Int): SubscriptionNotification {
-        this.subscriptionNotificationTypeId = notificationTypeId
+    fun setNotificationGroup(notificationGroup: String): NotificationBuilder {
+        this.notificationGroup = notificationGroup
+        return this
+    }
+
+    fun setNotificationChanel(notificationChanel: String): NotificationBuilder {
+        this.notificationChanel = notificationChanel
+        return this
+    }
+
+    fun setNotificationName(notificationName: String): NotificationBuilder {
+        this.notificationName = notificationName
+        return this
+    }
+
+    fun setNotificationDescription(notificationDescription: String): NotificationBuilder {
+        this.notificationDescription = notificationDescription
+        return this
+    }
+
+    fun setSubscriptionTitle(subscriptionTitle: String): NotificationBuilder {
+        this.notificationTitle = subscriptionTitle
+        return this
+    }
+
+    fun setNotificationTypeId(notificationTypeId: Int): NotificationBuilder {
+        this.notificationTypeId = notificationTypeId
         return this
     }
 
     private fun createSingleNotification(): Notification {
         return createBaseNotification()
-            .setSubText(subscriptionType + subscriptionTitle)
-            .setContentTitle("$subscriptionType subscription expire in less than 24h.")
+            .setSubText("$notificationServiceName $notificationTitle")
+            .setContentTitle("$notificationServiceName subscription expire in less than 24h.")
             .setContentText("Remember to renew or cancel your membership!")
             .build()
     }
@@ -76,10 +97,14 @@ class SubscriptionNotification(private val context: Context) {
     }
 
     fun build() {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             notificationManager.apply {
                 val notificationCount = activeNotifications.size
-                notify(subscriptionNotificationTypeId, createSingleNotification())
+                notify(notificationTypeId, createSingleNotification())
                 if (notificationCount > 0) notify(SUMMARY_ID, createGroupedNotification(notificationCount))
             }
         }

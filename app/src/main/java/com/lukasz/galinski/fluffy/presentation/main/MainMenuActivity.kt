@@ -1,6 +1,5 @@
 package com.lukasz.galinski.fluffy.presentation.main
 
-import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -11,7 +10,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.databinding.MainHostLayoutBinding
-import com.lukasz.galinski.fluffy.presentation.SubscriptionNotification
+import com.lukasz.galinski.fluffy.presentation.NotificationBuilder
 import com.lukasz.galinski.fluffy.presentation.account.AccountHostActivity
 import com.lukasz.galinski.fluffy.presentation.common.LoginEntryPoint
 import com.lukasz.galinski.fluffy.presentation.common.logDebug
@@ -21,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainMenuActivity : AppCompatActivity() {
 
-    private lateinit var notification: SubscriptionNotification
+    private lateinit var notification: NotificationBuilder
 
     companion object {
         fun createIntent(context: Context): Intent {
@@ -38,7 +37,7 @@ class MainMenuActivity : AppCompatActivity() {
         _mainMenuHostBinding = MainHostLayoutBinding.inflate(layoutInflater)
         setContentView(mainMenuHostBinding.root)
 
-        notification = SubscriptionNotification(this)
+        notification = NotificationBuilder(this)
         setupTopBar()
         createMonthSpinner()
         createDrawerMenu()
@@ -55,7 +54,8 @@ class MainMenuActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.notification_simulation_single -> {
                     logDebug("Simulate single notification")
-                    SubscriptionNotification(this)
+                    notification
+                        .createChanel()
                         .setNotificationTypeId(1)
                         .setSubscriptionType("Netflix")
                         .build()
@@ -63,7 +63,9 @@ class MainMenuActivity : AppCompatActivity() {
 
                 R.id.notification_simulation_10 -> {
                     repeat(10) { times ->
-                        notification.setNotificationTypeId(times + 1)
+                        notification
+                            .createChanel()
+                            .setNotificationTypeId(times + 1)
                             .setSubscriptionType("TestSubscription")
                             .build()
                     }
@@ -104,7 +106,11 @@ class MainMenuActivity : AppCompatActivity() {
         }
 
         val spinnerAdapter =
-            ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, resources.getStringArray(R.array.months_of_year))
+            ArrayAdapter(
+                this,
+                R.layout.support_simple_spinner_dropdown_item,
+                resources.getStringArray(R.array.months_of_year)
+            )
 
         mainMenuHostBinding.monthSpinner.apply {
             adapter = spinnerAdapter

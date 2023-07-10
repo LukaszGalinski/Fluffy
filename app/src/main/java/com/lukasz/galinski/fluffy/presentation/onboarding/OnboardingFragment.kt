@@ -7,13 +7,20 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.lukasz.galinski.fluffy.databinding.OnboardingScreenFirstFragmentBinding
-import com.lukasz.galinski.core.data.OnboardingDetailsModel
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
-class OnboardingFragment(private val fragmentDetails: OnboardingDetailsModel) : Fragment() {
+class OnboardingFragment : Fragment() {
     private var _onboardingBinding: OnboardingScreenFirstFragmentBinding? = null
     private val onboardingBinding get() = _onboardingBinding!!
+
+    companion object {
+        private var fragmentDetails: OnboardingDetailsModel? = null
+
+        fun create(details: OnboardingDetailsModel): OnboardingFragment {
+            return OnboardingFragment().apply {
+                fragmentDetails = details
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,11 +32,14 @@ class OnboardingFragment(private val fragmentDetails: OnboardingDetailsModel) : 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Glide.with(this).load(fragmentDetails.logoImage)
-            .centerCrop()
-            .into(onboardingBinding.onboardingLogo)
-        onboardingBinding.onboardingTitle.text = fragmentDetails.title
-        onboardingBinding.onboardingSubTitle.text = fragmentDetails.subtitle
-        onboardingBinding.onboardingLogo.tag = fragmentDetails.logoImage
+        with(fragmentDetails!!) {
+            Glide.with(requireContext()).load(logoImage)
+                .centerCrop()
+                .into(onboardingBinding.onboardingLogo)
+
+            onboardingBinding.onboardingTitle.text = title
+            onboardingBinding.onboardingSubTitle.text = subtitle
+            onboardingBinding.onboardingLogo.tag = logoImage
+        }
     }
 }

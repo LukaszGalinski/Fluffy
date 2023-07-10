@@ -1,4 +1,4 @@
-package com.lukasz.galinski.fluffy
+package com.lukasz.galinski.fluffy.database
 
 import android.content.Context
 import androidx.room.Room

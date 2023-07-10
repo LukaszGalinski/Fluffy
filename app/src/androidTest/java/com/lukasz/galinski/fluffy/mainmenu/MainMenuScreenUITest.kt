@@ -1,15 +1,17 @@
-package com.lukasz.galinski.fluffy
+package com.lukasz.galinski.fluffy.mainmenu
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.lukasz.galinski.core.domain.DateTimeOperations
+import com.lukasz.galinski.fluffy.R
 import com.lukasz.galinski.fluffy.framework.database.transaction.TransactionUseCases
 import com.lukasz.galinski.fluffy.framework.database.user.UserUseCases
 import com.lukasz.galinski.fluffy.framework.preferences.PreferencesData
-import com.lukasz.galinski.fluffy.presentation.main.MainScreen
+import com.lukasz.galinski.fluffy.launchFragmentInHiltContainer
 import com.lukasz.galinski.fluffy.presentation.main.MainMenuViewModel
+import com.lukasz.galinski.fluffy.presentation.main.MainScreen
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest

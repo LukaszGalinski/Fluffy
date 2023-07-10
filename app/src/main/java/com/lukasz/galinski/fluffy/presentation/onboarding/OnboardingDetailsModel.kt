@@ -1,4 +1,4 @@
-package com.lukasz.galinski.core.data
+package com.lukasz.galinski.fluffy.presentation.onboarding
 
 data class OnboardingDetailsModel(
     val title: String?,

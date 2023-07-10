@@ -1,4 +1,4 @@
-package com.lukasz.galinski.fluffy
+package com.lukasz.galinski.fluffy.onboarding
 
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -8,6 +8,8 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import com.lukasz.galinski.fluffy.R
+import com.lukasz.galinski.fluffy.launchFragmentInHiltContainer
 import com.lukasz.galinski.fluffy.presentation.onboarding.OnboardingParentFragment
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
