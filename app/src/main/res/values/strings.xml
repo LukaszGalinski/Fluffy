@@ -71,6 +71,12 @@
     <string name="simulate_10_notifications">Simulate 10 notifications</string>
     <string name="simulate_single_notifications">Simulate single notifications</string>
 
+    <!--> Notifications <-->
+    <string name="subscription_notification_title"><![CDATA[<b>%s subscription</b>]]></string>
+    <string name="subscription_notification_content_text">Expire in less than 24h. Remember to renew or cancel your membership!</string>
+    <string name="subscription_notification_summary_text">Subscriptions expire!</string>
+    <string name="subscription_notification_summary_content_title">Your subscriptions will end soon. Please renew or cancel</string>
+
     <string-array name="months_of_year">
         <item>January</item>
         <item>February</item>

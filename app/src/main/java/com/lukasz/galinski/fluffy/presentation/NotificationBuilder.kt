@@ -10,17 +10,23 @@ import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import com.lukasz.galinski.fluffy.R
+import com.lukasz.galinski.fluffy.presentation.common.toHtmlSpan
 
 private const val SUMMARY_ID = 0
+private const val GROUP_NOTIFICATION_FROM_VALUE = 0
 
 class NotificationBuilder(private val context: Context) {
     private var notificationGroup = "GROUP_KEY_SUBSCRIPTION"
     private var notificationChanel = "CHANEL_KEY_SUBSCRIPTION"
     private var notificationName = "NOTIFICATION_NAME_SUBSCRIPTION"
     private var notificationDescription = "Chanel for subscription notification"
+
     private var notificationTypeId = 0
-    private var notificationServiceName = "UNKNOWN"
-    private var notificationTitle = "subscription"
+    private var notificationContentTitle = ""
+    private var notificationContentText = context.getString(R.string.subscription_notification_content_text)
+    private var notificationSummaryText = context.getString(R.string.subscription_notification_summary_text)
+    private var notificationSummaryContentTitle =
+        context.getString(R.string.subscription_notification_summary_content_title)
 
     private lateinit var notificationManager: NotificationManager
 
@@ -41,8 +47,8 @@ class NotificationBuilder(private val context: Context) {
             .setGroup(notificationGroup)
     }
 
-    fun setSubscriptionType(subscriptionType: String): NotificationBuilder {
-        this.notificationServiceName = subscriptionType
+    fun setNotificationContentTitle(contentTitle: String): NotificationBuilder {
+        this.notificationContentTitle = contentTitle
         return this
     }
 
@@ -66,11 +72,6 @@ class NotificationBuilder(private val context: Context) {
         return this
     }
 
-    fun setSubscriptionTitle(subscriptionTitle: String): NotificationBuilder {
-        this.notificationTitle = subscriptionTitle
-        return this
-    }
-
     fun setNotificationTypeId(notificationTypeId: Int): NotificationBuilder {
         this.notificationTypeId = notificationTypeId
         return this
@@ -78,18 +79,17 @@ class NotificationBuilder(private val context: Context) {
 
     private fun createSingleNotification(): Notification {
         return createBaseNotification()
-            .setSubText("$notificationServiceName $notificationTitle")
-            .setContentTitle("$notificationServiceName subscription expire in less than 24h.")
-            .setContentText("Remember to renew or cancel your membership!")
+            .setContentTitle(notificationContentTitle.toHtmlSpan())
+            .setContentText(notificationContentText)
             .build()
     }
 
-    private fun createGroupedNotification(subscriptionsNumber: Int): Notification {
+    private fun createGroupedNotification(): Notification {
         return createBaseNotification()
             .setStyle(
                 NotificationCompat.InboxStyle()
-                    .setSummaryText("$subscriptionsNumber Subscriptions expire soon!")
-                    .setBigContentTitle("Your subscriptions will end soon. Please renew or cancel")
+                    .setSummaryText(notificationSummaryText)
+                    .setBigContentTitle(notificationSummaryContentTitle)
             )
             .setSmallIcon(R.drawable.ic_baseline_dollar_24)
             .setGroupSummary(true)
@@ -103,9 +103,11 @@ class NotificationBuilder(private val context: Context) {
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             notificationManager.apply {
-                val notificationCount = activeNotifications.size
                 notify(notificationTypeId, createSingleNotification())
-                if (notificationCount > 0) notify(SUMMARY_ID, createGroupedNotification(notificationCount))
+                if (activeNotifications.size > GROUP_NOTIFICATION_FROM_VALUE) notify(
+                    SUMMARY_ID,
+                    createGroupedNotification()
+                )
             }
         }
     }

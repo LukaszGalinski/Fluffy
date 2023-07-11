@@ -57,7 +57,7 @@ class MainMenuActivity : AppCompatActivity() {
                     notification
                         .createChanel()
                         .setNotificationTypeId(1)
-                        .setSubscriptionType("Netflix")
+                        .setNotificationContentTitle(getString(R.string.subscription_notification_title, "Netflix"))
                         .build()
                 }
 
@@ -66,7 +66,7 @@ class MainMenuActivity : AppCompatActivity() {
                         notification
                             .createChanel()
                             .setNotificationTypeId(times + 1)
-                            .setSubscriptionType("TestSubscription")
+                            .setNotificationContentTitle(getString(R.string.subscription_notification_title, "Amazon"))
                             .build()
                     }
                     logDebug("Simulate 10 notifications")
