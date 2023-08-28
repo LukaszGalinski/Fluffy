@@ -77,10 +77,7 @@ class MainScreen : Fragment() {
                 when (it) {
                     is MainMenuEvent.ShowFabAnimation -> fabAnimation.showInFabButtons()
                     is MainMenuEvent.HideFabAnimation -> fabAnimation.showOutFabButtons()
-                    is MainMenuEvent.DisplayToast -> {
-                        requireContext().createToast(it.message)
-                    }
-
+                    is MainMenuEvent.DisplayToast -> { requireContext().createToast(it.message) }
                     is MainMenuEvent.Idle -> logInfo(it.toString())
                     is MainMenuEvent.IsLoading -> when (it.isLoading) {
                         true -> mainMenuBinding.mainScreenProgressBar.setVisible()
