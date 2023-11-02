@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.lukasz.galinski.fluffy.presentation.account.AccountHostActivity
 import com.lukasz.galinski.fluffy.presentation.account.login.LoginViewModel
 import com.lukasz.galinski.fluffy.presentation.common.AppEntryPoint
@@ -12,6 +14,7 @@ import com.lukasz.galinski.fluffy.presentation.common.LoginEntryPoint
 import com.lukasz.galinski.fluffy.presentation.main.MainMenuActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
@@ -25,21 +28,23 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun presentViewBasedOnEntryPoint() {
-        lifecycleScope.launchWhenStarted {
-            when (viewModel.getEntryPoint().first()) {
-                AppEntryPoint.LOGIN -> startActivity(
-                    AccountHostActivity.createIntent(applicationContext, LoginEntryPoint.LOGIN)
-                )
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                when (viewModel.getEntryPoint().first()) {
+                    AppEntryPoint.LOGIN -> startActivity(
+                        AccountHostActivity.createIntent(applicationContext, LoginEntryPoint.LOGIN)
+                    )
 
-                AppEntryPoint.ONBOARDING -> startActivity(
-                    AccountHostActivity.createIntent(applicationContext, LoginEntryPoint.ONBOARDING)
-                )
+                    AppEntryPoint.ONBOARDING -> startActivity(
+                        AccountHostActivity.createIntent(applicationContext, LoginEntryPoint.ONBOARDING)
+                    )
 
-                AppEntryPoint.MAIN_MENU -> startActivity(
-                    MainMenuActivity.createIntent(applicationContext)
-                )
+                    AppEntryPoint.MAIN_MENU -> startActivity(
+                        MainMenuActivity.createIntent(applicationContext)
+                    )
+                }
+                finishAfterTransition()
             }
-            finishAfterTransition()
         }
     }
 

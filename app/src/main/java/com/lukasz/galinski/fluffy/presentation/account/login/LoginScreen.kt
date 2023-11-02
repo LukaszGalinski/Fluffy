@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.lukasz.galinski.fluffy.R
@@ -21,6 +23,7 @@ import com.lukasz.galinski.fluffy.presentation.common.setGone
 import com.lukasz.galinski.fluffy.presentation.common.setVisible
 import com.lukasz.galinski.fluffy.presentation.main.MainMenuActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 private const val MARKED_SPANS_COUNT = 7
 private const val HIGHLIGHTED_COLOR = "#7F3DFF"
@@ -89,30 +92,32 @@ class LoginScreen : Fragment() {
         handler.postDelayed(runnable, BACK_BUTTON_DELAY)
     }
 
-    private fun handleLoginStates() = lifecycleScope.launchWhenStarted {
-        hostViewModel.loginUiEvent.collect {
-            when (it) {
-                LoginUiState.LoginSuccess -> {
-                    activity?.finish()
-                    startActivity(MainMenuActivity.createIntent(requireContext()))
-                }
+    private fun handleLoginStates() = lifecycleScope.launch {
+        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            hostViewModel.loginUiEvent.collect {
+                when (it) {
+                    LoginUiState.LoginSuccess -> {
+                        activity?.finish()
+                        startActivity(MainMenuActivity.createIntent(requireContext()))
+                    }
 
-                is LoginUiState.DisplayToast -> {
-                    showToast(getString(R.string.unexpected_error_message))
-                }
+                    is LoginUiState.DisplayToast -> {
+                        showToast(getString(R.string.unexpected_error_message))
+                    }
 
-                is LoginUiState.IsLoading -> when (it.isLoading) {
-                    true -> loginBinding.loginProgressBar.setVisible()
-                    false -> loginBinding.loginProgressBar.setGone()
-                }
+                    is LoginUiState.IsLoading -> when (it.isLoading) {
+                        true -> loginBinding.loginProgressBar.setVisible()
+                        false -> loginBinding.loginProgressBar.setGone()
+                    }
 
-                LoginUiState.UserNotFound -> {
-                    showToast(getString(R.string.user_not_found))
-                }
+                    LoginUiState.UserNotFound -> {
+                        showToast(getString(R.string.user_not_found))
+                    }
 
-                LoginUiState.Idle -> Unit
+                    LoginUiState.Idle -> Unit
+                }
+                logInfo(it.toString())
             }
-            logInfo(it.toString())
         }
     }
 

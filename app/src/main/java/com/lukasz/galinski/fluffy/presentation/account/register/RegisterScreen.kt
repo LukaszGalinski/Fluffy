@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 import com.lukasz.galinski.core.data.User
@@ -21,6 +23,7 @@ import com.lukasz.galinski.fluffy.presentation.common.setGone
 import com.lukasz.galinski.fluffy.presentation.common.setStateAppearance
 import com.lukasz.galinski.fluffy.presentation.common.setVisible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RegisterScreen : Fragment() {
@@ -66,35 +69,39 @@ class RegisterScreen : Fragment() {
         }
     }
 
-    private fun observeRegisterButton() = lifecycleScope.launchWhenStarted {
-        viewModel.saveButtonState.collect {
-            registerBinding.registerButton.markAs(it)
-            registerBinding.registerButton.setStateAppearance()
+    private fun observeRegisterButton() = lifecycleScope.launch {
+        repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.saveButtonState.collect {
+                registerBinding.registerButton.markAs(it)
+                registerBinding.registerButton.setStateAppearance()
+            }
         }
     }
 
-    private fun handleRegisterStates() = lifecycleScope.launchWhenStarted {
-        viewModel.registerUiEvent.collect { state ->
-            when (state) {
-                is RegisterUiEvent.RegisterSuccess -> {
-                    showToast(getString(R.string.user_created))
-                    navigateToLogin()
+    private fun handleRegisterStates() = lifecycleScope.launch {
+        repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.registerUiEvent.collect { state ->
+                when (state) {
+                    is RegisterUiEvent.RegisterSuccess -> {
+                        showToast(getString(R.string.user_created))
+                        navigateToLogin()
+                    }
+
+                    is RegisterUiEvent.DisplayToast -> {
+                        logError(state.exception.message.toString())
+                        showToast(getString(R.string.email_occupied))
+                    }
+
+                    is RegisterUiEvent.IsLoading -> when (state.isLoading) {
+                        true -> registerBinding.registerProgressBar.setVisible()
+                        false -> registerBinding.registerProgressBar.setGone()
+                    }
+
+                    is RegisterUiEvent.Idle -> Unit
+
                 }
-
-                is RegisterUiEvent.DisplayToast -> {
-                    logError(state.exception.message.toString())
-                    showToast(getString(R.string.email_occupied))
-                }
-
-                is RegisterUiEvent.IsLoading -> when (state.isLoading) {
-                    true -> registerBinding.registerProgressBar.setVisible()
-                    false -> registerBinding.registerProgressBar.setGone()
-                }
-
-                is RegisterUiEvent.Idle -> Unit
-
+                logInfo(state.toString())
             }
-            logInfo(state.toString())
         }
     }
 
@@ -102,7 +109,7 @@ class RegisterScreen : Fragment() {
         requireContext().createToast(message)
     }
 
-    private fun navigateToLogin(){
+    private fun navigateToLogin() {
         findNavController().navigate(R.id.action_registerScreen_to_loginScreen)
     }
 

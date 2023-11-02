@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
@@ -18,6 +20,7 @@ import com.lukasz.galinski.fluffy.presentation.common.AppEntryPoint
 import com.lukasz.galinski.fluffy.presentation.common.handleBackPress
 import com.lukasz.galinski.fluffy.presentation.common.logInfo
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -49,14 +52,16 @@ class OnboardingParentFragment : Fragment() {
     }
 
     private fun observeUiEvent() {
-        lifecycleScope.launchWhenStarted {
-            onboardingViewModel.onboardingUiEvent.collect {
-                when (it) {
-                    is OnboardingUiState.SwipeBack -> {
-                        viewPager.currentItem += -1
-                    }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                onboardingViewModel.onboardingUiEvent.collect {
+                    when (it) {
+                        is OnboardingUiState.SwipeBack -> {
+                            viewPager.currentItem += -1
+                        }
 
-                    is OnboardingUiState.Idle -> logInfo(it.toString())
+                        is OnboardingUiState.Idle -> logInfo(it.toString())
+                    }
                 }
             }
         }
